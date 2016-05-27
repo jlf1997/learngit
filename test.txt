@@ -1,6 +1,7 @@
 <!DOCUTYPE HTML>
 <html>
 <head>
+	<a href='www.baidu.com'>连接</a>
 </head>
 <body>
 </body>
