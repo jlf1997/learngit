@@ -1,4 +1,4 @@
-<!DOCUTYPE HTML>
+﻿<!DOCUTYPE HTML>
 <html>
 <head>
 	<a href='www.sina.com'>连接</a>
@@ -6,3 +6,6 @@
 <body>
 </body>
 </html>
+
+
+123
