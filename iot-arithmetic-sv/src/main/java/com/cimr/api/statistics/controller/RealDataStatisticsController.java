@@ -15,7 +15,8 @@ public class RealDataStatisticsController {
 	
 	@GetMapping("/daily")
 	public HttpResult getStatisticsDataDaily(
-			@RequestParam("") String terid
+			@RequestParam(name="terid",required=false) String terid,
+			@RequestParam(name="dayTime",required=false) Long dayTime
 			) {
 		HttpResult result;
 		

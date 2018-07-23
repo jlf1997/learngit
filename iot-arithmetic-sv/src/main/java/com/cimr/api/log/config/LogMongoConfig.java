@@ -1,4 +1,4 @@
-package com.cimr.api.history.config;
+package com.cimr.api.log.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -9,10 +9,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import com.cimr.boot.mongodb.config.AbstractMongoConfig;
 
 @Configuration
-@ConfigurationProperties(prefix="spring.data.mongodb.history")
-public class HistoryMongoConfig extends AbstractMongoConfig{
+@ConfigurationProperties(prefix="spring.data.mongodb.log")
+public class LogMongoConfig extends AbstractMongoConfig{
 
-    @Bean(name = "history")
+    @Bean(name = "log")
 	@Override
 	public MongoTemplate getMongoTemplate() throws Exception {
 		// TODO Auto-generated method stub
@@ -21,6 +21,7 @@ public class HistoryMongoConfig extends AbstractMongoConfig{
 
 
 
+    
     
   
    
