@@ -8,7 +8,16 @@ import com.cimr.boot.model.BaseModel;
 
 @Table
 @Entity
-public class FaultLog extends BaseModel{
+public class FaultLog {
+	
+	
+	public static  String getDbName(String year) {
+		return "TEL_FAULT_"+year;
+	}
+	
+	public static Integer TERERROR = 1;
+	
+	public static Integer PLCERROR = 2;
 
 	@Id
 	private Long id;

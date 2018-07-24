@@ -168,7 +168,7 @@
          <!-- 本地开发环境 -->
          <id>dev</id>
          <properties>
-             <profiles.active>dev</profiles.active>
+             <profiles.active>138</profiles.active>
          </properties>
          <activation>
              <activeByDefault>true</activeByDefault>

@@ -24,8 +24,14 @@ import com.cimr.boot.utils.TimeUtil;
 @Service
 public class TerminalFaultService {
 	
+	/**
+	 * 错误发生回传周期，单位毫秒
+	 */
 	private static Long timePro = 10000L;
 	
+	/**
+	 * 默认错误结束时长，单位毫秒
+	 */
 	private static Long defaultTime = timePro;
 
 	
@@ -37,11 +43,20 @@ public class TerminalFaultService {
 	
 	
 	
-	public void test(Long faultTime) {
+	public void f(int pageNumber, int pageSize) {
+		
+	}
+	
+	
+	/**
+	 * 生成给定日期当天的终端错误日志统计
+	 * @param faultTime
+	 */
+	public void genDailyFaultLog(Date faultTime) {
 		
 		
 		List<Map<String,Object>>faultMapList = telLogService.findAllByDay(faultTime);
-		//TODO 将所有endTime 为null 的加入列表
+		//TODO 将所有endTime 为-1 的加入列表
 		
 		List<FaultLog> finalResult = new ArrayList<>();
 		//临时存放错误记录
@@ -64,7 +79,7 @@ public class TerminalFaultService {
 			}else {
 				//间隔超过一分钟，表示错误结束
 				if(bTime-faultLogPre.getEndTime()>timePro) {
-					//更新错误
+					//更新错误发生的结束时间
 					faultLogPre.setEndTime(getRealEndTime(faultLogPre));
 					finalResult.add(faultLogPre);
 					//map中替换为新的错误记录
@@ -91,9 +106,14 @@ public class TerminalFaultService {
 			
 			finalResult.add(faultLog);
 		}
-		faultLogDao.save(finalResult);
+		faultLogDao.saveByYear(finalResult);
 	}
 	
+	/**
+	 * 生成错误结束时间，默认在原结束时间上增加一个周期
+	 * @param faultLog
+	 * @return
+	 */
 	private Long getRealEndTime(FaultLog faultLog) {
 		return faultLog.getEndTime()+defaultTime;
 	}
@@ -112,6 +132,7 @@ public class TerminalFaultService {
 		faultLog.setCode(code);
 		faultLog.setId(getId());
 		faultLog.setTerId(terId);
+		faultLog.setFaultType(FaultLog.TERERROR);
 		return faultLog;
 	}
 	

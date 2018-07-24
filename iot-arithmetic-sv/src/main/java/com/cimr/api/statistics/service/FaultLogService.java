@@ -1,49 +1,47 @@
 package com.cimr.api.statistics.service;
 
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.cimr.api.statistics.jpa.FaultLogJpa;
-import com.cimr.api.statistics.model.FaultLog;
-import com.cimr.boot.jpafinder.Finder;
+import com.cimr.api.comm.model.HttpResult;
+import com.cimr.api.comm.model.PageModel;
+import com.cimr.api.statistics.dao.FaultLogDao;
+import com.cimr.api.statistics.exception.TimeTooLongException;
 
 @Service
-public class FaultLogService  extends Finder<FaultLog, Long>{
-
+public class FaultLogService  {
+	
 	@Autowired
-	private FaultLogJpa faultLogJpa;
+	private FaultLogDao faultLogDao;
 
-	@Override
-	public JpaSpecificationExecutor<FaultLog> specjpa() {
-		// TODO Auto-generated method stub
-		return faultLogJpa;
-	}
-
-	@Override
-	public JpaRepository<FaultLog, Long> jpa() {
-		// TODO Auto-generated method stub
-		return faultLogJpa;
-	}
-
-	@Override
-	public void addWhere(FaultLog[] t, List<Predicate> predicates, Root<FaultLog> root, CriteriaQuery<?> query,
-			CriteriaBuilder cb) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setSelect(FaultLog t) {
-		// TODO Auto-generated method stub
+	
+	/**
+	 * 分页查询
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param bTime
+	 * @param endTime
+	 * @param terid
+	 * @return
+	 */
+	public HttpResult findByPage(int pageNumber, int pageSize,Long bTime,Long endTime,String terid){
+		HttpResult result;
+		try {
+			PageModel<Map<String,Object>> page = faultLogDao.findByPage(pageNumber, pageSize, bTime, endTime, terid);
+			result = new HttpResult(true,"");
+			result.setData(page);
+			return result;
+		} catch (TimeTooLongException e) {
+			result = new HttpResult(true,e.getMessage());
+			return result;
+		}catch (Exception e) {
+			e.printStackTrace();
+			result = new HttpResult(true,"出现异常");
+			return result;
+		}
 		
 	}
 }
