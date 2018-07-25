@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.bson.types.ObjectId;
+
 @Table
 @Entity
 public class FaultLog {
@@ -20,7 +22,9 @@ public class FaultLog {
 	public static Integer PLCERROR = 2;
 
 	@Id
-	private Long id;
+	private FaultPK id;
+	
+	
 	
 	/**
 	 * 开始时间
@@ -39,20 +43,22 @@ public class FaultLog {
 	 */
 	private String terId;
 	
+	
+	
 	/**
 	 * 故障类型
 	 */
 	private Integer faultType;
 
-	public Long getId() {
+	
+
+	public FaultPK getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(FaultPK id) {
 		this.id = id;
 	}
-
-
 
 	public Date getbTime() {
 		return bTime;
@@ -93,6 +99,8 @@ public class FaultLog {
 	public void setFaultType(Integer faultType) {
 		this.faultType = faultType;
 	}
+
+
 	
 	
 }

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.cimr.api.history.dao.RealDataFalutHistoryDao;
 import com.cimr.api.statistics.dao.FaultLogDao;
 import com.cimr.api.statistics.model.FaultLog;
+import com.cimr.api.statistics.model.FaultPK;
 import com.cimr.boot.utils.IdGener;
 import com.cimr.boot.utils.TimeUtil;
 
@@ -91,6 +93,7 @@ public class PlcFaultService  {
 		//获取终端id
 		String terId = map.get("terminalNo").toString();
 		Date faultTime = (Date)map.get("gatherMsgTime");
+		ObjectId orgId =  (ObjectId) map.get("_id");
 		Map<String,FaultLog> falutMap = terMap.get(terId);
 		if(falutMap==null) {
 			falutMap = new HashMap<>();
@@ -100,12 +103,13 @@ public class PlcFaultService  {
 		while(iterator.hasNext()) {
 			String key = iterator.next();
 			Object value = map.get(key);
+			
 			if(value instanceof Boolean) {
 				Boolean newValue = (Boolean) value;
 				FaultLog inValue = falutMap.get(key);
 				if(inValue==null) {//新的错误
 					if(newValue) {
-						falutMap.put(key, getNewFaultLog(faultTime,key,terId));
+						falutMap.put(key, getNewFaultLog(orgId,faultTime,key,terId));
 					}else {//如果新的数据为false，直接忽略
 						log.debug("the fault is not change:"+key+" "+newValue);
 					}
@@ -129,14 +133,18 @@ public class PlcFaultService  {
 	 * @param terId
 	 * @return
 	 */
-	private FaultLog getNewFaultLog(Date bTime,String code,String terId) {
+	private FaultLog getNewFaultLog(ObjectId orgId,Date bTime,String code,String terId) {
 		FaultLog faultLog = new FaultLog();
 		faultLog.setbTime(bTime);
 		faultLog.setEndTime(bTime);
 		faultLog.setCode(code);
-		faultLog.setId(getId());
+		FaultPK id = new FaultPK();
+		id.setCode(code);
+		id.setOrgId(orgId);
+		faultLog.setId(id);
+//		faultLog.setOrgId(orgId);
 		faultLog.setTerId(terId);
-		faultLog.setFaultType(FaultLog.TERERROR);
+		faultLog.setFaultType(FaultLog.PLCERROR);
 		return faultLog;
 	}
 	

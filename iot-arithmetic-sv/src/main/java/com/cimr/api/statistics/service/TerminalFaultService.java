@@ -7,12 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.log.service.TelLogService;
 import com.cimr.api.statistics.dao.FaultLogDao;
 import com.cimr.api.statistics.model.FaultLog;
+import com.cimr.api.statistics.model.FaultPK;
 import com.cimr.boot.utils.IdGener;
 import com.cimr.boot.utils.TimeUtil;
 
@@ -68,14 +70,17 @@ public class TerminalFaultService {
 		String code;
 		//终端id
 		String terId;
+		
+		ObjectId orgId;
 		for(Map<String,Object> faultMap :faultMapList) {
 			bTime = getTime(faultMap);
 			code = getCode(faultMap);
 			terId = getTerId(faultMap);
+			orgId =  (ObjectId) faultMap.get("_id");
 			faultLogPre = result.get(terId);
 			if(faultLogPre==null) {
 				//初始化
-				result.put(terId,getNewFaultLog(new Date(bTime),code,terId));
+				result.put(terId,getNewFaultLog(orgId,new Date(bTime),code,terId));
 			}else {
 				//间隔超过一分钟，表示错误结束
 				if(bTime-faultLogPre.getEndTime().getTime()>timePro) {
@@ -83,7 +88,7 @@ public class TerminalFaultService {
 					faultLogPre.setEndTime(getRealEndTime(faultLogPre));
 					finalResult.add(faultLogPre);
 					//map中替换为新的错误记录
-					result.put(terId,getNewFaultLog(new Date(bTime),code,terId));
+					result.put(terId,getNewFaultLog(orgId,new Date(bTime),code,terId));
 				}else {
 					//更新时间
 					faultLogPre.setEndTime(new Date(bTime));
@@ -126,12 +131,15 @@ public class TerminalFaultService {
 	 * @param terId
 	 * @return
 	 */
-	private FaultLog getNewFaultLog(Date bTime,String code,String terId) {
+	private FaultLog getNewFaultLog(ObjectId orgId,Date bTime,String code,String terId) {
 		FaultLog faultLog = new FaultLog();
 		faultLog.setbTime(bTime);
 		faultLog.setEndTime(bTime);
 		faultLog.setCode(code);
-		faultLog.setId(getId());
+		FaultPK id = new FaultPK();
+		id.setCode(code);
+		id.setOrgId(orgId);
+		faultLog.setId(id);
 		faultLog.setTerId(terId);
 		faultLog.setFaultType(FaultLog.TERERROR);
 		return faultLog;
