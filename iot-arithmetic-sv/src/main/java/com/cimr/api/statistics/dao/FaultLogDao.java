@@ -57,7 +57,7 @@ public class FaultLogDao {
 			query.addCriteria(criteria);
 		}
 		if(bTime!=null && endTime!=null) {
-			Criteria criteria = Criteria.where("bTime").gte(bTime).lte(endTime);
+			Criteria criteria = Criteria.where("bTime").gte(new Date(bTime)).lte(new Date(endTime));
 			query.addCriteria(criteria);
 		}
 		
@@ -110,7 +110,7 @@ public class FaultLogDao {
 		List<FaultLog> faultList;
 		String year;
 		for(FaultLog faultLog:list) {
-			year = TimeUtil.getYear(new Date(faultLog.getbTime()));
+			year = TimeUtil.getYear(faultLog.getbTime());
 			faultList = yearMap.get(year);
 			if(faultList==null) {
 				faultList = new ArrayList<>();
@@ -121,7 +121,7 @@ public class FaultLogDao {
 		Iterator<String> iterator = yearMap.keySet().iterator();
 		while(iterator.hasNext()) {
 			year = iterator.next();
-			statisticsTemp.insert(yearMap.get(year), FaultLog.getDbName(year));
+			statisticsTemp.insert(yearMap.get(year), "demo");
 		}
 		
 	}

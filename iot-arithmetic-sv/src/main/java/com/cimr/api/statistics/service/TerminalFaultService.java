@@ -75,18 +75,18 @@ public class TerminalFaultService {
 			faultLogPre = result.get(terId);
 			if(faultLogPre==null) {
 				//初始化
-				result.put(terId,getNewFaultLog(bTime,code,terId));
+				result.put(terId,getNewFaultLog(new Date(bTime),code,terId));
 			}else {
 				//间隔超过一分钟，表示错误结束
-				if(bTime-faultLogPre.getEndTime()>timePro) {
+				if(bTime-faultLogPre.getEndTime().getTime()>timePro) {
 					//更新错误发生的结束时间
 					faultLogPre.setEndTime(getRealEndTime(faultLogPre));
 					finalResult.add(faultLogPre);
 					//map中替换为新的错误记录
-					result.put(terId,getNewFaultLog(bTime,code,terId));
+					result.put(terId,getNewFaultLog(new Date(bTime),code,terId));
 				}else {
 					//更新时间
-					faultLogPre.setEndTime(bTime);
+					faultLogPre.setEndTime(new Date(bTime));
 				}
 			}
 		}
@@ -96,12 +96,13 @@ public class TerminalFaultService {
 			terId = iterator.next();
 			FaultLog faultLog = result.get(terId);
 			//
-			if(TimeUtil.getEndTime(new Date(faultLog.getEndTime())).getTime()-faultLog.getEndTime()>timePro) {
+			if(TimeUtil.getEndTime(faultLog.getEndTime()).getTime()-faultLog.getEndTime().getTime()>timePro) {
 				
 				faultLog.setEndTime(getRealEndTime(faultLog));
+//				faultLog.setEndTime(null);
 			}else {
 				//表示当天结束，错误依然存在，需要第二天继续计算
-				faultLog.setEndTime(-1L);
+				faultLog.setEndTime(null);
 			}
 			
 			finalResult.add(faultLog);
@@ -114,8 +115,8 @@ public class TerminalFaultService {
 	 * @param faultLog
 	 * @return
 	 */
-	private Long getRealEndTime(FaultLog faultLog) {
-		return faultLog.getEndTime()+defaultTime;
+	private Date getRealEndTime(FaultLog faultLog) {
+		return new Date(faultLog.getEndTime().getTime()+defaultTime);
 	}
 	
 	/**
@@ -125,7 +126,7 @@ public class TerminalFaultService {
 	 * @param terId
 	 * @return
 	 */
-	private FaultLog getNewFaultLog(Long bTime,String code,String terId) {
+	private FaultLog getNewFaultLog(Date bTime,String code,String terId) {
 		FaultLog faultLog = new FaultLog();
 		faultLog.setbTime(bTime);
 		faultLog.setEndTime(bTime);

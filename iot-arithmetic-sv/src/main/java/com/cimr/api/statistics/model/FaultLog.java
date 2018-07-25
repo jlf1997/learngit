@@ -1,10 +1,10 @@
 package com.cimr.api.statistics.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.cimr.boot.model.BaseModel;
 
 @Table
 @Entity
@@ -25,11 +25,11 @@ public class FaultLog {
 	/**
 	 * 开始时间
 	 */
-	private Long bTime;
+	private Date bTime;
 	/**
 	 * 结束时间
 	 */
-	private Long endTime;
+	private Date endTime;
 	/**
 	 * 故障码
 	 */
@@ -52,19 +52,21 @@ public class FaultLog {
 		this.id = id;
 	}
 
-	public Long getbTime() {
+
+
+	public Date getbTime() {
 		return bTime;
 	}
 
-	public void setbTime(Long bTime) {
+	public void setbTime(Date bTime) {
 		this.bTime = bTime;
 	}
 
-	public Long getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Long endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 
