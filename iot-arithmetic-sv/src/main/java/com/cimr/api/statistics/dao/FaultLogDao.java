@@ -9,13 +9,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.cimr.api.comm.model.PageModel;
@@ -32,6 +30,87 @@ public class FaultLogDao {
 	@Autowired
 	@Qualifier(value="statistics")
 	protected MongoTemplate statisticsTemp;
+	
+
+	
+//	/**
+//	 * 查询最近的未完成的数据
+//	 * @param terId
+//	 * @param code
+//	 * @param faultType
+//	 * @return
+//	 */
+//	public FaultLog findUnFinishedByCodeAndType(String terId,String code,Integer faultType) {
+//		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
+//		Query query = new Query();
+//		Criteria criteria1 = Criteria.where("endTime").exists(false);
+//		query.addCriteria(criteria1);
+//		Criteria criteria2 = Criteria.where("code").is(code);
+//		query.addCriteria(criteria2);
+//		Criteria criteria3 = Criteria.where("faultType").is(faultType);
+//		query.addCriteria(criteria3);
+//		Sort sort = new Sort(Sort.Direction.DESC,"bTime");
+//		query.with(sort);
+//		//TODO 
+//		List<Map<String,Object>> list = finder.findAll(query, FaultLog.getDbName(year));
+//		if(list!=null && list.size()>0) {
+//			return new FaultLog(list.get(0));
+//		}
+//		return null;
+//		
+//	}
+	
+	
+	
+	/**
+	 * 查询所有未结束的错误
+	 * @return
+	 */
+	public List<Map<String,Object>> getUnfininshLog(Date pointTime,Integer falutType){
+		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
+		Query query = new Query();
+		Criteria criteria1 = Criteria.where("endTime").exists(false);
+		query.addCriteria(criteria1);
+		Criteria criteria2 = Criteria.where("faultType").is(falutType);
+		query.addCriteria(criteria2);
+		String year = TimeUtil.getYear(pointTime);
+		List<Map<String,Object>> list1 = new ArrayList<>();
+		int yearBase = Integer.parseInt(year);
+		for(int i=0;i<10;i++) {
+			List<Map<String,Object>> l = finder.findAll(query, FaultLog.getDbName(yearBase-i+""));
+			list1.addAll(l);
+		}
+		return list1;
+//		return finder.findAll(query, "demo");
+	}
+	
+	
+	/**
+	 * 获取未完结数据
+	 * @param list1
+	 * @return
+	 */
+	public Map<String,Map<String,FaultLog>> getPlcMap(List<Map<String,Object>> list1){
+		Map<String,Map<String,FaultLog>>  rs = new HashMap<>();
+		 for(Map<String,Object> masp :list1) {
+			 String terId = masp.get("terId").toString();
+			 String code = masp.get("code").toString();
+			 Map<String,FaultLog> terMap = rs.get(terId);
+			 if(terMap==null) {
+				 terMap = new HashMap<>();
+			 }
+			FaultLog log = terMap.get(code);
+			if(log==null) {
+				log = new FaultLog(masp);
+				log.setYear(TimeUtil.getYear(log.getbTime()));
+			}			 
+			terMap.put(code, log);
+			rs.put(terId, terMap);
+		 }
+		 return rs;
+	}
+	
+	
 	
 	
 	/**
@@ -115,14 +194,54 @@ public class FaultLogDao {
 			if(faultList==null) {
 				faultList = new ArrayList<>();
 			}
+			if(faultLog.getId()==null) {
+				faultLog.setCreTime(new Date());
+			}
+			faultLog.setUpdTime(new Date());
 			faultList.add(faultLog);
 			yearMap.put(year, faultList);
 		}
 		Iterator<String> iterator = yearMap.keySet().iterator();
 		while(iterator.hasNext()) {
 			year = iterator.next();
-			statisticsTemp.insert(yearMap.get(year), "demo");
+			statisticsTemp.insert(yearMap.get(year), FaultLog.getDbName(year));
 		}
 		
+	}
+	
+	/**
+	 * 保存或者更新
+	 * @param list
+	 */
+	public void updateYear(List<FaultLog> list) {
+		Map<String,List<FaultLog>> yearMap = new HashMap<>();
+		List<FaultLog> faultList;
+		String year;
+		for(FaultLog faultLog:list) {
+			year = TimeUtil.getYear(faultLog.getbTime());
+			faultList = yearMap.get(year);
+			if(faultList==null) {
+				faultList = new ArrayList<>();
+			}
+			if(faultLog.getId()==null) {
+				faultLog.setCreTime(new Date());
+			}
+			faultLog.setUpdTime(new Date());
+			faultList.add(faultLog);
+			yearMap.put(year, faultList);
+		}
+		Iterator<String> iterator = yearMap.keySet().iterator();
+		while(iterator.hasNext()) {
+			year = iterator.next();
+			List<FaultLog> listFin = yearMap.get(year);
+			removeAll(listFin,FaultLog.getDbName(year));
+			statisticsTemp.insert(listFin, FaultLog.getDbName(year));
+		}
+	}
+	
+	public void removeAll(List<FaultLog> list,String collection) {
+		for(FaultLog faultLog:list) {
+			statisticsTemp.remove(faultLog, collection);
+		}
 	}
 }

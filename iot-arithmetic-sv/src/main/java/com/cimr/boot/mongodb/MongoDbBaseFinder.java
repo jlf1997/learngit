@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.DocumentCallbackHandler;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import com.cimr.api.statistics.model.FaultLog;
 import com.mongodb.DBObject;
@@ -42,6 +43,9 @@ public class MongoDbBaseFinder {
 	 */
 	public List<Map<String,Object>> findAll(Query query, String collectionName){
 		List<Map<String,Object>> list = new ArrayList<>();
+		if(!template.collectionExists(collectionName)) {
+			return list;
+		}
 		template.executeQuery(query, collectionName, new DocumentCallbackHandler() {
 
 			@Override
@@ -56,7 +60,15 @@ public class MongoDbBaseFinder {
 		 });
 		 return list;
 	}
-	
+	/**
+	 * 分页查询
+	 * @param query
+	 * @param collectionName
+	 * @param sort
+	 * @param pageNumber
+	 * @param pageSize
+	 * @return
+	 */
 	public Page<Map<String,Object>> findPage(Query query, String collectionName,Sort sort,int pageNumber, int pageSize) {
 		Pageable pageable = new PageRequest(pageNumber, pageSize, sort);
 		query.with(pageable);
@@ -65,9 +77,28 @@ public class MongoDbBaseFinder {
 		Page<Map<String,Object>> page = new PageImpl<>(result,pageable,total);
 		return page;
 	}
-	
+	/**
+	 * 获取查询总数
+	 * @param query
+	 * @param collectionName
+	 * @return
+	 */
 	public long getTotalNum(Query query,String collectionName) {
 		return template.count(query, collectionName);
+	}
+	
+	/**
+	 * 查询一条记录
+	 * @param query
+	 * @param collectionName
+	 * @return
+	 */
+	public Map<String,Object> findOne(Query query,String collectionName) {
+		List< Map<String,Object>> list = findAll(query,collectionName);
+		if(list!=null && list.size()==1) {
+			return list.get(0);
+		}
+		return null;
 	}
 	
 	/**
@@ -104,5 +135,7 @@ public class MongoDbBaseFinder {
 		return findAll(query,collectionName);
 	}
 		
-	
+	public <T> void  update(T t,String collectionName) {
+		
+	}
 }

@@ -34,6 +34,7 @@ public class RealDataFalutHistoryDao {
 	private String projectId = "P00001";
 	
 	private static String falutTime = "gatherMsgTime";
+
 	
 	private String getDbName() {
 		return "REALDATA_SIGNAL_"+projectId+"_"+singal;
@@ -48,12 +49,22 @@ public class RealDataFalutHistoryDao {
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(mongoTemplate);
 		Query query = new Query();
 		query.with(new Sort(new Order(Direction.ASC,falutTime)));
-		if(faultStartTime!=null && faultEndTime!=null) {
-			Criteria criteria = Criteria.where(falutTime).gte(faultStartTime);
-			criteria.lte(faultEndTime);
+		Criteria criteria =null;
+		if( faultEndTime!=null) {
+			criteria = Criteria.where(falutTime).lte(faultEndTime);
+		}
+		if(faultStartTime!=null) {
+			if(criteria==null) {
+				criteria = Criteria.where(falutTime);
+			}
+			criteria = criteria.gte(faultStartTime);
+		}
+		if(criteria!=null) {
 			query.addCriteria(criteria);
 		}
 		return finder.findAll(query,getDbName());
 		
 	}
+	
+	
 }

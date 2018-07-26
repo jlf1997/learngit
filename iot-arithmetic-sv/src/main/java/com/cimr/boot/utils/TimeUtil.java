@@ -72,10 +72,57 @@ public class TimeUtil {
 	public static int getYearSpan(Date date1,Date date2) {
 		int year1 = Integer.parseInt(getYear(date1));
 		int year2 = Integer.parseInt(getYear(date2));
-		return year1-year2;
+		return year2-year1;
 		
 	}
+	
+	/**
+	 * 获取当年的最后一天
+	 * @param date
+	 * @return
+	 */
+	public static Date getTheLastDayOfYear(Date date) {
+		Calendar todayEnd = Calendar.getInstance();
+		date = getTheNextYear(date);
+		todayEnd.setTime(date);
+		todayEnd.set(Calendar.DAY_OF_YEAR,0);
+		todayEnd.set(Calendar.HOUR_OF_DAY, 23);
+		todayEnd.set(Calendar.MINUTE, 59);
+		todayEnd.set(Calendar.SECOND, 59);
+		todayEnd.set(Calendar.MILLISECOND, 999);
+		return todayEnd.getTime();
+	}
+	
+	/**
+	 * 获取一年前
+	 * @param date
+	 * @return
+	 */
+	public static Date getTheLastYear(Date date) {
+		Calendar todayEnd = Calendar.getInstance();
+		todayEnd.setTime(date);
+		todayEnd.add(Calendar.YEAR, -1);
+		return todayEnd.getTime();
+	}
 
+	/**
+	 * 获取下一年
+	 * @param date
+	 * @return
+	 */
+	public static Date getTheNextYear(Date date) {
+		Calendar todayEnd = Calendar.getInstance();
+		todayEnd.setTime(date);
+		todayEnd.add(Calendar.YEAR, 1);
+		return todayEnd.getTime();
+	}
+	
+	public static Date getNextSecord(Date date) {
+		Calendar todayEnd = Calendar.getInstance();
+		todayEnd.setTime(date);
+		todayEnd.add(Calendar.SECOND, 1);
+		return todayEnd.getTime();
+	}
 	
 	
 }

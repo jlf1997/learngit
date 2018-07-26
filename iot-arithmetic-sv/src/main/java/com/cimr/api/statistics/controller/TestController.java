@@ -24,24 +24,24 @@ public class TestController {
 	@Autowired
 	private PlcFaultService plcFaultService;
 	
-	@GetMapping("/all")
+	@GetMapping("/ter")
 	public void findALl(
-			@RequestParam("faultTime") Long faultTime
+
 			){
-		 Date faultDate = new Date(faultTime);
-		 plcFaultService.genDailyFaultLog(faultDate);
+
+		terminalFaultService.genDailyFaultLog();
 		
 	}
 	
 	@GetMapping("/plc")
-	public List<Map<String,Object>> plc(
-			@RequestParam("faultTime") Long faultTime
+	public void plc(
+			
 			){
-		Date faultDate = new Date(faultTime);
+		Date faultDate = new Date();
 		Date faultEndTime = TimeUtil.getEndTime(faultDate);
 		Date faultStartTime = TimeUtil.getStartTime(faultDate);
-		plcFaultService.genDailyFaultLog(faultDate);
-		return plcFaultService.findFaultList(faultStartTime,faultEndTime);
+		plcFaultService.genDailyFaultLog();
+//		return plcFaultService.findFaultList(faultStartTime,faultEndTime);
 		
 	}
 	

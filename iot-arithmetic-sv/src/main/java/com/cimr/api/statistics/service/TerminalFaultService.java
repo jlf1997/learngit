@@ -8,13 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cimr.api.history.dao.RealDataFalutHistoryDao;
 import com.cimr.api.log.service.TelLogService;
 import com.cimr.api.statistics.dao.FaultLogDao;
+import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.api.statistics.model.FaultLog;
-import com.cimr.api.statistics.model.FaultPK;
+import com.cimr.api.statistics.model.StaticsticsLog;
 import com.cimr.boot.utils.IdGener;
 import com.cimr.boot.utils.TimeUtil;
 
@@ -25,6 +29,10 @@ import com.cimr.boot.utils.TimeUtil;
  */
 @Service
 public class TerminalFaultService {
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(TerminalFaultService.class);
+
 	
 	/**
 	 * 错误发生回传周期，单位毫秒
@@ -43,6 +51,17 @@ public class TerminalFaultService {
 	@Autowired
 	private FaultLogDao faultLogDao;
 	
+	@Autowired
+	private FaultLogService faultLogService;
+	
+	
+	
+	@Autowired
+	private RealDataFalutHistoryDao realDataFalutHistoryDao;
+	
+	@Autowired
+	private StaticsticsLogDao staticsticsLogDao;
+	
 	
 	
 	public void f(int pageNumber, int pageSize) {
@@ -54,65 +73,66 @@ public class TerminalFaultService {
 	 * 生成给定日期当天的终端错误日志统计
 	 * @param faultTime
 	 */
-	public void genDailyFaultLog(Date faultTime) {
-		
-		
-		List<Map<String,Object>>faultMapList = telLogService.findAllByDay(faultTime);
-		//TODO 将所有endTime 为-1 的加入列表
-		
+	public void genDailyFaultLog() {
+		//保存最后的结果
 		List<FaultLog> finalResult = new ArrayList<>();
-		//临时存放错误记录
-		Map<String,FaultLog> result = new HashMap<>();
-		FaultLog faultLogPre = null;
-		//错误发生时间
-		Long bTime;
-		//错误码
-		String code;
-		//终端id
-		String terId;
+		Date[] range = faultLogService.getDefaultTimeRange(StaticsticsLog.TER_FAULT_TYPE);
 		
-		ObjectId orgId;
-		for(Map<String,Object> faultMap :faultMapList) {
-			bTime = getTime(faultMap);
-			code = getCode(faultMap);
-			terId = getTerId(faultMap);
-			orgId =  (ObjectId) faultMap.get("_id");
-			faultLogPre = result.get(terId);
-			if(faultLogPre==null) {
-				//初始化
-				result.put(terId,getNewFaultLog(orgId,new Date(bTime),code,terId));
-			}else {
-				//间隔超过一分钟，表示错误结束
-				if(bTime-faultLogPre.getEndTime().getTime()>timePro) {
-					//更新错误发生的结束时间
-					faultLogPre.setEndTime(getRealEndTime(faultLogPre));
-					finalResult.add(faultLogPre);
-					//map中替换为新的错误记录
-					result.put(terId,getNewFaultLog(orgId,new Date(bTime),code,terId));
-				}else {
-					//更新时间
-					faultLogPre.setEndTime(new Date(bTime));
-				}
-			}
+		//需要处理的数据
+		List<Map<String,Object>> faultMapList = telLogService.findAllByDay(range[0],range[1]);
+		log.debug("new list size:"+faultMapList.size());
+		
+		//获取未结束的预警信息
+		List<Map<String,Object>> listun = faultLogDao.getUnfininshLog(range[1], FaultLog.TERERROR);
+		log.debug("unfinsh list size:"+listun.size());
+		
+		//格式化预警信息
+		Map<String,Map<String,FaultLog>> terMap = faultLogDao.getPlcMap(listun);
+		log.debug("finish get the map");
+	
+	
+		for(Map<String,Object> map:faultMapList) {
+			parseFalutMap(map,terMap,finalResult);
 		}
-		//将map中剩余数据 放到list中，最后一条数据
-		Iterator<String> iterator = result.keySet().iterator();
+		doLastResult(finalResult,terMap);
+		List<FaultLog> updList = faultLogService.getPreList(finalResult);
+		faultLogDao.saveByYear(finalResult);
+		faultLogDao.updateYear(updList);
+		//更新扫描时间
+		staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,range[1]);
+	}
+	
+	
+	/**
+	 * 将map中剩余数据 放到list中，最后一条数据
+	 * @param finalResult
+	 * @param terMap
+	 */
+	private void doLastResult(List<FaultLog> finalResult,Map<String,Map<String,FaultLog>> terMap) {
+		Iterator<String> iterator = terMap.keySet().iterator();
 		while(iterator.hasNext()) {
-			terId = iterator.next();
-			FaultLog faultLog = result.get(terId);
-			//
-			if(TimeUtil.getEndTime(faultLog.getEndTime()).getTime()-faultLog.getEndTime().getTime()>timePro) {
-				
-				faultLog.setEndTime(getRealEndTime(faultLog));
-//				faultLog.setEndTime(null);
-			}else {
-				//表示当天结束，错误依然存在，需要第二天继续计算
+			String terId = iterator.next();
+			Map<String,FaultLog> faultMap = terMap.get(terId);
+			Iterator<String> iteratorTer = faultMap.keySet().iterator();
+			while(iteratorTer.hasNext()) {
+				FaultLog faultLog = faultMap.get(iteratorTer.next());
+				//错误未结束
 				faultLog.setEndTime(null);
+				finalResult.add(faultLog);
 			}
 			
-			finalResult.add(faultLog);
 		}
-		faultLogDao.saveByYear(finalResult);
+	}
+	
+	/**
+	 * 获取时间范围内的数据
+	 * @param faultMap
+	 */
+	public List<Map<String,Object>> findFaultList() {
+		Date[] range = faultLogService.getDefaultTimeRange(StaticsticsLog.PLC_FAULT_TYPE);
+		List<Map<String,Object>> faultMapList = telLogService.findAllByDay(range[0],range[1]);
+		return  faultMapList;
+		
 	}
 	
 	/**
@@ -122,6 +142,48 @@ public class TerminalFaultService {
 	 */
 	private Date getRealEndTime(FaultLog faultLog) {
 		return new Date(faultLog.getEndTime().getTime()+defaultTime);
+	}
+	
+	
+	private void parseFalutMap(Map<String,Object> map,Map<String,Map<String,FaultLog>> terMap,List<FaultLog> finalResult) {
+			Long bTime = getTime(map);
+			String code = getCode(map);
+			String terId = getTerId(map);
+			ObjectId orgId =  (ObjectId) map.get("_id");
+			Map<String,FaultLog> falutMap = terMap.get(terId);
+			if(falutMap==null) {
+				//初始化
+				falutMap = new HashMap<>();
+				terMap.put(terId, falutMap);
+			}
+			
+			
+		
+			FaultLog faultLogPre = falutMap.get("code");
+				//新的异常
+				if(faultLogPre==null){
+					faultLogPre = getNewFaultLog(orgId,new Date(bTime),code,terId);
+					falutMap.put("code", faultLogPre);
+				}else{
+					//判断是否异常结束
+					if(bTime-faultLogPre.getEndTime().getTime()>timePro) {
+						//更新错误发生的结束时间
+						faultLogPre.setEndTime(getRealEndTime(faultLogPre));
+						finalResult.add(faultLogPre);
+						//map中替换为新的错误记录
+						falutMap.put("code",getNewFaultLog(orgId,new Date(bTime),code,terId));
+					}else {
+						//更新时间
+						faultLogPre.setEndTime(new Date(bTime));
+					}
+					
+				}
+				
+					
+			
+		
+			 
+		
 	}
 	
 	/**
@@ -136,10 +198,7 @@ public class TerminalFaultService {
 		faultLog.setbTime(bTime);
 		faultLog.setEndTime(bTime);
 		faultLog.setCode(code);
-		FaultPK id = new FaultPK();
-		id.setCode(code);
-		id.setOrgId(orgId);
-		faultLog.setId(id);
+		faultLog.setId(getId());
 		faultLog.setTerId(terId);
 		faultLog.setFaultType(FaultLog.TERERROR);
 		return faultLog;

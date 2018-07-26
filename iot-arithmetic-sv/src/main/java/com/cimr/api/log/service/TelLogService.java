@@ -23,11 +23,9 @@ public class TelLogService {
 	 * @param faultTime
 	 * @return
 	 */
-	public List<Map<String,Object>> findAllByDay(Date faultTime){
-		Date faultEndTime = TimeUtil.getEndTime(faultTime);
-		Date faultStartTime = TimeUtil.getStartTime(faultTime);
-		String year = TimeUtil.getYear(faultTime);
-		return telLogDao.findAllByDay(year,faultStartTime,faultEndTime);
+	public List<Map<String,Object>> findAllByDay(Date btime,Date eTime){
+		String year = TimeUtil.getYear(btime);
+		return telLogDao.findAllByDay(year,btime,eTime);
 	}
 	
 	

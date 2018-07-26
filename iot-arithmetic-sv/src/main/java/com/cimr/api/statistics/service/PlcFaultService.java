@@ -15,8 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.cimr.api.history.dao.RealDataFalutHistoryDao;
 import com.cimr.api.statistics.dao.FaultLogDao;
+import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.api.statistics.model.FaultLog;
-import com.cimr.api.statistics.model.FaultPK;
+import com.cimr.api.statistics.model.StaticsticsLog;
 import com.cimr.boot.utils.IdGener;
 import com.cimr.boot.utils.TimeUtil;
 
@@ -28,6 +29,8 @@ public class PlcFaultService  {
 	private FaultLogService faultLogService;
 	@Autowired
 	private FaultLogDao faultLogDao;
+	@Autowired
+	private StaticsticsLogDao staticsticsLogDao;
 	
 	@Autowired
 	private RealDataFalutHistoryDao realDataFalutHistoryDao;
@@ -52,12 +55,34 @@ public class PlcFaultService  {
 	 * @param faultDate
 	 * @return
 	 */
-	public void genDailyFaultLog(Date faultDate){
-		Date faultEndTime = TimeUtil.getEndTime(faultDate);
-		Date faultStartTime = TimeUtil.getStartTime(faultDate);
-		List<Map<String,Object>> faultList = findFaultList(faultStartTime,faultEndTime);
+	public void genDailyFaultLog(){
+		//统计结束时间
+		Date faultEndDate = new Date();
+		//上次统计时间
+		Date faultStartTime = staticsticsLogDao.getFaultDate(StaticsticsLog.PLC_FAULT_TYPE);
+		
+		//如果时间跨年，则此次统计只统计到上一年最后一刻
+		if(faultStartTime!=null && faultEndDate!=null ) {
+			if(TimeUtil.getYearSpan(faultStartTime, faultEndDate)>1) {
+				faultEndDate = TimeUtil.getTheLastYear(faultEndDate);
+				faultEndDate = TimeUtil.getTheLastDayOfYear(faultEndDate);
+			}
+			//如果本次查询时间超过一天，则只查询从开始到结束的时间
+			if(faultEndDate.getTime()-faultStartTime.getTime()>TimeUtil.DAY_1) {
+				faultEndDate = TimeUtil.getEndTime(faultStartTime);
+			}
+			
+		}
+		//新增的需要统计的历史记录
+		log.debug("begin get the log:"+faultStartTime+"~"+faultEndDate);
+		List<Map<String,Object>> faultList = findFaultList(faultStartTime,faultEndDate);
+		log.debug("get the log list"+faultList.size());
 		//临时保存某个终端的错误map
-		Map<String,Map<String,FaultLog>> terMap = new HashMap<>();
+		List<Map<String,Object>> listun = faultLogDao.getUnfininshLog(faultEndDate, FaultLog.PLCERROR);
+		log.debug("unfinsh list size:"+listun.size());
+		Map<String,Map<String,FaultLog>> terMap = //new HashMap<>();
+				faultLogDao.getPlcMap(listun);
+		log.debug("get the map");
 		//保存最终的结果
 		List<FaultLog> result = new ArrayList<>();
 		for(Map<String,Object> map : faultList) {
@@ -66,25 +91,34 @@ public class PlcFaultService  {
 		doLastResult(result,terMap);
 		//保存日志 ，不需要进行事务管理
 		faultLogDao.saveByYear(result);
+		List<FaultLog> updList = faultLogService.getPreList(result);
+		faultLogDao.updateYear(updList);
+		staticsticsLogDao.updateDate(StaticsticsLog.PLC_FAULT_TYPE,faultEndDate);
 		
 	}
 	
+	/**
+	 * 处理最后的数据
+	 * @param resutl
+	 * @param terMap
+	 */
 	private void doLastResult(List<FaultLog> resutl,Map<String,Map<String,FaultLog>> terMap) {
 		//将map中剩余数据 放到list中，最后一条数据
-				Iterator<String> iterator = terMap.keySet().iterator();
-				while(iterator.hasNext()) {
-					String terId = iterator.next();
-					Map<String,FaultLog> faultMap = terMap.get(terId);
-					Iterator<String> iteratorTer = faultMap.keySet().iterator();
-					while(iteratorTer.hasNext()) {
-						FaultLog faultLog =  faultMap.get(iteratorTer.next());
-						faultLog.setEndTime(null);
-						resutl.add(faultLog);
-					}
-					
-				}
+		Iterator<String> iterator = terMap.keySet().iterator();
+		while(iterator.hasNext()) {
+			String terId = iterator.next();
+			Map<String,FaultLog> faultMap = terMap.get(terId);
+			Iterator<String> iteratorTer = faultMap.keySet().iterator();
+			while(iteratorTer.hasNext()) {
+				FaultLog faultLog =  faultMap.get(iteratorTer.next());
+				faultLog.setEndTime(null);
+				resutl.add(faultLog);
+			}
+			
+		}
 	}
 	
+
 	/**
 	 * 解析map
 	 * @param faultMap
@@ -111,7 +145,8 @@ public class PlcFaultService  {
 					if(newValue) {
 						falutMap.put(key, getNewFaultLog(orgId,faultTime,key,terId));
 					}else {//如果新的数据为false，直接忽略
-						log.debug("the fault is not change:"+key+" "+newValue);
+						//查询最早的数据，如果存在则结束
+//						log.debug("the fault is not change:"+key+" "+newValue);
 					}
 				}else {//已有的错误
 					if(!newValue) {
@@ -119,7 +154,7 @@ public class PlcFaultService  {
 						resutl.add(inValue);
 						falutMap.remove(key);
 					}else {//旧数据依然为错误，直接忽略
-						log.debug("the fault is not change"+key+" "+newValue);
+//						log.debug("the fault is not change"+key+" "+newValue);
 					}
 				}
 			}
@@ -138,11 +173,8 @@ public class PlcFaultService  {
 		faultLog.setbTime(bTime);
 		faultLog.setEndTime(bTime);
 		faultLog.setCode(code);
-		FaultPK id = new FaultPK();
-		id.setCode(code);
-		id.setOrgId(orgId);
-		faultLog.setId(id);
-//		faultLog.setOrgId(orgId);
+		faultLog.setId(getId());
+		faultLog.setOrgId(orgId);
 		faultLog.setTerId(terId);
 		faultLog.setFaultType(FaultLog.PLCERROR);
 		return faultLog;

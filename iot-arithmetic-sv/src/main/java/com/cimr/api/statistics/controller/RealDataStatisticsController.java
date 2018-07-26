@@ -8,15 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cimr.api.comm.model.HttpResult;
 
 @RestController
-@RequestMapping("/statistics/realdata")
+@RequestMapping("iotsv/statistics/realdata")
 public class RealDataStatisticsController {
 
 	
 	
-	@GetMapping("/daily")
-	public HttpResult getStatisticsDataDaily(
+	@GetMapping("/dev/day")
+	public HttpResult getStatisticsDataDay(
 			@RequestParam(name="terid",required=false) String terid,
-			@RequestParam(name="dayTime",required=false) Long dayTime
+			@RequestParam(name="bTime",required=false) Long bTime,
+			@RequestParam(name="eTime",required=false) Long eTime
 			) {
 		HttpResult result;
 		
@@ -26,6 +27,32 @@ public class RealDataStatisticsController {
 		return result;
 	}
 	
+	@GetMapping("/dev/month")
+	public HttpResult getStatisticsDataMonth(
+			@RequestParam(name="terid",required=false) String terid,
+			@RequestParam(name="bTime",required=false) Long bTime,
+			@RequestParam(name="eTime",required=false) Long eTime
+			) {
+		HttpResult result;
+		
+		
+		
+		result = new HttpResult(true,"");
+		return result;
+	}
 	
+	@GetMapping("/dev/year")
+	public HttpResult getStatisticsDataYear(
+			@RequestParam(name="terid",required=false) String terid,
+			@RequestParam(name="bTime",required=false) Long bTime,
+			@RequestParam(name="eTime",required=false) Long eTime
+			) {
+		HttpResult result;
+		
+		
+		
+		result = new HttpResult(true,"");
+		return result;
+	}
 	
 }
