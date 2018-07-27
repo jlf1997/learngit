@@ -44,7 +44,13 @@ public class StaticsticsLogDao {
 		Query query = new Query();
 		Criteria criteria = Criteria.where("type").is(type);
 		query.addCriteria(criteria);
-		Update update = Update.update("sDate",endDate);
+		Update update ;
+		if(endDate==null) {
+			 update = Update.update("updTime",new Date());
+		}else {
+			 update = Update.update("sDate",endDate).set("updTime", new Date());
+		}
+		
 		statisticsTemp.upsert(query, update, StaticsticsLog.class,  StaticsticsLog.getDbName());
 	}
 }

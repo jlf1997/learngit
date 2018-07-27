@@ -93,7 +93,18 @@ public class PlcFaultService  {
 		faultLogDao.saveByYear(result);
 		List<FaultLog> updList = faultLogService.getPreList(result);
 		faultLogDao.updateYear(updList);
-		staticsticsLogDao.updateDate(StaticsticsLog.PLC_FAULT_TYPE,faultEndDate);
+		if(faultList.size()>0) {
+			staticsticsLogDao.updateDate(StaticsticsLog.PLC_FAULT_TYPE,(Date)faultList.get(faultList.size()-1).get("gatherMsgTime"));
+		}else {
+			//已经超过一天 则默认没有数据
+			if(faultEndDate.getTime()-new Date().getTime()<TimeUtil.DAY_1) {
+				staticsticsLogDao.updateDate(StaticsticsLog.PLC_FAULT_TYPE,faultEndDate);
+			}else {
+				staticsticsLogDao.updateDate(StaticsticsLog.PLC_FAULT_TYPE,null);
+			}
+			
+		}
+		
 		
 	}
 	

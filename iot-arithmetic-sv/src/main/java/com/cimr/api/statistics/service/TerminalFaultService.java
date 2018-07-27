@@ -99,7 +99,17 @@ public class TerminalFaultService {
 		faultLogDao.saveByYear(finalResult);
 		faultLogDao.updateYear(updList);
 		//更新扫描时间
-		staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,range[1]);
+		if(faultMapList.size()>0) {
+			staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,new Date(getTime(faultMapList.get(faultMapList.size()-1))));
+		}else {
+			//已经超过一天 则默认没有数据
+			if(range[1].getTime()-new Date().getTime()<TimeUtil.DAY_1) {
+				staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,range[1]);
+			}else {
+				staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,null);
+			}
+		}
+		
 	}
 	
 	

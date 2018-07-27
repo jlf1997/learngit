@@ -29,6 +29,8 @@ public class StaticsticsLog {
 	 */
 	private Integer type;
 
+	
+	private Date updTime;
 
 
 	public ObjectId getId() {
@@ -53,6 +55,14 @@ public class StaticsticsLog {
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public Date getUpdTime() {
+		return updTime;
+	}
+
+	public void setUpdTime(Date updTime) {
+		this.updTime = updTime;
 	}
 	
 	

@@ -24,7 +24,10 @@ public class FaultStatisticsController {
 			@RequestParam(value="endTime") Long endTime,
 			@RequestParam(value="terid",required=false) String terid
 			){
-	
+		//临时解决前端传输空串导致无法查询
+		if("".equals(terid) || "undefind".equals(terid)) {
+			terid =null;
+		}
 		return faultLogService.findByPage(pageNumber, pageSize, bTime, endTime, terid);
 		
 	}
