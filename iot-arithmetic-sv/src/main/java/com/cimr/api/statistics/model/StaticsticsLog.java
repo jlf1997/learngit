@@ -13,7 +13,7 @@ public class StaticsticsLog {
 	public static Integer TER_FAULT_TYPE = 1;
 	
 	public static String getDbName() {
-		return "staticstics_log";
+		return "staticstics_log_demo";
 	}
 
 	@Id

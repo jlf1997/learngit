@@ -29,7 +29,7 @@ public class TestController {
 
 			){
 
-		terminalFaultService.genDailyFaultLog();
+		terminalFaultService.genLog();
 		
 	}
 	
