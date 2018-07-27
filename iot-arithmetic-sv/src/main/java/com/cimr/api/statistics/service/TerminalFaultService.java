@@ -31,7 +31,6 @@ public class TerminalFaultService  {
 	private TerminalFaultGen terminalFaultGen;
 
 	public void genLog() {
-//		TerminalFaultGen gen = new TerminalFaultGen();
 		terminalFaultGen.genLog();
 	}
 
