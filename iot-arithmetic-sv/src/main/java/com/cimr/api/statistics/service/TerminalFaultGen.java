@@ -64,7 +64,7 @@ public class TerminalFaultGen extends DefaultFaultGen{
 		faultLog.setCode(code);
 		faultLog.setId(getId());
 		faultLog.setTerId(terId);
-		faultLog.setFaultType(FaultLog.TERERROR);
+		faultLog.setFaultType(type);
 		return faultLog;
 	}
 

@@ -24,4 +24,10 @@ public class IotAutoConfiguration {
 		ExecutorService executorService = Executors.newFixedThreadPool(10);
 		return executorService;
 	}
+	
+	@Bean
+    @ConditionalOnMissingBean
+    public ProjectPropertities projectPropertities() {
+        return new ProjectPropertities();
+    }
 }

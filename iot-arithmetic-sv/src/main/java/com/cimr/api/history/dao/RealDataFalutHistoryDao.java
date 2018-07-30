@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.cimr.api.comm.configuration.ProjectPropertities;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
 
 
@@ -28,16 +29,15 @@ public class RealDataFalutHistoryDao {
 	@Autowired
 	@Qualifier(value="history")
 	protected MongoTemplate mongoTemplate;
+	@Autowired
+	private ProjectPropertities projectPropertities;
 	
-	private String singal = "503447856";
-	
-	private String projectId = "P00001";
 	
 	private static String falutTime = "gatherMsgTime";
 
 	
 	private String getDbName() {
-		return "REALDATA_SIGNAL_"+projectId+"_"+singal;
+		return "REALDATA_SIGNAL_"+projectPropertities.getProjectId()+"_"+projectPropertities.getSingalFault();
 	}
 
 	

@@ -23,14 +23,14 @@ public class FaultSchedule {
 	private static final Logger log = LoggerFactory.getLogger(FaultSchedule.class);
 
 
-//	@Scheduled(cron = "0 0/5 * * * *")
+	@Scheduled(cron = "0 0/5 * * * *")
     public void timer(){
         //获取当前时间
 //        LocalDateTime localDateTime =LocalDateTime.now();
 //        System.out.println("当前时间为:" + localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		log.info("begain scan fault");
 		terminalFaultService.genLog();
-		plcFaultService.genDailyFaultLog();
+		plcFaultService.genLog();
 		log.info("end scan fault");
 	
 	}

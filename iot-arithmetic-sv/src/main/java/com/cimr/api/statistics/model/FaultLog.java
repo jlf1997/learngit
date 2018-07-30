@@ -31,7 +31,7 @@ public class FaultLog {
 	
 	
 	public static  String getDbName(String year) {
-		return "TEL_FAULT_1111111"+year;
+		return "TEL_FAULT_"+year;
 	}
 	
 	public static Integer TERERROR = 1;

@@ -15,7 +15,53 @@ import org.springframework.stereotype.Service;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.boot.statistics.AbstractGenLogTimeRang;
 
-public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang implements FaultLogGen{
+public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
+	
+
+
+	/**
+	 * 获取此次统计的开始时间 结束时间 数组0为开始 1为结束
+	 * @param type
+	 * @return
+	 */
+	protected abstract  Date[] getTimeRange(Integer type);
+	
+
+	
+	/**
+	 * 获取未结束的任务
+	 * @param type
+	 * @return
+	 */
+	protected abstract List<Map<String,Object>>  getUnfinished(Integer type);
+	
+	/**
+	 * 处理单个原始数据
+	 * @param map
+	 * @param terMap
+	 * @param finalResult
+	 */
+	protected abstract void parseFalutMap(Map<String,Object> map,Map<String,Map<String,FaultLog>> terMap,List<FaultLog> finalResult);
+
+	
+	protected abstract void doLastResult(List<FaultLog> finalResult,Map<String,Map<String,FaultLog>> terMap);
+	
+	/**
+	 * 更新日期
+	 * @param type
+	 * @param listun
+	 */
+	protected abstract void updateDate(Integer type, List<Map<String, Object>> listun);
+	
+	
+	
+	protected abstract Map<String,Map<String,FaultLog>> getTerMap(List<Map<String,Object>> unfinishedList);
+	
+	/**
+	 * 构造错误对象
+	 * @return
+	 */
+	protected abstract FaultLog getNewFaultLog(ObjectId orgId,Date bTime,String code,String terId);
 	
 	private static final Logger log = LoggerFactory.getLogger(AbstractFaultLogGen.class);
 	
@@ -29,20 +75,16 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang impleme
 	protected String faultTime = "faultTime";
 		
 	
-//	public AbstractFaultLogGen(Integer type) {
-//		this.type = type;
-//	}
-	
 	
 	@Override
-	public final Date[] getTimeRange() {
+	protected final Date[] getTimeRange() {
 		// TODO Auto-generated method stub
 		return getTimeRange(type);
 	}
 
 
 	@Override
-	public final void parseFalutList(List<Map<String, Object>> list, List<Map<String, Object>> listun,
+	protected final void parseFalutList(List<Map<String, Object>> list, List<Map<String, Object>> listun,
 			List<FaultLog> finalResult) {
 		Map<String,Map<String,FaultLog>> terMap = getTerMap(listun);
 		for(Map<String,Object> map:list) {
@@ -53,13 +95,13 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang impleme
 
 
 	@Override
-	public final List<Map<String, Object>> getUnfinished() {
+	protected final List<Map<String, Object>> getUnfinished() {
 		// TODO Auto-generated method stub
 		return getUnfinished(type);
 	}
 
 	@Override
-	public final void updateDate(List<Map<String, Object>> listun) {
+	protected final void updateDate(List<Map<String, Object>> listun) {
 		// TODO Auto-generated method stub
 		updateDate(type,listun);
 	}
@@ -67,8 +109,7 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang impleme
 	/**
 	 * 获取终端编号
 	 */
-	@Override
-	public String getTerId(Map<String, Object> map) {
+	protected String getTerId(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return map.get(terminalNo).toString();
 	}
@@ -76,8 +117,7 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang impleme
 	/**
 	 * 获取错误码
 	 */
-	@Override
-	public  String getCode(Map<String, Object> map) {
+	protected  String getCode(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return map.get(code).toString();
 	}
@@ -85,8 +125,7 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang impleme
 	/**
 	 * 获取原始数据id
 	 */
-	@Override
-	public final ObjectId getOrgId(Map<String, Object> map) {
+	protected final ObjectId getOrgId(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return (ObjectId) map.get("_id");
 	}
@@ -96,8 +135,7 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang impleme
 	 * @param faultMap
 	 * @return
 	 */
-	@Override
-	public Date getTime(Map<String,Object> map) {
+	protected Date getTime(Map<String,Object> map) {
 		return ((Date)map.get(faultTime));
 	}
 

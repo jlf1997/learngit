@@ -8,12 +8,10 @@ import org.bson.types.ObjectId;
 
 public class StaticsticsLog {
 	
-	public static Integer PLC_FAULT_TYPE = 2;
-	
-	public static Integer TER_FAULT_TYPE = 1;
+
 	
 	public static String getDbName() {
-		return "staticstics_log_demo";
+		return "staticstics_log";
 	}
 
 	@Id

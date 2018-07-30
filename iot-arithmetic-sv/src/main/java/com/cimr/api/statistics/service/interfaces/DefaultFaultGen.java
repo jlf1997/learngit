@@ -24,7 +24,14 @@ import com.cimr.boot.utils.TimeUtil;
 
 public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	
-	public abstract void parseFaultLog(Map<String, Object> map,Map<String,FaultLog> falutMap,List<FaultLog> finalResult);
+	
+	/**
+	 * 解析具体的每一个历史记录
+	 * @param map
+	 * @param falutMap
+	 * @param finalResult
+	 */
+	protected abstract void parseFaultLog(Map<String, Object> map,Map<String,FaultLog> falutMap,List<FaultLog> finalResult);
 	
 	private static final Logger log = LoggerFactory.getLogger(DefaultFaultGen.class);
 	
@@ -38,7 +45,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	
 
 	@Override
-	public Date[] getTimeRange(Integer type) {
+	protected Date[] getTimeRange(Integer type) {
 		
 		//记录是否是之前的 故障延续
 		//查询出存在异常的记录
@@ -61,13 +68,13 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	}
 
 	@Override
-	public List<Map<String, Object>> getUnfinished(Integer type) {
+	protected List<Map<String, Object>> getUnfinished(Integer type) {
 		
 		return faultLogDao.getUnfininshLog(getbTime(), type);
 	}
 
 	@Override
-	public void parseFalutMap(Map<String, Object> map, Map<String, Map<String, FaultLog>> terMap,
+	protected void parseFalutMap(Map<String, Object> map, Map<String, Map<String, FaultLog>> terMap,
 			List<FaultLog> finalResult) {
 		String terId = getTerId(map);
 		Map<String,FaultLog> falutMap = terMap.get(terId);
@@ -80,7 +87,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	}
 
 	@Override
-	public void doLastResult(List<FaultLog> finalResult, Map<String, Map<String, FaultLog>> terMap) {
+	protected void doLastResult(List<FaultLog> finalResult, Map<String, Map<String, FaultLog>> terMap) {
 		Iterator<String> iterator = terMap.keySet().iterator();
 		while(iterator.hasNext()) {
 			String terId = iterator.next();
@@ -98,15 +105,15 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	}
 
 	@Override
-	public void updateDate(Integer type,List<Map<String, Object>> listun) {
+	protected void updateDate(Integer type,List<Map<String, Object>> listun) {
 		if(listun.size()>0) {
-			staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,getTime(listun.get(listun.size()-1)));
+			staticsticsLogDao.updateDate(type,getTime(listun.get(listun.size()-1)));
 		}else {
 			//已经超过一天 则默认没有数据
 			if(new Date().getTime()-geteTime().getTime()>TimeUtil.DAY_1) {
-				staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,geteTime());
+				staticsticsLogDao.updateDate(type,geteTime());
 			}else {
-				staticsticsLogDao.updateDate(StaticsticsLog.TER_FAULT_TYPE,null);
+				staticsticsLogDao.updateDate(type,null);
 			}
 		}
 		
@@ -116,7 +123,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	 * 格式化数据
 	 */
 	@Override
-	public Map<String, Map<String, FaultLog>> getTerMap(List<Map<String, Object>> unfinishedList) {
+	protected Map<String, Map<String, FaultLog>> getTerMap(List<Map<String, Object>> unfinishedList) {
 		// TODO Auto-generated method stub
 		Map<String,Map<String,FaultLog>>  rs = new HashMap<>();
 		 for(Map<String,Object> masp :unfinishedList) {
@@ -143,7 +150,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	 * 保存数据
 	 */
 	@Override
-	public void update(List<FaultLog> finalResult) {
+	protected void update(List<FaultLog> finalResult) {
 		List<FaultLog> updList = getPreList(finalResult);
 		faultLogDao.saveByYear(finalResult);
 		faultLogDao.updateYear(updList);
@@ -177,7 +184,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	 * 生成id
 	 * @return
 	 */
-	public final Long getId() {
+	protected final Long getId() {
 		return IdGener.getInstance().getNormalId();
 	}
 

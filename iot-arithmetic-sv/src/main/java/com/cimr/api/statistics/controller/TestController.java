@@ -40,7 +40,7 @@ public class TestController {
 		Date faultDate = new Date();
 		Date faultEndTime = TimeUtil.getEndTime(faultDate);
 		Date faultStartTime = TimeUtil.getStartTime(faultDate);
-		plcFaultService.genDailyFaultLog();
+		plcFaultService.genLog();
 //		return plcFaultService.findFaultList(faultStartTime,faultEndTime);
 		
 	}

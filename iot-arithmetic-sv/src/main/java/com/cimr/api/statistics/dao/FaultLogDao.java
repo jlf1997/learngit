@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.cimr.api.comm.model.PageModel;
@@ -21,6 +20,8 @@ import com.cimr.api.statistics.exception.TimeTooLongException;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
 import com.cimr.boot.utils.TimeUtil;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 
 @Repository
@@ -132,7 +133,7 @@ public class FaultLogDao {
 		Sort sort = new Sort(Sort.Direction.ASC, "bTime");
 		Query query = new Query();
 		if(terid!=null) {
-			Criteria criteria = Criteria.where("terid").is(terid);
+			Criteria criteria = Criteria.where("terId").is(terid);
 			query.addCriteria(criteria);
 		}
 		if(bTime!=null && endTime!=null) {

@@ -14,12 +14,16 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.cimr.api.comm.configuration.ProjectPropertities;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
-import com.cimr.boot.utils.TimeUtil;
 
 @Repository
 public class TelLogDao {
 
+	
+	@Autowired
+	private ProjectPropertities projectPropertities;
+	
 	
 	@Autowired
 	@Qualifier(value="log")
@@ -45,6 +49,8 @@ public class TelLogDao {
 			criteria.lte(faultEndTime);
 			query.addCriteria(criteria);
 		}
+		Criteria criteriaPj = Criteria.where("projectNo").is(projectPropertities.getProjectId());
+		query.addCriteria(criteriaPj);
 		return finder.findAll(query,getDbName(year));
 	}
 	
