@@ -28,6 +28,16 @@ public class TimeUtil {
 		return format.format(date);
 	}
 	
+	public static String getMonth(Date date){
+		DateFormat format = new SimpleDateFormat("MM");
+		return format.format(date);
+	}
+	
+	public static String getDay(Date date){
+		DateFormat format = new SimpleDateFormat("dd");
+		return format.format(date);
+	}
+	
 	public static Long dateToLong(Date date) {
 		if(date==null) {
 			return null;
@@ -91,6 +101,12 @@ public class TimeUtil {
 		todayEnd.set(Calendar.SECOND, 59);
 		todayEnd.set(Calendar.MILLISECOND, 999);
 		return todayEnd.getTime();
+	}
+	
+	public static Date getDay(int day) {
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.DATE, day);
+		return now.getTime();
 	}
 	
 	/**

@@ -1,15 +1,14 @@
 package com.cimr.boot.statistics;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import com.cimr.api.statistics.model.FaultLog;
 
 public interface GenLogTimeRang {
 		
+	/**
+	 * 生成历史记录
+	 */
 	public  void genLog();
 	
-	
+	public  void genLog(Date bTime,Date eTime);
 
 }

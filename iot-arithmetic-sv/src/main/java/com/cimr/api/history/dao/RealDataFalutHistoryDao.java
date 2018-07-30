@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.cimr.api.comm.configuration.ProjectPropertities;
+import com.cimr.api.comm.configuration.Setting;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
 
 
@@ -32,12 +33,15 @@ public class RealDataFalutHistoryDao {
 	@Autowired
 	private ProjectPropertities projectPropertities;
 	
+	@Autowired
+	private Setting setting;
+	
 	
 	private static String falutTime = "gatherMsgTime";
 
 	
-	private String getDbName() {
-		return "REALDATA_SIGNAL_"+projectPropertities.getProjectId()+"_"+projectPropertities.getSingalFault();
+	private String getDbName(String signal) {
+		return "REALDATA_SIGNAL_"+projectPropertities.getProjectId()+"_"+signal;
 	}
 
 	
@@ -62,8 +66,37 @@ public class RealDataFalutHistoryDao {
 		if(criteria!=null) {
 			query.addCriteria(criteria);
 		}
-		return finder.findAll(query,getDbName());
+		return finder.findAll(query,getDbName(projectPropertities.getSingalFault()));
 		
+	}
+	
+	
+	/**
+	 * 获取时间范围内所有数据
+	 * @param bTime
+	 * @param eTime
+	 * @param singal
+	 * @return
+	 */
+	public List<Map<String,Object>> findAll(Date bTime,Date eTime,String singal){
+		String gatherMsgTime = setting.getGatherMsgTime(singal);
+		MongoDbBaseFinder finder = new MongoDbBaseFinder(mongoTemplate);
+		Query query = new Query();
+		query.with(new Sort(new Order(Direction.ASC,gatherMsgTime)));
+		Criteria criteria =null;
+		if( eTime!=null) {
+			criteria = Criteria.where(gatherMsgTime).lte(eTime);
+		}
+		if(bTime!=null) {
+			if(criteria==null) {
+				criteria = Criteria.where(gatherMsgTime);
+			}
+			criteria = criteria.gte(bTime);
+		}
+		if(criteria!=null) {
+			query.addCriteria(criteria);
+		}
+		return finder.findAll(query,getDbName(singal));
 	}
 	
 	

@@ -4,10 +4,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("iot.sv.info")
 public class ProjectPropertities {
+	
+	private String role = "";
 
 	private String projectId ="P00001";
 	
-	private String singalRealData = "";
+	private String singalOil = "503447824";
 	
 	private String singalFault = "503447856";
 
@@ -19,12 +21,14 @@ public class ProjectPropertities {
 		this.projectId = projectId;
 	}
 
-	public String getSingalRealData() {
-		return singalRealData;
+
+
+	public String getSingalOil() {
+		return singalOil;
 	}
 
-	public void setSingalRealData(String singalRealData) {
-		this.singalRealData = singalRealData;
+	public void setSingalOil(String singalOil) {
+		this.singalOil = singalOil;
 	}
 
 	public String getSingalFault() {
@@ -34,6 +38,15 @@ public class ProjectPropertities {
 	public void setSingalFault(String singalFault) {
 		this.singalFault = singalFault;
 	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
 	
 	
 }

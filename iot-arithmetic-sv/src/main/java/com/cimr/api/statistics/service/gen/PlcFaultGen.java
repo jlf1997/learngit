@@ -1,4 +1,4 @@
-package com.cimr.api.statistics.service;
+package com.cimr.api.statistics.service.gen;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public  class PlcFaultGen extends DefaultFaultGen{
 	}
 
 	@Override
-	public void parseFaultLog(Map<String, Object> map, Map<String, FaultLog> falutMap, List<FaultLog> finalResult) {
+	public void parseFaultLog(Map<String, Object> map, Map<String, Object> falutMap, List<Object> finalResult) {
 		// TODO Auto-generated method stub
 		String terId = getTerId(map);
 		Date time = getTime(map);
@@ -58,7 +58,7 @@ public  class PlcFaultGen extends DefaultFaultGen{
 			
 			if(value instanceof Boolean) {
 				Boolean newValue = (Boolean) value;
-				FaultLog inValue = falutMap.get(code);
+				FaultLog inValue = (FaultLog) falutMap.get(code);
 				if(inValue==null) {//新的错误
 					if(newValue) {
 						falutMap.put(code, getNewFaultLog(orgId,time,code,terId));

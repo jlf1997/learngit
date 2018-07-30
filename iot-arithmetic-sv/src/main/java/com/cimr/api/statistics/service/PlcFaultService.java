@@ -18,6 +18,7 @@ import com.cimr.api.statistics.dao.FaultLogDao;
 import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.api.statistics.model.StaticsticsLog;
+import com.cimr.api.statistics.service.gen.PlcFaultGen;
 import com.cimr.boot.utils.IdGener;
 import com.cimr.boot.utils.TimeUtil;
 

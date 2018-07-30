@@ -1,4 +1,4 @@
-package com.cimr.api.statistics.service;
+package com.cimr.api.statistics.service.gen;
 
 import java.util.Date;
 import java.util.List;
@@ -6,12 +6,9 @@ import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.log.service.TelLogService;
-import com.cimr.api.statistics.dao.FaultLogDao;
-import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.api.statistics.service.interfaces.DefaultFaultGen;
 
@@ -76,9 +73,9 @@ public class TerminalFaultGen extends DefaultFaultGen{
 
 
 	@Override
-	public void parseFaultLog(Map<String, Object> map,Map<String, FaultLog> falutMap, List<FaultLog> finalResult) {
+	public void parseFaultLog(Map<String, Object> map,Map<String, Object> falutMap, List<Object> finalResult) {
 		// TODO Auto-generated method stub
-		FaultLog faultLog = falutMap.get("code");
+		FaultLog faultLog = (FaultLog) falutMap.get("code");
 		String code = getCode(map);
 		String terId = getTerId(map);
 		Date time = getTime(map);

@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class IotAutoConfiguration {
 
 	
-	
+
 	
 	@Bean(name="executorServiceForSendCodeByKafka")
     @ConditionalOnMissingBean

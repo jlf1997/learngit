@@ -31,7 +31,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	 * @param falutMap
 	 * @param finalResult
 	 */
-	protected abstract void parseFaultLog(Map<String, Object> map,Map<String,FaultLog> falutMap,List<FaultLog> finalResult);
+	protected abstract void parseFaultLog(Map<String, Object> map,Map<String,Object> falutMap,List<Object> finalResult);
 	
 	private static final Logger log = LoggerFactory.getLogger(DefaultFaultGen.class);
 	
@@ -63,7 +63,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 			faultEndDate = TimeUtil.getTheLastYear(faultEndDate);
 			faultEndDate = TimeUtil.getTheLastDayOfYear(faultEndDate);
 		}
-		log.debug("begin get the log:"+faultStartTime+"~"+faultEndDate);
+//		log.debug("begin get the log:"+faultStartTime+"~"+faultEndDate);
 		return new Date[]{faultStartTime,faultEndDate};
 	}
 
@@ -74,10 +74,10 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	}
 
 	@Override
-	protected void parseFalutMap(Map<String, Object> map, Map<String, Map<String, FaultLog>> terMap,
-			List<FaultLog> finalResult) {
+	protected void parseFalutMap(Map<String, Object> map, Map<String, Map<String, Object>> terMap,
+			List<Object> finalResult) {
 		String terId = getTerId(map);
-		Map<String,FaultLog> falutMap = terMap.get(terId);
+		Map<String,Object> falutMap = terMap.get(terId);
 		if(falutMap==null) {
 			//初始化
 			falutMap = new HashMap<>();
@@ -87,14 +87,14 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	}
 
 	@Override
-	protected void doLastResult(List<FaultLog> finalResult, Map<String, Map<String, FaultLog>> terMap) {
+	protected void doLastResult(List<Object> finalResult, Map<String, Map<String, Object>> terMap) {
 		Iterator<String> iterator = terMap.keySet().iterator();
 		while(iterator.hasNext()) {
 			String terId = iterator.next();
-			Map<String,FaultLog> faultMap = terMap.get(terId);
+			Map<String,Object> faultMap = terMap.get(terId);
 			Iterator<String> iteratorTer = faultMap.keySet().iterator();
 			while(iteratorTer.hasNext()) {
-				FaultLog faultLog = faultMap.get(iteratorTer.next());
+				FaultLog faultLog = (FaultLog) faultMap.get(iteratorTer.next());
 				//错误未结束
 				faultLog.setEndTime(null);
 				finalResult.add(faultLog);
@@ -123,17 +123,17 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	 * 格式化数据
 	 */
 	@Override
-	protected Map<String, Map<String, FaultLog>> getTerMap(List<Map<String, Object>> unfinishedList) {
+	protected Map<String, Map<String, Object>> getTerMap(List<Map<String, Object>> unfinishedList) {
 		// TODO Auto-generated method stub
-		Map<String,Map<String,FaultLog>>  rs = new HashMap<>();
+		Map<String,Map<String,Object>>  rs = new HashMap<>();
 		 for(Map<String,Object> masp :unfinishedList) {
 			 String terId = masp.get("terId").toString();
 			 String code = masp.get("code").toString();
-			 Map<String,FaultLog> terMap = rs.get(terId);
+			 Map<String,Object> terMap = rs.get(terId);
 			 if(terMap==null) {
 				 terMap = new HashMap<>();
 			 }
-			FaultLog log = terMap.get(code);
+			FaultLog log = (FaultLog) terMap.get(code);
 			if(log==null) {
 				log = new FaultLog(masp);
 				log.setYear(TimeUtil.getYear(log.getbTime()));
@@ -150,9 +150,13 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	 * 保存数据
 	 */
 	@Override
-	protected void update(List<FaultLog> finalResult) {
+	protected void update(List<Object> finalResult) {
 		List<FaultLog> updList = getPreList(finalResult);
-		faultLogDao.saveByYear(finalResult);
+		List<FaultLog> list = new ArrayList<>();
+		for(Object obj:finalResult) {
+			list.add((FaultLog)obj);
+		}
+		faultLogDao.saveByYear(list);
 		faultLogDao.updateYear(updList);
 	}
 	
@@ -161,12 +165,12 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	 * @param resutl
 	 * @return
 	 */
-	private List<FaultLog> getPreList(List<FaultLog> resutl){
+	private List<FaultLog> getPreList(List<Object> resutl){
 		List<FaultLog> updList = new ArrayList<>();
-		Iterator<FaultLog> iterator = resutl.iterator();
+		Iterator<Object> iterator = resutl.iterator();
 		FaultLog faultLog;
 		while(iterator.hasNext()) {
-			faultLog = iterator.next();
+			faultLog = (FaultLog) iterator.next();
 			if(faultLog.getYear()!=null) {
 				updList.add(faultLog);
 				iterator.remove();
@@ -187,5 +191,13 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	protected final Long getId() {
 		return IdGener.getInstance().getNormalId();
 	}
+
+	@Override
+	protected boolean timeError(Date bTime, Date eTime) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
 
 }

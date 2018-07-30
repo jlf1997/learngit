@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.cimr.api.log.service.TelLogService;
 import com.cimr.api.statistics.model.FaultLog;
+import com.cimr.api.statistics.service.gen.TerminalFaultGen;
 import com.cimr.api.statistics.service.interfaces.DefaultFaultGen;
 
 /**

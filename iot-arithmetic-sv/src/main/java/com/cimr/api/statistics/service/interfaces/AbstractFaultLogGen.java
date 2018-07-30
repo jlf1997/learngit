@@ -41,10 +41,10 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 	 * @param terMap
 	 * @param finalResult
 	 */
-	protected abstract void parseFalutMap(Map<String,Object> map,Map<String,Map<String,FaultLog>> terMap,List<FaultLog> finalResult);
+	protected abstract void parseFalutMap(Map<String,Object> map,Map<String,Map<String,Object>> terMap,List<Object> finalResult);
 
 	
-	protected abstract void doLastResult(List<FaultLog> finalResult,Map<String,Map<String,FaultLog>> terMap);
+	protected abstract void doLastResult(List<Object> finalResult,Map<String,Map<String,Object>> terMap);
 	
 	/**
 	 * 更新日期
@@ -55,7 +55,7 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 	
 	
 	
-	protected abstract Map<String,Map<String,FaultLog>> getTerMap(List<Map<String,Object>> unfinishedList);
+	protected abstract Map<String,Map<String,Object>> getTerMap(List<Map<String,Object>> unfinishedList);
 	
 	/**
 	 * 构造错误对象
@@ -85,8 +85,8 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 
 	@Override
 	protected final void parseFalutList(List<Map<String, Object>> list, List<Map<String, Object>> listun,
-			List<FaultLog> finalResult) {
-		Map<String,Map<String,FaultLog>> terMap = getTerMap(listun);
+			List<Object> finalResult) {
+		Map<String,Map<String,Object>> terMap = getTerMap(listun);
 		for(Map<String,Object> map:list) {
 			parseFalutMap(map,terMap,finalResult);
 		}

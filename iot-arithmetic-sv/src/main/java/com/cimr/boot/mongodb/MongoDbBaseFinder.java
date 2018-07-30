@@ -1,6 +1,7 @@
 package com.cimr.boot.mongodb;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +14,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.DocumentCallbackHandler;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import com.cimr.api.comm.model.PageModel;
+import com.cimr.api.statistics.exception.TimeTooLongException;
 import com.cimr.api.statistics.model.FaultLog;
+import com.cimr.boot.utils.TimeUtil;
 import com.mongodb.DBObject;
 import com.mongodb.MongoException;
 
@@ -60,6 +68,8 @@ public class MongoDbBaseFinder {
 		 });
 		 return list;
 	}
+	
+
 	/**
 	 * 分页查询
 	 * @param query
@@ -135,7 +145,55 @@ public class MongoDbBaseFinder {
 		return findAll(query,collectionName);
 	}
 		
-	public <T> void  update(T t,String collectionName) {
+	public List<Map<String,Object>> findAll(List<Criteria> criterias,String collectionName,Sort sort, AggregationOperation... aggregations) {
+		List<AggregationOperation> operations = new ArrayList<>();
+		Query query = new Query();
+		for(Criteria criteria:criterias) {
+			operations.add(Aggregation.match(criteria));
+			query.addCriteria(criteria);
+		}
+	
+		for(AggregationOperation aggregation :aggregations) {
+			operations.add(aggregation);
+		}
+		
+		Aggregation agg = Aggregation.newAggregation(  
+				operations);  
+		AggregationResults res = template.aggregate(agg,collectionName,Map.class);
+		
+
+		return res.getMappedResults();
+		
+	}
+	
+	public PageModel<Map<String,Object>> findByPage(List<Criteria> criterias,String collectionName,Sort sort,int skip,int pageNumber, int pageSize,AggregationOperation... aggregations) {
+		List<AggregationOperation> operations = new ArrayList<>();
+		Query query = new Query();
+		for(Criteria criteria:criterias) {
+			operations.add(Aggregation.match(criteria));
+			query.addCriteria(criteria);
+		}
+		for(AggregationOperation aggregation :aggregations) {
+			operations.add(aggregation);
+		}
+		Aggregation agg = Aggregation.newAggregation(  
+				operations);  
+		
+		operations.add(Aggregation.skip(pageNumber*pageSize+skip));
+		operations.add(Aggregation.limit(pageSize));
+		AggregationResults res= template.aggregate(agg, collectionName,Map.class);
+		long total = res.getMappedResults().size();
+		
+		PageModel pageModel = new PageModel();
+		 agg = Aggregation.newAggregation(  
+				operations);  
+		 res = template.aggregate(agg,collectionName,Map.class);
+		
+		
+		pageModel.setContent(res.getMappedResults());
+		pageModel.setPageSize(pageSize);
+		pageModel.setTotalCount(total);
+		return pageModel;
 		
 	}
 }
