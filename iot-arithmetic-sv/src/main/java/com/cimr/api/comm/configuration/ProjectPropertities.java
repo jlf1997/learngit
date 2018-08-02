@@ -5,7 +5,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("iot.sv.info")
 public class ProjectPropertities {
 	
-	private String role = "";
+	public static Long OIL = 1L;
+	
+	public static Long FAULT = 2L;
+	
+	private Long role = 0L;
 
 	private String projectId ="P00001";
 	
@@ -39,12 +43,21 @@ public class ProjectPropertities {
 		this.singalFault = singalFault;
 	}
 
-	public String getRole() {
+	public Long getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(Long role) {
 		this.role = role;
+	}
+
+	
+	public boolean isAllRole() {
+		if(role.equals(-1L)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	

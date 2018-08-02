@@ -25,7 +25,7 @@ public class StaticsticsLogDao {
 	 * 获取最后的错误统计时间
 	 * @return
 	 */
-	public Date getFaultDate(Integer type) {
+	public Date getDate(String type) {
 		Query query = new Query();
 		Criteria criteria = Criteria.where("type").is(type);
 		query.addCriteria(criteria);
@@ -40,7 +40,7 @@ public class StaticsticsLogDao {
 	 * 更新日期
 	 * @param date
 	 */
-	public void updateDate(Integer type,Date endDate) {
+	public void updateDate(String type,Date endDate) {
 		Query query = new Query();
 		Criteria criteria = Criteria.where("type").is(type);
 		query.addCriteria(criteria);
@@ -53,4 +53,6 @@ public class StaticsticsLogDao {
 		
 		statisticsTemp.upsert(query, update, StaticsticsLog.class,  StaticsticsLog.getDbName());
 	}
+	
+	
 }

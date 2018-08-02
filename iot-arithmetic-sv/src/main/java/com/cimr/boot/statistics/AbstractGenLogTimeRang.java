@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cimr.api.statistics.model.FaultLog;
+import com.cimr.boot.utils.TimeUtil;
 
 public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 	
@@ -116,7 +117,17 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 		return ethreadLocal.get();
 	}
 
+	@Override
+	public final void genLogDaily(Date date) {
+		Date b = TimeUtil.getStartTime(date);
+		 bthreadLocal.set(b);
+		Date e = TimeUtil.getEndTime(date);
+		ethreadLocal.set(e);
+		genLog(b,e);
+		
+	}
 
+	
 	
 	
 }

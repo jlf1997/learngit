@@ -1,0 +1,59 @@
+node1:
+  175.6.65.239
+node2:
+  175.6.65.53
+server:
+  port: 8889
+  
+spring:
+  application: 
+    name: zuul-main-1
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    name: base
+    url: jdbc:mysql://175.6.73.138:3406/iot_zuul
+    username: root
+    password: root
+    
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url: 
+      defaultZone: http://${node2}:8888/eureka/,http://${node1}:8888/eureka/
+zuul: 
+  ignored-services: '*'
+  host:
+    max-total-connections: 1000
+    max-per-route-connections: 1000
+  routes:     
+     zuul-member: 
+        strip-prefix: true
+        path: /zuul/**
+        service-id: zuul-main
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000 
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled:false            
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+
+
+            
+
+       
+
+      
+       

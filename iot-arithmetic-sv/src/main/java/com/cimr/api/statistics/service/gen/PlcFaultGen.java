@@ -9,7 +9,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cimr.api.history.dao.RealDataFalutHistoryDao;
+import com.cimr.api.comm.configuration.ProjectPropertities;
+import com.cimr.api.history.dao.RealDataSignalHistoryDao;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.api.statistics.service.interfaces.DefaultFaultGen;
 
@@ -17,7 +18,9 @@ import com.cimr.api.statistics.service.interfaces.DefaultFaultGen;
 public  class PlcFaultGen extends DefaultFaultGen{
 	
 	@Autowired
-	private RealDataFalutHistoryDao realDataFalutHistoryDao;
+	private RealDataSignalHistoryDao realDataSignalHistoryDao;
+	@Autowired
+	private ProjectPropertities projectPropertities;
 	
 	public PlcFaultGen() {
 		this.type=FaultLog.PLCERROR;
@@ -42,7 +45,7 @@ public  class PlcFaultGen extends DefaultFaultGen{
 	@Override
 	public List<Map<String, Object>> getDateFromSource(Date bTime, Date eTime) {
 		// TODO Auto-generated method stub
-		return realDataFalutHistoryDao.findFaultList(bTime,eTime);
+		return realDataSignalHistoryDao.findAll(bTime, eTime, projectPropertities.getSingalFault());
 	}
 
 	@Override

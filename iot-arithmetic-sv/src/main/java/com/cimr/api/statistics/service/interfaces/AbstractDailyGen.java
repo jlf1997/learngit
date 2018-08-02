@@ -2,17 +2,18 @@ package com.cimr.api.statistics.service.interfaces;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.cimr.api.statistics.model.FaultLog;
-import com.cimr.api.statistics.model.StaticsicsRealDateOil;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.boot.statistics.AbstractGenLogTimeRang;
 import com.cimr.boot.utils.TimeUtil;
 
 public abstract class AbstractDailyGen  extends AbstractGenLogTimeRang{
+	
+	
 
 	@Override
 	protected Date[] getTimeRange() {
@@ -33,12 +34,6 @@ public abstract class AbstractDailyGen  extends AbstractGenLogTimeRang{
 
 
 	@Override
-	protected void updateDate(List<Map<String, Object>> listun) {
-		// 按日统计无需更新时间
-		
-	}
-
-	@Override
 	protected boolean timeError(Date bTime, Date eTime) {
 		// TODO Auto-generated method stub
 		if(bTime.after(eTime)) {
@@ -47,5 +42,6 @@ public abstract class AbstractDailyGen  extends AbstractGenLogTimeRang{
 		return false;
 	}
 
+	
 
 }

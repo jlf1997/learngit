@@ -1,0 +1,65 @@
+node1:
+  175.6.65.239
+node2:
+  175.6.65.53
+server:
+  port: 8887
+  
+spring:
+  application: 
+    name: zuul-main
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url: 
+      defaultZone: http://${node2}:8888/eureka/,http://${node1}:8888/eureka/
+zuul: 
+  ignored-services: '*'
+  host:
+    max-total-connections: 1000
+    max-per-route-connections: 1000
+  routes:     
+     zuul-member: 
+        strip-prefix: true
+        path: /member/**
+        service-id: member-bs
+     zuul-supermarket: 
+        strip-prefix: true
+        path: /shop/**
+        service-id: shop-bs
+     partner-api: 
+        strip-prefix: true
+        path: /partner/**
+        service-id: partner-bs
+     pay-api: 
+        strip-prefix: true
+        path: /demo/**
+        service-id: client
+feign:
+  hystrix:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000 
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled:false            
+ribbon: 
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+
+
+            
+
+       
+
+      
+       

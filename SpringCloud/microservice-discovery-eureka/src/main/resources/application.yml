@@ -1,0 +1,19 @@
+server:
+  port: 8761                    # 指定该Eureka实例的端口
+  enable-self-preservation: false
+  eviction-interval-timer-in-ms: 4000
+eureka:
+  instance:
+    hostname: localhost         # 指定该Eureka实例的主机名
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+# 参考文档：http://projects.spring.io/spring-cloud/docs/1.0.3/spring-cloud.html#_standalone_mode
+# 参考文档：http://my.oschina.net/buwei/blog/618756
+
+# log4j2 config
+logging :
+  config : classpath:log4j2.xml

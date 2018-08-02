@@ -41,8 +41,8 @@ public class RealDateSignalOilGen extends RealDateSignalGen{
 			}
 			Integer FQ_DAY_OIL = (Integer) map.get("FQ_DAY_OIL");
 			Integer KQ_DAY_WORK =(Integer) map.get("KQ_DAY_WORK");
-			staticsicsRealDateOil.setFQ_DAY_OIL(staticsicsRealDateOil.getFQ_DAY_OIL()+FQ_DAY_OIL);
-			staticsicsRealDateOil.setKQ_DAY_WORK(staticsicsRealDateOil.getKQ_DAY_WORK()+KQ_DAY_WORK);
+			staticsicsRealDateOil.setFQ_DAY_OIL(FQ_DAY_OIL);
+			staticsicsRealDateOil.setKQ_DAY_WORK(KQ_DAY_WORK);
 		}
 		
 		Iterator<String> iterator = terMap.keySet().iterator();

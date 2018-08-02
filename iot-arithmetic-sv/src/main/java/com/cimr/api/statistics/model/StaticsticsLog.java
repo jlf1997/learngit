@@ -25,7 +25,7 @@ public class StaticsticsLog {
 	/**
 	 * 统计日期
 	 */
-	private Integer type;
+	private String type;
 
 	
 	private Date updTime;
@@ -47,11 +47,13 @@ public class StaticsticsLog {
 		this.sDate = sDate;
 	}
 
-	public Integer getType() {
+
+
+	public String getType() {
 		return type;
 	}
 
-	public void setType(Integer type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

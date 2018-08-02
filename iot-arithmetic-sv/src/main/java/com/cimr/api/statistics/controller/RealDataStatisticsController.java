@@ -25,9 +25,7 @@ public class RealDataStatisticsController {
 			@RequestParam(name="eTime",required=false) Long eTime
 			) {
 		HttpResult result;
-		
-//		result = RealDataSignalService.getStatisticsDataDay(signal, bTime, eTime, terid);
-		result = RealDataSignalService.getStatisticsDataDayPage(signal, 0, 10, bTime, eTime, terid);
+		result = RealDataSignalService.getStatisticsDataDay(signal, bTime, eTime, terid);
 		return result;
 	}
 	
@@ -39,12 +37,11 @@ public class RealDataStatisticsController {
 			@RequestParam(name="eTime",required=false) Long eTime
 			) {
 		HttpResult result;
-		
-		
-		
-		result = RealDataSignalService.getStatisticsDataMonthPage(signal, 0, 10, bTime, eTime, terid);
+		result = RealDataSignalService.getStatisticsDataMonth(signal, bTime, eTime, terid);
 		return result;
 	}
+	
+
 	
 	@GetMapping("/{signal}/year")
 	public HttpResult getStatisticsDataYear(
@@ -54,11 +51,10 @@ public class RealDataStatisticsController {
 			@RequestParam(name="eTime",required=false) Long eTime
 			) {
 		HttpResult result;
-		
-		
-		
-		result = RealDataSignalService.getStatisticsDataYearAll(signal, bTime, eTime, terid);
+		result = RealDataSignalService.getStatisticsDataYear(signal, bTime, eTime, terid);
 		return result;
 	}
+	
+	
 	
 }

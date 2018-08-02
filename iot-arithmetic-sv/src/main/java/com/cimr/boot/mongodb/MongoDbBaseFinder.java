@@ -131,10 +131,6 @@ public class MongoDbBaseFinder {
 		}
 	}
 	
-	
-	
-	
-	
 	/**
 	 * 查询指定collection的所有数据
 	 * @param collectionName
@@ -144,56 +140,74 @@ public class MongoDbBaseFinder {
 		Query query = new Query();
 		return findAll(query,collectionName);
 	}
-		
-	public List<Map<String,Object>> findAll(List<Criteria> criterias,String collectionName,Sort sort, AggregationOperation... aggregations) {
+	
+	/**
+	 * 增加分页条件
+	 * @param skip
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param operations
+	 */
+	private void addPage(Integer skip,Integer pageNumber, Integer pageSize,List<AggregationOperation> operations) {
+		operations.add(Aggregation.skip(pageNumber*pageSize+skip));
+		operations.add(Aggregation.limit(pageSize));
+	}
+	/**
+	 * 增加查询条件
+	 * @param criterias
+	 * @param aggregations
+	 * @return
+	 */
+	private List<AggregationOperation> getOperationsAll(List<Criteria> criterias, List<AggregationOperation> aggregations) {
 		List<AggregationOperation> operations = new ArrayList<>();
-		Query query = new Query();
 		for(Criteria criteria:criterias) {
 			operations.add(Aggregation.match(criteria));
-			query.addCriteria(criteria);
 		}
-	
 		for(AggregationOperation aggregation :aggregations) {
 			operations.add(aggregation);
 		}
+		return operations;
+	}
 		
+	/**
+	 * 查询所有
+	 * @param criterias
+	 * @param collectionName
+	 * @param aggregations
+	 * @return
+	 */
+	public List<Map<String,Object>> findByAgg(List<Criteria> criterias,String collectionName, List<AggregationOperation> aggregations) {
+		List<AggregationOperation> operations = getOperationsAll(criterias,aggregations);
 		Aggregation agg = Aggregation.newAggregation(  
 				operations);  
 		AggregationResults res = template.aggregate(agg,collectionName,Map.class);
-		
-
 		return res.getMappedResults();
 		
 	}
-	
-	public PageModel<Map<String,Object>> findByPage(List<Criteria> criterias,String collectionName,Sort sort,int skip,int pageNumber, int pageSize,AggregationOperation... aggregations) {
-		List<AggregationOperation> operations = new ArrayList<>();
-		Query query = new Query();
-		for(Criteria criteria:criterias) {
-			operations.add(Aggregation.match(criteria));
-			query.addCriteria(criteria);
-		}
-		for(AggregationOperation aggregation :aggregations) {
-			operations.add(aggregation);
-		}
+	/**
+	 * 分页查询
+	 * @param criterias
+	 * @param collectionName
+	 * @param skip
+	 * @param pageNumber
+	 * @param pageSize
+	 * @param aggregations
+	 * @return
+	 */
+	public PageModel<Map<String,Object>> findByAgg(int skip,int pageNumber, int pageSize,List<Criteria> criterias,String collectionName,List<AggregationOperation> aggregations) {
+		List<AggregationOperation> operations = getOperationsAll(criterias,aggregations);
 		Aggregation agg = Aggregation.newAggregation(  
 				operations);  
-		
-		operations.add(Aggregation.skip(pageNumber*pageSize+skip));
-		operations.add(Aggregation.limit(pageSize));
 		AggregationResults res= template.aggregate(agg, collectionName,Map.class);
+		addPage(skip,pageNumber,pageSize,operations);
 		long total = res.getMappedResults().size();
-		
-		PageModel pageModel = new PageModel();
-		 agg = Aggregation.newAggregation(  
+		agg = Aggregation.newAggregation(  
 				operations);  
-		 res = template.aggregate(agg,collectionName,Map.class);
-		
-		
+		res = template.aggregate(agg,collectionName,Map.class);
+		PageModel<Map<String,Object>> pageModel = new PageModel<>();
 		pageModel.setContent(res.getMappedResults());
 		pageModel.setPageSize(pageSize);
 		pageModel.setTotalCount(total);
 		return pageModel;
-		
 	}
 }

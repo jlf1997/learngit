@@ -77,7 +77,7 @@ public class FaultLogService  {
 		//统计结束时间
 		Date faultEndDate = new Date();
 		//上次统计时间
-		Date faultStartTime = staticsticsLogDao.getFaultDate(type);
+		Date faultStartTime = staticsticsLogDao.getDate("fault_"+type);
 		//第一次统计 
 		if(faultStartTime==null) {
 			faultStartTime = TimeUtil.getTheLastYear(new Date());

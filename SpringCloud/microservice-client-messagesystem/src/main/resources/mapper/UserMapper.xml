@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cloud.dao.UserDao">
+
+	<resultMap id="BaseResultMap" type="com.cloud.entity.User">
+		<id property="UserID" column="UserID" />
+		<result column="WxID" property="WxID" jdbcType="VARCHAR" />
+		<result column="UserName" property="UserName" jdbcType="VARCHAR" />
+		<result column="RealName" property="RealName" jdbcType="VARCHAR" />
+		<result column="Tel" property="Tel" jdbcType="VARCHAR" />
+		<result column="Email" property="Email" jdbcType="VARCHAR" />
+		<result column="BirthDate" property="BirthDate" jdbcType="TIMESTAMP" />
+		<result column="Address" property="Address" jdbcType="VARCHAR" />
+		<result column="Department" property="Department" jdbcType="VARCHAR" />
+		<result column="Job" property="Job" jdbcType="VARCHAR" />
+		<result column="ShortTel" property="ShortTel" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		u.UserID,u.WxID,u.UserName,u.RealName,u.Tel,u.Email,
+		u.BirthDate,u.Address,u.Department,
+		u.Job,u.ShortTel
+	</sql>
+
+	<select id="findList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from User as u where u.UserID in(select DISTINCT UserID from userstation where SType = #{stype})
+
+	</select>
+
+
+
+
+</mapper>

@@ -52,7 +52,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 		//统计结束时间
 		Date faultEndDate = new Date();
 		//上次统计时间
-		Date faultStartTime = staticsticsLogDao.getFaultDate(type);
+		Date faultStartTime = staticsticsLogDao.getDate("fault_"+type);
 		//第一次统计 
 		if(faultStartTime==null) {
 			faultStartTime = TimeUtil.getTheLastYear(new Date());
@@ -107,13 +107,13 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	@Override
 	protected void updateDate(Integer type,List<Map<String, Object>> listun) {
 		if(listun.size()>0) {
-			staticsticsLogDao.updateDate(type,getTime(listun.get(listun.size()-1)));
+			staticsticsLogDao.updateDate("fault_"+type,getTime(listun.get(listun.size()-1)));
 		}else {
 			//已经超过一天 则默认没有数据
 			if(new Date().getTime()-geteTime().getTime()>TimeUtil.DAY_1) {
-				staticsticsLogDao.updateDate(type,geteTime());
+				staticsticsLogDao.updateDate("fault_"+type,geteTime());
 			}else {
-				staticsticsLogDao.updateDate(type,null);
+				staticsticsLogDao.updateDate("fault_"+type,null);
 			}
 		}
 		
