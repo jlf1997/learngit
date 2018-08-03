@@ -11,7 +11,7 @@ public class StaticsticsLog {
 
 	
 	public static String getDbName() {
-		return "staticstics_log";
+		return "staticstics_log_test";
 	}
 
 	@Id

@@ -53,7 +53,7 @@ public class FaultLogDao {
 		String year = TimeUtil.getYear(pointTime);
 		List<Map<String,Object>> list1 = new ArrayList<>();
 		int yearBase = Integer.parseInt(year);
-		for(int i=0;i<10;i++) {
+		for(int i=0;i<12;i++) {
 			List<Map<String,Object>> l = finder.findAll(query, FaultLog.getDbName(yearBase-i+""));
 			list1.addAll(l);
 		}
@@ -79,7 +79,7 @@ public class FaultLogDao {
 			FaultLog log = terMap.get(code);
 			if(log==null) {
 				log = new FaultLog(masp);
-				log.setYear(TimeUtil.getYear(log.getbTime()));
+				log.setYMD(log.getbTime());
 			}			 
 			terMap.put(code, log);
 			rs.put(terId, terMap);
@@ -191,10 +191,11 @@ public class FaultLogDao {
 	public void saveByYear(List<FaultLog> list) {
 		Map<String,List<FaultLog>> yearMap = new HashMap<>();
 		List<FaultLog> faultList;
-		String year;
+		String time;
 		for(FaultLog faultLog:list) {
-			year = TimeUtil.getYear(faultLog.getbTime());
-			faultList = yearMap.get(year);
+			time = TimeUtil.getYear(faultLog.getbTime());
+		
+			faultList = yearMap.get(time);
 			if(faultList==null) {
 				faultList = new ArrayList<>();
 			}
@@ -203,12 +204,12 @@ public class FaultLogDao {
 			}
 			faultLog.setUpdTime(new Date());
 			faultList.add(faultLog);
-			yearMap.put(year, faultList);
+			yearMap.put(time, faultList);
 		}
 		Iterator<String> iterator = yearMap.keySet().iterator();
 		while(iterator.hasNext()) {
-			year = iterator.next();
-			statisticsTemp.insert(yearMap.get(year), FaultLog.getDbName(year));
+			time = iterator.next();
+			statisticsTemp.insert(yearMap.get(time), FaultLog.getDbName(time));
 		}
 		
 	}

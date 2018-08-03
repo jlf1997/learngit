@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import org.bson.types.ObjectId;
 
+import com.cimr.boot.utils.TimeUtil;
+
 @Table
 @Entity
 public class FaultLog {
@@ -30,8 +32,8 @@ public class FaultLog {
 	
 	
 	
-	public static  String getDbName(String year) {
-		return "TEL_FAULT_"+year;
+	public static  String getDbName(String yearAndMonth) {
+		return "TEL_FAULT_"+yearAndMonth;
 	}
 	
 	public static Integer TERERROR = 1;
@@ -166,6 +168,12 @@ public class FaultLog {
 		return year;
 	}
 
+	
+	public void setYMD(Date date) {
+		this.year = TimeUtil.getYear(date);
+		this.month = TimeUtil.getMonth(date);
+		this.day = TimeUtil.getDay(date);
+	}
 	public void setYear(String year) {
 		this.year = year;
 	}

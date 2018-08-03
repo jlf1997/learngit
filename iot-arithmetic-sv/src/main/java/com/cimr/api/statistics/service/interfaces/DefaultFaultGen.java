@@ -136,7 +136,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 			FaultLog log = (FaultLog) terMap.get(code);
 			if(log==null) {
 				log = new FaultLog(masp);
-				log.setYear(TimeUtil.getYear(log.getbTime()));
+				log.setYMD(log.getbTime());
 			}			 
 			terMap.put(code, log);
 			rs.put(terId, terMap);
@@ -175,8 +175,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 				updList.add(faultLog);
 				iterator.remove();
 			}else {
-				String year = TimeUtil.getYear(faultLog.getbTime());
-				faultLog.setYear(year);
+				faultLog.setYMD(faultLog.getbTime());
 			}
 		}
 		return updList;
