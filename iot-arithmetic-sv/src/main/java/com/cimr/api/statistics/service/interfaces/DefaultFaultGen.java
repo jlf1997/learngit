@@ -59,9 +59,9 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 		}else {
 			faultStartTime = TimeUtil.getNextSecord(faultStartTime);
 		}
-		if(TimeUtil.getYearSpan(faultStartTime, faultEndDate)>=1) {
-			faultEndDate = TimeUtil.getTheLastYear(faultEndDate);
-			faultEndDate = TimeUtil.getTheLastDayOfYear(faultEndDate);
+		if(TimeUtil.getMonthSpan(faultStartTime, faultEndDate)>=1) {
+//			faultEndDate = TimeUtil.getTheLastMonth(faultEndDate);
+			faultEndDate = TimeUtil.getTheLastDayOfMonth(faultStartTime);
 		}
 //		log.debug("begin get the log:"+faultStartTime+"~"+faultEndDate);
 		return new Date[]{faultStartTime,faultEndDate};

@@ -44,10 +44,11 @@ public class FaultLogService  {
 	 * @param terid
 	 * @return
 	 */
-	public HttpResult findByPage(int pageNumber, int pageSize,Long bTime,Long endTime,String terid){
+	public HttpResult findByPage(int pageNumber, int pageSize,Long bTime,Long endTime,
+			String terId,String code,Boolean status){
 		HttpResult result;
 		try {
-			PageModel<Map<String,Object>> page = faultLogDao.findByPage(pageNumber, pageSize, bTime, endTime, terid);
+			PageModel<Map<String,Object>> page = faultLogDao.findByPage(pageNumber, pageSize, bTime, endTime, terId,code,status);
 			result = new HttpResult(true,"");
 			result.setData(page);
 			return result;

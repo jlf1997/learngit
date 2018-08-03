@@ -69,6 +69,9 @@ public class FaultLog {
 	private ObjectId orgId;
 	
 	
+	private Integer status;
+	
+	
 	
 	/**
 	 * 故障类型
@@ -80,6 +83,10 @@ public class FaultLog {
 	 * 用于表示是否是之前未完结的数据
 	 */
 	private String year;
+	
+	private String month;
+	
+	private String day;
 
 	
 
@@ -163,7 +170,31 @@ public class FaultLog {
 		this.year = year;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
 
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+
+	
 	
 	
 }

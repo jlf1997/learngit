@@ -9,6 +9,7 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +74,8 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 	protected String code = "code";
 	
 	protected String faultTime = "faultTime";
+	
+
 		
 	
 	

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.statistics.service.PlcFaultService;
@@ -47,10 +48,11 @@ public class TestController {
 	
 	@GetMapping("/oil")
 	public void oil(
-			
+			@RequestParam("day") int day
 			){
 		
 		Date faultDate = new Date();
+		faultDate = TimeUtil.getDay(day);
 		Date faultEndTime = TimeUtil.getEndTime(faultDate);
 		Date faultStartTime = TimeUtil.getStartTime(faultDate);
 		realDateSignalOilGen.genLog(faultStartTime,faultEndTime);

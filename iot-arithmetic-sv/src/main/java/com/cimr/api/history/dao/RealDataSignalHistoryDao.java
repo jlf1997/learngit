@@ -1,8 +1,6 @@
 package com.cimr.api.history.dao;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import com.cimr.api.comm.configuration.ProjectPropertities;
 import com.cimr.api.comm.configuration.Setting;
-import com.cimr.api.history.config.HistoryMongoConfig;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
-import com.cimr.util.MapResultUtils;
+import com.cimr.boot.utils.TimeUtil;
 
 
 @Repository
@@ -35,11 +32,10 @@ public class RealDataSignalHistoryDao {
 	private Setting setting;
 	
 	
-	private static String gatherMsgTime = "gatherMsgTime";
 
 	
-	private String getDbName(String signal) {
-		return "REALDATA_SIGNAL_"+projectPropertities.getProjectId()+"_"+signal;
+	private String getDbName(String signal,Date date) {
+		return "REALDATA_SIGNAL_"+projectPropertities.getProjectId()+"_"+signal+"_"+TimeUtil.getYearAndMonth(date);
 	}
 
 	
@@ -94,7 +90,7 @@ public class RealDataSignalHistoryDao {
 		if(criteria!=null) {
 			query.addCriteria(criteria);
 		}
-		return finder.findAll(query,getDbName(singal));
+		return finder.findAll(query,getDbName(singal,bTime));
 	}
 	
 	

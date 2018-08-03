@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.comm.configuration.ProjectPropertities;
+import com.cimr.api.comm.configuration.Setting;
 import com.cimr.api.history.dao.RealDataSignalHistoryDao;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.api.statistics.service.interfaces.DefaultFaultGen;
@@ -19,13 +20,19 @@ public  class PlcFaultGen extends DefaultFaultGen{
 	
 	@Autowired
 	private RealDataSignalHistoryDao realDataSignalHistoryDao;
-	@Autowired
+	
 	private ProjectPropertities projectPropertities;
 	
-	public PlcFaultGen() {
+	private Setting setting;
+	
+	@Autowired
+	public PlcFaultGen(ProjectPropertities projectPropertities,Setting setting) {
 		this.type=FaultLog.PLCERROR;
+		
+		this.setting = setting;
+		this.projectPropertities =projectPropertities;
 		this.terminalNo="terminalNo";
-		this.faultTime = "gatherMsgTime";
+		this.faultTime = setting.getGatherMsgTime(projectPropertities.getSingalFault());
 		
 	}
 	
@@ -72,6 +79,7 @@ public  class PlcFaultGen extends DefaultFaultGen{
 				}else {//已有的错误
 					if(!newValue) {
 						inValue.setEndTime(time);
+						inValue.setStatus(1);
 						finalResult.add(inValue);
 						falutMap.remove(code);
 					}else {//旧数据依然为错误，直接忽略

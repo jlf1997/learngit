@@ -28,6 +28,11 @@ public class TimeUtil {
 		return format.format(date);
 	}
 	
+	public static String getYearAndMonth(Date date){
+		DateFormat format = new SimpleDateFormat("yyyyMM");
+		return format.format(date);
+	}
+	
 	public static String getMonth(Date date){
 		DateFormat format = new SimpleDateFormat("MM");
 		return format.format(date);
@@ -86,6 +91,15 @@ public class TimeUtil {
 		
 	}
 	
+	public static int getMonthSpan(Date date1,Date date2) {
+		int year1 = Integer.parseInt(getYear(date1));
+		int year2 = Integer.parseInt(getYear(date2));
+		int year = year2-year1;
+		int month1 = Integer.parseInt(getMonth(date1));
+		int month2 = Integer.parseInt(getMonth(date2));
+		return year*12+month2-month1;
+	}
+	
 	/**
 	 * 获取当年的最后一天
 	 * @param date
@@ -96,6 +110,18 @@ public class TimeUtil {
 		date = getTheNextYear(date);
 		todayEnd.setTime(date);
 		todayEnd.set(Calendar.DAY_OF_YEAR,0);
+		todayEnd.set(Calendar.HOUR_OF_DAY, 23);
+		todayEnd.set(Calendar.MINUTE, 59);
+		todayEnd.set(Calendar.SECOND, 59);
+		todayEnd.set(Calendar.MILLISECOND, 999);
+		return todayEnd.getTime();
+	}
+	
+	public static Date getTheLastDayOfMonth(Date date) {
+		Calendar todayEnd = Calendar.getInstance();
+		todayEnd.setTime(date);
+		todayEnd.add(Calendar.MONTH, 1);
+		todayEnd.set(Calendar.DAY_OF_MONTH,0);
 		todayEnd.set(Calendar.HOUR_OF_DAY, 23);
 		todayEnd.set(Calendar.MINUTE, 59);
 		todayEnd.set(Calendar.SECOND, 59);
@@ -118,6 +144,13 @@ public class TimeUtil {
 		Calendar todayEnd = Calendar.getInstance();
 		todayEnd.setTime(date);
 		todayEnd.add(Calendar.YEAR, -1);
+		return todayEnd.getTime();
+	}
+	
+	public static Date getTheLastMonth(Date date) {
+		Calendar todayEnd = Calendar.getInstance();
+		todayEnd.setTime(date);
+		todayEnd.add(Calendar.MONTH, -1);
 		return todayEnd.getTime();
 	}
 

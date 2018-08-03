@@ -22,9 +22,12 @@ public class Setting {
 	 */
 	public  String getGatherMsgTime(String signal) {
 //		//特殊信号的返回
-//		if("".equal(signal)) {
-//			return "";
-//		}
+		if(projectPropertities.getSingalOil().equals(signal)) {
+			return "insertTime";
+		}
+		if(projectPropertities.getSingalFault().equals(signal)) {
+			return "insertTime";
+		}
 		//默认返回
 		return "gatherMsgTime";
 	}

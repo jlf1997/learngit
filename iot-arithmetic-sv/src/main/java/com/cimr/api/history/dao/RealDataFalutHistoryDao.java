@@ -1,22 +1,12 @@
 package com.cimr.api.history.dao;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.cimr.api.comm.configuration.ProjectPropertities;
 import com.cimr.api.comm.configuration.Setting;
-import com.cimr.boot.mongodb.MongoDbBaseFinder;
 
 
 /**
@@ -37,12 +27,7 @@ public class RealDataFalutHistoryDao {
 	private Setting setting;
 	
 	
-	private static String gatherMsgTime = "gatherMsgTime";
-
 	
-	private String getDbName(String signal) {
-		return "REALDATA_SIGNAL_"+projectPropertities.getProjectId()+"_"+signal;
-	}
 
 	
 //	/**

@@ -11,7 +11,7 @@ import com.cimr.api.comm.model.HttpResult;
 import com.cimr.api.statistics.service.RealDataSignalService;
 
 @RestController
-@RequestMapping("iotsv/statistics/realdata")
+@RequestMapping("statistics/realdata")
 public class RealDataStatisticsController {
 
 	@Autowired
@@ -20,9 +20,9 @@ public class RealDataStatisticsController {
 	@GetMapping("/{signal}/day")
 	public HttpResult getStatisticsDataDay(
 			@PathVariable(name="signal") String signal,
-			@RequestParam(name="terid",required=false) String terid,
-			@RequestParam(name="bTime",required=false) Long bTime,
-			@RequestParam(name="eTime",required=false) Long eTime
+			@RequestParam(name="terid",required=true) String terid,
+			@RequestParam(name="bTime",required=true) Long bTime,
+			@RequestParam(name="eTime",required=true) Long eTime
 			) {
 		HttpResult result;
 		result = RealDataSignalService.getStatisticsDataDay(signal, bTime, eTime, terid);
@@ -32,9 +32,9 @@ public class RealDataStatisticsController {
 	@GetMapping("/{signal}/month")
 	public HttpResult getStatisticsDataMonth(
 			@PathVariable(name="signal") String signal,
-			@RequestParam(name="terid",required=false) String terid,
-			@RequestParam(name="bTime",required=false) Long bTime,
-			@RequestParam(name="eTime",required=false) Long eTime
+			@RequestParam(name="terid",required=true) String terid,
+			@RequestParam(name="bTime",required=true) Long bTime,
+			@RequestParam(name="eTime",required=true) Long eTime
 			) {
 		HttpResult result;
 		result = RealDataSignalService.getStatisticsDataMonth(signal, bTime, eTime, terid);
@@ -46,9 +46,9 @@ public class RealDataStatisticsController {
 	@GetMapping("/{signal}/year")
 	public HttpResult getStatisticsDataYear(
 			@PathVariable(name="signal") String signal,
-			@RequestParam(name="terid",required=false) String terid,
-			@RequestParam(name="bTime",required=false) Long bTime,
-			@RequestParam(name="eTime",required=false) Long eTime
+			@RequestParam(name="terid",required=true) String terid,
+			@RequestParam(name="bTime",required=true) Long bTime,
+			@RequestParam(name="eTime",required=true) Long eTime
 			) {
 		HttpResult result;
 		result = RealDataSignalService.getStatisticsDataYear(signal, bTime, eTime, terid);

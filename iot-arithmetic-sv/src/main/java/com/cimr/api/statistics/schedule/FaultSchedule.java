@@ -32,7 +32,7 @@ public class FaultSchedule {
 	private static final Logger log = LoggerFactory.getLogger(FaultSchedule.class);
 
 
-	@Scheduled(cron = "0 0/5 * * * *")
+//	@Scheduled(cron = "0 0/5 * * * *")
     public void faultTimer(){
         //存在单点故障 ，后期使用分布式任务调度框架优化
 		if((projectPropertities.getRole()&ProjectPropertities.FAULT)==ProjectPropertities.FAULT||projectPropertities.isAllRole()) {
@@ -46,7 +46,7 @@ public class FaultSchedule {
 	}
 	
 
-	@Scheduled(cron = "0 0 1,2,3,4,5 * * ? ")
+//	@Scheduled(cron = "0 0 1,2,3,4,5 * * ? ")
 //	@Scheduled(cron = "0/10 * * * * ? ")
     public void oilGetTimer(){
         

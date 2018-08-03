@@ -26,13 +26,19 @@ public abstract class AbstractMongoConfig {
 	 
 	 
 	 //暂时 不使用
-	 private MongoDbFactory mongoDbFactory() throws Exception {
+	 private MongoDbFactory mongoDbFactory(AbstractMongoConfig config) throws Exception {
 
 	        List<ServerAddress> addresses = new ArrayList<ServerAddress>();
-	        ServerAddress addr = new ServerAddress("10.100.138.95",27016);
+	        String uris = config.getProperties().getUri();
+	        String[] uriArray = uris.split(",");
+	        ServerAddress addr;
+	        for(String uri:uriArray) {
+	        	 addr = new ServerAddress("10.100.138.95",27016);
+	        }
+//	        ServerAddress addr = new ServerAddress("10.100.138.95",27016);
 	        ServerAddress addr2 = new ServerAddress("10.100.138.95", 27017);
 	        ServerAddress addr3 = new ServerAddress("10.100.138.96", 27018);
-	        addresses.add(addr);
+//	        addresses.add(addr);
 	        addresses.add(addr2);
 	        addresses.add(addr3);
 	        MongoCredential mongoCredential = MongoCredential.createMongoCRCredential(

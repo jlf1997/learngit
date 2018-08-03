@@ -88,6 +88,7 @@ public class TerminalFaultGen extends DefaultFaultGen{
 		if(time.getTime()-faultLog.getEndTime().getTime()>timePro) {
 			//更新错误发生的结束时间
 			faultLog.setEndTime(getRealEndTime(faultLog));
+			faultLog.setStatus(1);
 			finalResult.add(faultLog);
 			//map中替换为新的错误记录
 			falutMap.put("code",getNewFaultLog(orgId,time,code,terId));

@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import com.cimr.api.comm.model.PageModel;
 import com.cimr.api.statistics.exception.TimeTooLongException;
@@ -34,32 +35,7 @@ public class FaultLogDao {
 	
 
 	
-//	/**
-//	 * 查询最近的未完成的数据
-//	 * @param terId
-//	 * @param code
-//	 * @param faultType
-//	 * @return
-//	 */
-//	public FaultLog findUnFinishedByCodeAndType(String terId,String code,Integer faultType) {
-//		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
-//		Query query = new Query();
-//		Criteria criteria1 = Criteria.where("endTime").exists(false);
-//		query.addCriteria(criteria1);
-//		Criteria criteria2 = Criteria.where("code").is(code);
-//		query.addCriteria(criteria2);
-//		Criteria criteria3 = Criteria.where("faultType").is(faultType);
-//		query.addCriteria(criteria3);
-//		Sort sort = new Sort(Sort.Direction.DESC,"bTime");
-//		query.with(sort);
-//		//TODO 
-//		List<Map<String,Object>> list = finder.findAll(query, FaultLog.getDbName(year));
-//		if(list!=null && list.size()>0) {
-//			return new FaultLog(list.get(0));
-//		}
-//		return null;
-//		
-//	}
+
 	
 	
 	
@@ -111,7 +87,37 @@ public class FaultLogDao {
 		 return rs;
 	}
 	
+	private void queryByLogTime(Query query,Long bTime,Long eTime) {
+		Assert.notNull(query,"query is not null");
+		if(bTime!=null && eTime!=null) {
+			Criteria criteria = Criteria.where("bTime").gte(new Date(bTime)).lte(new Date(eTime));
+			query.addCriteria(criteria);
+		}
+	}
 	
+	private void queryByTerId(Query query,String terId) {
+		Assert.notNull(query,"query is not null");
+		if(terId!=null) {
+			Criteria criteria = Criteria.where("terId").is(terId);
+			query.addCriteria(criteria);
+		}
+	}
+	
+	private void queryByStatus(Query query,Boolean status) {
+		Assert.notNull(query,"query is not null");
+		if(status!=null ) {
+			Criteria criteria = Criteria.where("endTime").exists(status);
+			query.addCriteria(criteria);
+		}
+	}
+	
+	private void queryByCode(Query query,String code) {
+		Assert.notNull(query,"query is not null");
+		if(code!=null ) {
+			Criteria criteria = Criteria.where("code").is(code);
+			query.addCriteria(criteria);
+		}
+	}
 	
 	
 	/**
@@ -124,23 +130,20 @@ public class FaultLogDao {
 	 * @return
 	 * @throws Exception
 	 */
-	public PageModel<Map<String,Object>> findByPage(int pageNumber, int pageSize,Long bTime,Long endTime,String terid) throws TimeTooLongException {
+	public PageModel<Map<String,Object>> findByPage(int pageNumber, int pageSize,Long bTime,Long endTime,String terId,String code,Boolean status) throws TimeTooLongException {
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
 		//判断开始结束时间，最大支持查询90天的数据
 //		if(endTime-bTime>TimeUtil.DAY_1*90) {
 //			throw new TimeTooLongException("最大支持查询90天数据");
 //		}
-		Sort sort = new Sort(Sort.Direction.ASC, "bTime");
+		Sort sort = new Sort(Sort.Direction.ASC, "status")
+				.and(new Sort(Sort.Direction.DESC,"bTime"));
 		Query query = new Query();
-		if(terid!=null) {
-			Criteria criteria = Criteria.where("terId").is(terid);
-			query.addCriteria(criteria);
-		}
-		if(bTime!=null && endTime!=null) {
-			Criteria criteria = Criteria.where("bTime").gte(new Date(bTime)).lte(new Date(endTime));
-			query.addCriteria(criteria);
-		}
-		
+		query.with(sort);
+		queryByLogTime(query,bTime,endTime);
+		queryByTerId(query,terId);
+		queryByStatus(query,status);
+		queryByCode(query,code);
 		PageModel<Map<String,Object>> page1 =null;
 		
 		PageModel<Map<String,Object>> page2 = null;
