@@ -5,23 +5,50 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.boot.statistics.AbstractGenLogTimeRang;
 import com.cimr.boot.utils.TimeUtil;
 
 public abstract class AbstractDailyGen  extends AbstractGenLogTimeRang{
 	
 	
+	private static final Logger log = LoggerFactory.getLogger(AbstractDailyGen.class);
+
 
 	@Override
 	protected Date[] getTimeRange() {
-		// 时间设定为前一天 从开始到结束
+		
+		Date sTime = getPreTime();
+		Date nextDay = TimeUtil.getNextSecord(sTime);
+		if(nextDay!=null && TimeUtil.isToday(nextDay)) {
+			return null;
+		}
+		//最早支持从1年前开始扫描数据
+		if(nextDay==null) {
+//			nextDay = TimeUtil.getTheLastYear(new Date());
+			nextDay = TimeUtil.getTheLastMonth(new Date());
+		}
+		
 		Date[] dates = new Date[2];
-		Date date = TimeUtil.getDay(-1);
-		dates[0] = TimeUtil.getStartTime(date);
-		dates[1] = TimeUtil.getEndTime(date);
+		dates[0] = TimeUtil.getStartTime(nextDay);
+		dates[1] = TimeUtil.getEndTime(nextDay);
+//		Long count = getCount(dates[0],dates[1]);
+//		log.info("the count:"+count);
+//		if(count>=100000) {
+//			Date later = TimeUtil.getHour(dates[0], 1);
+//			later = TimeUtil.getSecond(later, -1);
+//			if(later.before(dates[1])) {
+//				dates[1] = later;
+//			}
+//		}else if(count>10000){
+//			Date later = TimeUtil.getHour(dates[0], 12);
+//			later = TimeUtil.getSecond(later, -1);
+//			if(later.before(dates[1])) {
+//				dates[1] = later;
+//			}
+//		}
 		return dates;
 	}
 
@@ -41,7 +68,6 @@ public abstract class AbstractDailyGen  extends AbstractGenLogTimeRang{
 		}
 		return false;
 	}
-
 	
-
+	
 }

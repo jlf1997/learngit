@@ -210,4 +210,14 @@ public class MongoDbBaseFinder {
 		pageModel.setTotalCount(total);
 		return pageModel;
 	}
+	
+	/**
+	 * 获取查询数量
+	 * @param query
+	 * @param collectionName
+	 * @return
+	 */
+	public Long getCount(Query query,String collectionName) {
+		return template.count(query, collectionName);
+	}
 }

@@ -1,4 +1,4 @@
-package com.cimr.api.statistics.service.gen;
+package com.cimr.api.statistics.service.gen.faultGen;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.comm.configuration.ProjectPropertities;
-import com.cimr.api.comm.configuration.Setting;
+import com.cimr.api.comm.configuration.SignalSetting;
 import com.cimr.api.history.dao.RealDataSignalHistoryDao;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.api.statistics.service.interfaces.DefaultFaultGen;
@@ -21,15 +21,13 @@ public  class PlcFaultGen extends DefaultFaultGen{
 	@Autowired
 	private RealDataSignalHistoryDao realDataSignalHistoryDao;
 	
+	
 	private ProjectPropertities projectPropertities;
 	
-	private Setting setting;
-	
 	@Autowired
-	public PlcFaultGen(ProjectPropertities projectPropertities,Setting setting) {
+	public PlcFaultGen(ProjectPropertities projectPropertities,SignalSetting setting) {
 		this.type=FaultLog.PLCERROR;
 		
-		this.setting = setting;
 		this.projectPropertities =projectPropertities;
 		this.terminalNo="terminalNo";
 		this.faultTime = setting.getGatherMsgTime(projectPropertities.getSingalFault());
@@ -38,7 +36,6 @@ public  class PlcFaultGen extends DefaultFaultGen{
 	
 	@Override
 	public FaultLog getNewFaultLog(ObjectId orgId, Date bTime, String code, String terId) {
-		// TODO Auto-generated method stub
 		FaultLog faultLog = new FaultLog();
 		faultLog.setbTime(bTime);
 		faultLog.setEndTime(bTime);
@@ -51,13 +48,19 @@ public  class PlcFaultGen extends DefaultFaultGen{
 
 	@Override
 	public List<Map<String, Object>> getDateFromSource(Date bTime, Date eTime) {
-		// TODO Auto-generated method stub
 		return realDataSignalHistoryDao.findAll(bTime, eTime, projectPropertities.getSingalFault());
+	}
+	
+	
+
+	@Override
+	protected Long getCount(Date bTime, Date eTime) {
+		// TODO Auto-generated method stub
+		return 0L;
 	}
 
 	@Override
 	public void parseFaultLog(Map<String, Object> map, Map<String, Object> falutMap, List<Object> finalResult) {
-		// TODO Auto-generated method stub
 		String terId = getTerId(map);
 		Date time = getTime(map);
 		ObjectId orgId = getOrgId(map);
@@ -89,6 +92,16 @@ public  class PlcFaultGen extends DefaultFaultGen{
 			}
 		}
 	}
+
+
+
+	@Override
+	protected String getTimeSaveType() {
+		// TODO Auto-generated method stub
+		return "fault_plc_org";
+	}
+
+
 
 	
 

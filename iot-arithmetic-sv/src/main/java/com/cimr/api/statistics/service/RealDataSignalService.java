@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -13,7 +14,8 @@ import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.comm.model.HttpResult;
-import com.cimr.api.statistics.dao.RealDataSignalDao;
+import com.cimr.api.statistics.dao.query.RealDataSignalDao;
+import com.cimr.api.statistics.model.FaultField;
 import com.cimr.boot.utils.TimeUtil;
 
 @Service
@@ -104,6 +106,72 @@ public class RealDataSignalService {
 		HttpResult res = new HttpResult(true,"");
 		res.setData(data);
 		return res;
+	}
+
+
+	public HttpResult getStatisticsDataYear(String signal, Long bTime, Long eTime, List<String> terIds, String codes) {
+		// TODO Auto-generated method stub
+		if(bTime!=null) {
+			Date b = new Date(bTime);
+			b = TimeUtil.getTheFirstDayOfMonth(b);
+			bTime = b.getTime();
+		}
+		if(eTime!=null) {
+			Date e = new Date(eTime);
+			e = TimeUtil.getTheLastDayOfMonth(e);
+			eTime = e.getTime();
+		}
+		List<AggregationOperation> aggregations = new ArrayList<>();
+		GroupOperation aggregationOil = Aggregation.group("year","terminalNo");
+		if(codes!=null && !StringUtils.isBlank(codes)) {
+			String[] codeStrs = codes.split(",");
+			for(String code: codeStrs) {
+				aggregationOil = aggregationOil.sum(code).as(code);
+			}
+		}else {
+			
+		}
+		aggregations.add(aggregationOil);
+		List<Map<String,Object>> data = realDataSignalDao.findAll(terIds, new Date(bTime), new Date(eTime),aggregations);
+		HttpResult res = new HttpResult(true,"");
+		res.setData(data);
+		return res;
+	}
+
+
+	public HttpResult getStatisticsDataMonth(String signal, Long bTime, Long eTime, List<String> terIds, String codes) {
+		// TODO Auto-generated method stub
+				if(bTime!=null) {
+					Date b = new Date(bTime);
+					b = TimeUtil.getTheFirstDayOfMonth(b);
+					bTime = b.getTime();
+				}
+				if(eTime!=null) {
+					Date e = new Date(eTime);
+					e = TimeUtil.getTheLastDayOfMonth(e);
+					eTime = e.getTime();
+				}
+				List<AggregationOperation> aggregations = new ArrayList<>();
+				GroupOperation aggregationOil = Aggregation.group("year","month","terminalNo");
+				if(codes!=null && !StringUtils.isBlank(codes)) {
+					String[] codeStrs = codes.split(",");
+					for(String code: codeStrs) {
+						aggregationOil = aggregationOil.sum(code).as(code);
+					}
+				}else {
+					
+				}
+				aggregations.add(aggregationOil);
+				List<Map<String,Object>> data = realDataSignalDao.findAll(terIds, new Date(bTime), new Date(eTime),aggregations);
+				HttpResult res = new HttpResult(true,"");
+				res.setData(data);
+				return res;
+	}
+
+
+	public HttpResult getStatisticsDataDay(String signal, Long bTime, Long eTime, List<String> terIds, String codes) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

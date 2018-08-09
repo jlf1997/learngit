@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cimr.api.statistics.dao.StatisticsDailyLogDao;
 import com.cimr.api.statistics.service.PlcFaultService;
 import com.cimr.api.statistics.service.TerminalFaultService;
-import com.cimr.api.statistics.service.gen.RealDateSignalOilGen;
+import com.cimr.api.statistics.service.gen.simpleStatistic.FaultDailyGen;
+import com.cimr.api.statistics.service.gen.simpleStatistic.RealDateSignalOilGen;
 import com.cimr.boot.utils.TimeUtil;
 
 
@@ -24,6 +26,11 @@ public class TestController {
 	private PlcFaultService plcFaultService;
 	@Autowired
 	private RealDateSignalOilGen realDateSignalOilGen;
+	
+	@Autowired
+	private StatisticsDailyLogDao statisticsDailyLogDao;
+	@Autowired
+	private FaultDailyGen faultDailyGen;
 	
 	@GetMapping("/ter")
 	public void findALl(
@@ -48,16 +55,24 @@ public class TestController {
 	
 	@GetMapping("/oil")
 	public void oil(
-			@RequestParam("day") int day
 			){
-		
-		Date faultDate = new Date();
-		faultDate = TimeUtil.getDay(day);
-		Date faultEndTime = TimeUtil.getEndTime(faultDate);
-		Date faultStartTime = TimeUtil.getStartTime(faultDate);
-		realDateSignalOilGen.genLog(faultStartTime,faultEndTime);
+		realDateSignalOilGen.genLog();
 		
 	}
+	@GetMapping("/faultGen")
+	public void faultGen(
+			){
+//		Date date = getDate();
+//		realDateSignalOilGen.genLogDaily(date);
+		faultDailyGen.genLog();
+	}
+	
+	
+	
+	public void init() {
+		
+	}
+	
 	
 	
 }

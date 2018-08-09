@@ -12,7 +12,8 @@ import com.cimr.api.comm.configuration.ProjectPropertities;
 import com.cimr.api.statistics.dao.StatisticsDailyLogDao;
 import com.cimr.api.statistics.service.PlcFaultService;
 import com.cimr.api.statistics.service.TerminalFaultService;
-import com.cimr.api.statistics.service.gen.RealDateSignalOilGen;
+import com.cimr.api.statistics.service.gen.simpleStatistic.FaultDailyGen;
+import com.cimr.api.statistics.service.gen.simpleStatistic.RealDateSignalOilGen;
 import com.cimr.boot.utils.TimeUtil;
 @Component
 public class FaultSchedule {
@@ -29,10 +30,13 @@ public class FaultSchedule {
 	@Autowired
 	private StatisticsDailyLogDao statisticsDailyLogDao;
 	
+	@Autowired
+	private FaultDailyGen faultDailyGen;
+	
 	private static final Logger log = LoggerFactory.getLogger(FaultSchedule.class);
 
 
-//	@Scheduled(cron = "0 0/5 * * * *")
+	@Scheduled(cron = "0 0/5 * * * *")
     public void faultTimer(){
         //存在单点故障 ，后期使用分布式任务调度框架优化
 		if((projectPropertities.getRole()&ProjectPropertities.FAULT)==ProjectPropertities.FAULT||projectPropertities.isAllRole()) {
@@ -48,11 +52,19 @@ public class FaultSchedule {
 
 //	@Scheduled(cron = "0 0 1,2,3,4,5 * * ? ")
 //	@Scheduled(cron = "0/10 * * * * ? ")
+	@Scheduled(cron = "0 0/2 * * * *")
     public void oilGetTimer(){
         
 		getSignalLogDaily(projectPropertities.getSingalOil(),ProjectPropertities.OIL);
 		
 	
+	}
+	@Scheduled(cron = "0 0/1 * * * *")
+	 public void faultGetTimer(){
+		log.info("begain statistics fault");
+		faultDailyGen.genLog();
+		log.info("end statistics fault");
+		
 	}
 	
 	private void getSignalLogDaily(String signal,Long role) {
@@ -60,7 +72,7 @@ public class FaultSchedule {
 			Date sDate = TimeUtil.getDay(-1);
 			if(statisticsDailyLogDao.getDate("signal_"+signal, sDate)==null) {
 				log.info("begain scan "+signal);
-				realDateSignalOilGen.genLogDaily(sDate);
+				realDateSignalOilGen.genLog();
 				log.info("end scan "+signal);
 			}else {//控制不重复生成
 				

@@ -1,17 +1,12 @@
 package com.cimr.api.statistics.service.interfaces;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.boot.statistics.AbstractGenLogTimeRang;
@@ -47,12 +42,7 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 	
 	protected abstract void doLastResult(List<Object> finalResult,Map<String,Map<String,Object>> terMap);
 	
-	/**
-	 * 更新日期
-	 * @param type
-	 * @param listun
-	 */
-	protected abstract void updateDate(Integer type, List<Map<String, Object>> listun);
+
 	
 	
 	
@@ -103,11 +93,7 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 		return getUnfinished(type);
 	}
 
-	@Override
-	protected final void updateDate(List<Map<String, Object>> listun) {
-		// TODO Auto-generated method stub
-		updateDate(type,listun);
-	}
+
 
 	/**
 	 * 获取终端编号
@@ -141,6 +127,9 @@ public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 	protected Date getTime(Map<String,Object> map) {
 		return ((Date)map.get(faultTime));
 	}
+
+
+
 
 	
 	

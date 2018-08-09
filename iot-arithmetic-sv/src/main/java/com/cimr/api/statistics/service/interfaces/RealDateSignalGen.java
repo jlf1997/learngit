@@ -6,51 +6,61 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.cimr.api.comm.configuration.ProjectPropertities;
+import com.cimr.api.comm.configuration.SignalSetting;
 import com.cimr.api.history.dao.RealDataSignalHistoryDao;
-import com.cimr.api.statistics.dao.RealDataSignalDao;
-import com.cimr.api.statistics.dao.StatisticsDailyLogDao;
+import com.cimr.api.statistics.config.DbNameSetting;
+import com.cimr.api.statistics.service.interfaces.statisticsDailyGen.StaticsicsGen;
 
+/**
+ * 通用实时数据生成统计类
+ * @author Administrator
+ *
+ */
+public abstract class RealDateSignalGen extends StaticsicsGen{
 
-public abstract class RealDateSignalGen extends AbstractDailyGen{
-
-	@Autowired
-	private StatisticsDailyLogDao statisticsDailyLogDao;
 
 	@Autowired
 	private RealDataSignalHistoryDao realDataSignalHistoryDao;
 	
 	@Autowired
-	private RealDataSignalDao realDataSignalDao;
-	
-	
+	private SignalSetting signalSetting;
 	
 	protected abstract String getSignal();
 	
 	@Override
 	protected List<Map<String, Object>> getDateFromSource(Date bTime, Date eTime) {
-		// TODO Auto-generated method stub
 		return realDataSignalHistoryDao.findAll(bTime, eTime, getSignal());
 	}
 
-
-
+	
+	
 	@Override
-	protected void update(List<Object> finalResult) {
+	protected Long getCount(Date bTime, Date eTime) {
 		// TODO Auto-generated method stub
-		if(finalResult.size()>0) {
-			realDataSignalDao.save(getSignal(), finalResult);
-		}
-	
+		return realDataSignalHistoryDao.getCount(bTime, eTime, getSignal());
 	}
-	
-	protected abstract String getTerId(Map<String, Object> map);
-	
-	
 
 	@Override
-	protected void updateDate(List<Map<String, Object>> listun) {
-		// 按日统计无需更新时间
-		statisticsDailyLogDao.updateDate("signal_"+getSignal(), getbTime());
+	protected  String getTerId(Map<String, Object> map) {
+		return map.get(signalSetting.getTerminalId(getSignal())).toString();
 	}
+
+
+	@Override
+	protected Date getTime(Map<String, Object> map) {
+		return (Date) map.get(signalSetting.getGatherMsgTime(getSignal()));
+	}
+
+	@Override
+	protected String getCollectionName() {
+		return DbNameSetting.getRealDateStatisticsDbName(getSignal());
+	}
+
+	@Override
+	protected String getTimeSaveType() {
+		return "signal_"+getSignal();
+	}
+	
 
 }

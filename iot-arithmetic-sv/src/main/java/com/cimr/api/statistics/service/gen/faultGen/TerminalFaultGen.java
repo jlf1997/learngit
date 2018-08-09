@@ -1,4 +1,4 @@
-package com.cimr.api.statistics.service.gen;
+package com.cimr.api.statistics.service.gen.faultGen;
 
 import java.util.Date;
 import java.util.List;
@@ -70,6 +70,12 @@ public class TerminalFaultGen extends DefaultFaultGen{
 		return telLogService.findAllByDay(bTime,eTime);
 		
 	}
+	
+	@Override
+	protected Long getCount(Date bTime, Date eTime) {
+		// TODO Auto-generated method stub
+		return 0L;
+	}
 
 
 	@Override
@@ -97,5 +103,12 @@ public class TerminalFaultGen extends DefaultFaultGen{
 			faultLog.setEndTime(time);
 		}
 	}
+
+	@Override
+	protected String getTimeSaveType() {
+		// TODO Auto-generated method stub
+		return "fault_ter_org";
+	}
+
 
 }

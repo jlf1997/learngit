@@ -1,14 +1,20 @@
 package com.cimr.api.statistics.controller;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.comm.model.HttpResult;
 import com.cimr.api.statistics.service.FaultLogService;
+import com.cimr.api.statistics.service.FaultStatisticsService;
+import com.cimr.api.statistics.service.RealDataSignalService;
 
 @RequestMapping("statistics/fault")
 @RestController
@@ -16,6 +22,8 @@ public class FaultStatisticsController {
 	
 	@Autowired
 	private FaultLogService faultLogService;
+	@Autowired
+	private FaultStatisticsService faultStatisticsService;
 	
 	@GetMapping("/page")
 	public HttpResult findByPage(
@@ -33,6 +41,44 @@ public class FaultStatisticsController {
 		}
 		return faultLogService.findByPage(pageNumber, pageSize, bTime, endTime, terId, code, status);
 		
+	}
+	
+	@PostMapping("/day")
+	public HttpResult getStatisticsDataDay(
+			@RequestParam(name="bTime",required=true) Long bTime,
+			@RequestParam(name="eTime",required=true) Long eTime,
+			@RequestParam(name="codes",required=false) String codes,
+			@RequestBody List<String> terIds
+			) {
+		HttpResult result;
+		result = faultStatisticsService.findAllByDay(terIds,bTime,eTime,codes);
+		return result;
+	}
+	
+	@PostMapping("/month")
+	public HttpResult getStatisticsDataMonth(
+			@RequestParam(name="bTime",required=true) Long bTime,
+			@RequestParam(name="eTime",required=true) Long eTime,
+			@RequestParam(name="codes",required=false) String codes,
+			@RequestBody List<String> terIds
+			) {
+		HttpResult result;
+		result = faultStatisticsService.findAllByMonth(terIds,bTime,eTime,codes);
+		return result;
+	}
+	
+
+	
+	@PostMapping("/year")
+	public HttpResult getStatisticsDataYear(
+			@RequestParam(name="bTime",required=true) Long bTime,
+			@RequestParam(name="eTime",required=true) Long eTime,
+			@RequestParam(name="codes",required=false) String codes,
+			@RequestBody List<String> terIds
+			) {
+		HttpResult result;
+		result = faultStatisticsService.findAllByYear(terIds,bTime,eTime,codes);
+		return result;
 	}
 
 }

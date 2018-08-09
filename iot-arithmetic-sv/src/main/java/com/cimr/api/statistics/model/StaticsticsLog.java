@@ -10,9 +10,9 @@ public class StaticsticsLog {
 	
 
 	
-	public static String getDbName() {
-		return "staticstics_log_test";
-	}
+//	public static String getDbName() {
+//		return "staticstics_log";
+//	}
 
 	@Id
 	private ObjectId id;

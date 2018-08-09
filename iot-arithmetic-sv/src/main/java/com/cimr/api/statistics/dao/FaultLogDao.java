@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import com.cimr.api.comm.model.PageModel;
+import com.cimr.api.statistics.config.DbNameSetting;
 import com.cimr.api.statistics.exception.TimeTooLongException;
 import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
@@ -32,11 +33,6 @@ public class FaultLogDao {
 	@Autowired
 	@Qualifier(value="statistics")
 	protected MongoTemplate statisticsTemp;
-	
-
-	
-
-	
 	
 	
 	/**
@@ -54,7 +50,7 @@ public class FaultLogDao {
 		List<Map<String,Object>> list1 = new ArrayList<>();
 		int yearBase = Integer.parseInt(year);
 		for(int i=0;i<12;i++) {
-			List<Map<String,Object>> l = finder.findAll(query, FaultLog.getDbName(yearBase-i+""));
+			List<Map<String,Object>> l = finder.findAll(query, DbNameSetting.getFaultLogName(yearBase-i+""));
 			list1.addAll(l);
 		}
 		return list1;
@@ -147,8 +143,8 @@ public class FaultLogDao {
 		PageModel<Map<String,Object>> page1 =null;
 		
 		PageModel<Map<String,Object>> page2 = null;
-		String preYear = FaultLog.getDbName(TimeUtil.getYear(new Date(bTime)));
-		String nextYear = FaultLog.getDbName(TimeUtil.getYear(new Date(endTime)));
+		String preYear = DbNameSetting.getFaultLogName(TimeUtil.getYear(new Date(bTime)));
+		String nextYear = DbNameSetting.getFaultLogName(TimeUtil.getYear(new Date(endTime)));
 		//当前页的查询 间隔跨年
 		long totalSize = finder.getTotalNum(query, preYear);
 		int pageCount = PageModel.getTotlaPage(totalSize, pageSize);
@@ -209,7 +205,7 @@ public class FaultLogDao {
 		Iterator<String> iterator = yearMap.keySet().iterator();
 		while(iterator.hasNext()) {
 			time = iterator.next();
-			statisticsTemp.insert(yearMap.get(time), FaultLog.getDbName(time));
+			statisticsTemp.insert(yearMap.get(time), DbNameSetting.getFaultLogName(time));
 		}
 		
 	}
@@ -239,8 +235,8 @@ public class FaultLogDao {
 		while(iterator.hasNext()) {
 			year = iterator.next();
 			List<FaultLog> listFin = yearMap.get(year);
-			removeAll(listFin,FaultLog.getDbName(year));
-			statisticsTemp.insert(listFin, FaultLog.getDbName(year));
+			removeAll(listFin,DbNameSetting.getFaultLogName(year));
+			statisticsTemp.insert(listFin, DbNameSetting.getFaultLogName(year));
 		}
 	}
 	
@@ -248,5 +244,46 @@ public class FaultLogDao {
 		for(FaultLog faultLog:list) {
 			statisticsTemp.remove(faultLog, collection);
 		}
+	}
+
+
+	/**
+	 * 根据条件查询所有预警信息
+	 * @param bTime
+	 * @param endTime
+	 * @param terId
+	 * @param code
+	 * @param status
+	 * @return
+	 * @throws TimeTooLongException
+	 */
+	public List<Map<String, Object>> findAll(Long bTime, Long endTime, String terId, String code, Boolean status) throws TimeTooLongException {
+		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
+			if(endTime-bTime>TimeUtil.DAY_1) {
+			throw new TimeTooLongException("最大支持查询1天数据");
+		}
+		Sort sort = new Sort(Sort.Direction.ASC, "status")
+				.and(new Sort(Sort.Direction.DESC,"bTime"));
+		Query query = new Query();
+		query.with(sort);
+		queryByLogTime(query,bTime,endTime);
+		queryByTerId(query,terId);
+		queryByStatus(query,status);
+		queryByCode(query,code);
+		return finder.findAll(query, DbNameSetting.getFaultLogName(TimeUtil.getYear(new Date(bTime))));
+	}
+
+
+	/**
+	 * 获取错误总数
+	 * @param bTime
+	 * @param eTime
+	 * @return
+	 */
+	public Long getCount(Date bTime, Date eTime) {
+		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
+		Query query = new Query();
+		queryByLogTime(query,bTime.getTime(),eTime.getTime());
+		return finder.getCount(query, DbNameSetting.getFaultLogName(TimeUtil.getYear(bTime)));
 	}
 }

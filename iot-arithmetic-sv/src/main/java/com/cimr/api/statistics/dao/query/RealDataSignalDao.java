@@ -1,4 +1,4 @@
-package com.cimr.api.statistics.dao;
+package com.cimr.api.statistics.dao.query;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,17 +7,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.cimr.api.comm.configuration.Setting;
 import com.cimr.api.comm.model.PageModel;
-import com.cimr.api.statistics.exception.TimeTooLongException;
+import com.cimr.api.statistics.config.DbNameSetting;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
 
 @Repository
@@ -26,12 +22,11 @@ public class RealDataSignalDao {
 	@Autowired
 	@Qualifier(value="statistics")
 	protected MongoTemplate statisticsTemp;
-	@Autowired
-	private Setting setting;
 	
 	public void save(String signal,List<Object> realDate) {
 		
-		statisticsTemp.insert(realDate, setting.getRealDateStatisticsDbName(signal));
+		statisticsTemp.insert(realDate,
+				DbNameSetting.getRealDateStatisticsDbName(signal));
 	}
 	
 	private void findByTime(String signal,Long bTime,Long endTime,List<Criteria> criterias) {
@@ -72,7 +67,8 @@ public class RealDataSignalDao {
 		findByTerminal(signal,terid,criterias);
 		
 		
-		PageModel<Map<String,Object>>	res = finder.findByAgg(0,pageNumber,pageSize,criterias, setting.getRealDateStatisticsDbName(signal),aggregations);
+		PageModel<Map<String,Object>>	res = finder.findByAgg(0,pageNumber,pageSize,criterias, 
+				DbNameSetting.getRealDateStatisticsDbName(signal),aggregations);
 		
 		return res;
 	}
@@ -95,8 +91,28 @@ public class RealDataSignalDao {
 		if(aggregations==null) {
 			aggregations = new ArrayList<>();
 		}
-		return finder.findByAgg(criterias, setting.getRealDateStatisticsDbName(signal),aggregations);
+		return finder.findByAgg(criterias, 
+				DbNameSetting.getRealDateStatisticsDbName(signal),aggregations);
 		
+	}
+
+	public List<Map<String, Object>> findAll(List<String> terIds, Date bTime, Date eTime,
+			List<AggregationOperation> aggregations) {
+		// TODO Auto-generated method stub
+		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
+		List<Criteria> criterias = new ArrayList<>();
+		if(bTime!=null && eTime!=null) {
+			Criteria criteria = Criteria.where("logTime").gte(bTime).lte(eTime);
+			criterias.add(criteria);
+		}
+		if(terIds!=null && terIds.size()>0) {
+			Criteria criteria = Criteria.where("terminalNo").in(terIds);
+			criterias.add(criteria);
+		}
+		if(aggregations==null) {
+			aggregations = new ArrayList<>();
+		}
+		return finder.findByAgg(criterias,DbNameSetting.getFaultStatic() ,aggregations);
 	}
 	
 	

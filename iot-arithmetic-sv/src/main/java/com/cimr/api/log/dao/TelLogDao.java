@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.cimr.api.comm.configuration.ProjectPropertities;
+import com.cimr.api.statistics.config.DbNameSetting;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
 
 @Repository
@@ -29,9 +30,9 @@ public class TelLogDao {
 	@Qualifier(value="log")
 	protected MongoTemplate logTemp;
 	
-	private String getDbName(String year) {
-		return "TEL_FAULT_"+year;
-	}
+//	private String getDbName(String year) {
+//		return "TEL_FAULT_"+year;
+//	}
 	
 	/**
 	 * 通过信号id 以及 终端编号查询对应历史记录
@@ -51,7 +52,7 @@ public class TelLogDao {
 		}
 		Criteria criteriaPj = Criteria.where("projectNo").is(projectPropertities.getProjectId());
 		query.addCriteria(criteriaPj);
-		return finder.findAll(query,getDbName(year));
+		return finder.findAll(query,DbNameSetting.getTelFaultDbName(year));
 	}
 	
 	

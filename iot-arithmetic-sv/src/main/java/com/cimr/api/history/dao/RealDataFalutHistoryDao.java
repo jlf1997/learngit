@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.cimr.api.comm.configuration.ProjectPropertities;
-import com.cimr.api.comm.configuration.Setting;
+import com.cimr.api.comm.configuration.SignalSetting;
 
 
 /**
@@ -24,7 +24,7 @@ public class RealDataFalutHistoryDao {
 	private ProjectPropertities projectPropertities;
 	
 	@Autowired
-	private Setting setting;
+	private SignalSetting setting;
 	
 	
 	

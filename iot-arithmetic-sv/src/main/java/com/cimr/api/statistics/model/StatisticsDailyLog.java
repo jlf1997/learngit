@@ -67,10 +67,10 @@ public class StatisticsDailyLog {
 		this.type = type;
 	}
 
-	public static String getDbName() {
-		// TODO Auto-generated method stub
-		return "staticstics_daily_log";
-	}
+//	public static String getDbName() {
+//		// TODO Auto-generated method stub
+//		return "staticstics_daily_log_1";
+//	}
 	
 	
 	

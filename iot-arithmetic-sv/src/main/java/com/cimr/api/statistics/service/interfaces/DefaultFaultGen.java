@@ -39,8 +39,6 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 	@Autowired
 	private FaultLogDao faultLogDao;
 	
-	@Autowired
-	private StaticsticsLogDao staticsticsLogDao ;
 	
 	
 
@@ -52,7 +50,7 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 		//统计结束时间
 		Date faultEndDate = new Date();
 		//上次统计时间
-		Date faultStartTime = staticsticsLogDao.getDate("fault_"+type);
+		Date faultStartTime =  getPreTime();
 		//第一次统计 
 		if(faultStartTime==null) {
 			faultStartTime = TimeUtil.getTheLastYear(new Date());
@@ -104,20 +102,20 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 		
 	}
 
-	@Override
-	protected void updateDate(Integer type,List<Map<String, Object>> listun) {
-		if(listun.size()>0) {
-			staticsticsLogDao.updateDate("fault_"+type,getTime(listun.get(listun.size()-1)));
-		}else {
-			//已经超过一天 则默认没有数据
-			if(new Date().getTime()-geteTime().getTime()>TimeUtil.DAY_1) {
-				staticsticsLogDao.updateDate("fault_"+type,geteTime());
-			}else {
-				staticsticsLogDao.updateDate("fault_"+type,null);
-			}
-		}
-		
-	}
+//	@Override
+//	protected void updateDate(Integer type,List<Map<String, Object>> listun) {
+//		if(listun.size()>0) {
+//			staticsticsLogDao.updateDate("fault_"+type,getTime(listun.get(listun.size()-1)));
+//		}else {
+//			//已经超过一天 则默认没有数据
+//			if(new Date().getTime()-geteTime().getTime()>TimeUtil.DAY_1) {
+//				staticsticsLogDao.updateDate("fault_"+type,geteTime());
+//			}else {
+//				staticsticsLogDao.updateDate("fault_"+type,null);
+//			}
+//		}
+//		
+//	}
 
 	/**
 	 * 格式化数据
@@ -196,6 +194,8 @@ public abstract class DefaultFaultGen extends AbstractFaultLogGen{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	
 	
 	
 

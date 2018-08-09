@@ -32,9 +32,9 @@ public class FaultLog {
 	
 	
 	
-	public static  String getDbName(String yearAndMonth) {
-		return "TEL_FAULT_"+yearAndMonth;
-	}
+//	public static  String getDbName(String yearAndMonth) {
+//		return "TEL_FAULT_"+yearAndMonth;
+//	}
 	
 	public static Integer TERERROR = 1;
 	

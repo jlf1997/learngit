@@ -11,7 +11,7 @@ public class ProjectPropertities {
 	
 	private Long role = 0L;
 
-	private String projectId ="P00001";
+	public static  String projectId ="P00001";
 	
 	private String singalOil = "503447824";
 	
@@ -20,11 +20,6 @@ public class ProjectPropertities {
 	public String getProjectId() {
 		return projectId;
 	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
-
 
 
 	public String getSingalOil() {

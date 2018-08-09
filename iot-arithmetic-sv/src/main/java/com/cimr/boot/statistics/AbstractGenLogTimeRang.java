@@ -7,13 +7,18 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cimr.api.statistics.model.FaultLog;
+import com.cimr.api.statistics.dao.StatisticsDailyLogDao;
+import com.cimr.api.statistics.model.StatisticsDailyLog;
 import com.cimr.boot.utils.TimeUtil;
 
 public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 	
 	private static final Logger log = LoggerFactory.getLogger(AbstractGenLogTimeRang.class);
+	
+	@Autowired
+	private StatisticsDailyLogDao statisticsDailyLogDao;
 	
 	/**
 	 * 获取此次统计的开始时间 结束时间 数组0为开始 1为结束
@@ -29,6 +34,8 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 	 * @return
 	 */
 	protected abstract List<Map<String,Object>> getDateFromSource(Date bTime,Date eTime);
+	
+	protected abstract Long getCount(Date bTime,Date eTime);
 	
 	/**
 	 * 获取未结束的任务
@@ -47,11 +54,7 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 
 	
 	
-	/**
-	 * 更新时间
-	 * @param listun
-	 */
-	protected abstract void updateDate(List<Map<String, Object>> listun);
+	
 	
 	/**
 	 * 更新数据
@@ -70,13 +73,15 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 	public final void genLog() {
 		//获取需要处理的时间范围
 		Date[] range = getTimeRange();
-		bthreadLocal.set(range[0]);
-		ethreadLocal.set(range[1]);
+		if(range==null || range.length!=2 || range[0]==null || range[1] ==null) {
+			log.info("no date to gen");
+			return;
+		}
 		genLog(range[0],range[1]);
 		
 	}
 	
-	public final void genLog(Date bTime,Date eTime) {
+	private final void genLog(Date bTime,Date eTime) {
 		//保存最后的结果
 		List<Object> finalResult = new ArrayList<>();
 		
@@ -88,11 +93,34 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 			log.error("time error");
 			return;
 		}
-		//需要处理的数据
-		List<Map<String,Object>> faultMapList = getDateFromSource(getbTime(),geteTime());
+		long count = getCount(getbTime(),geteTime());
+		List<Map<String,Object>> faultMapList = new ArrayList<>();
+		List<Map<String,Object>> temp = null;
+		if(count>100000) {
+			log.info("cout too much:"+count);
+			Date tempB = getbTime();
+			Date tempE = null;
+			for(int i=0;i<10;i++) {
+				tempE = TimeUtil.getHour(tempB, 1);
+				tempE = TimeUtil.getSecond(tempE, -1);
+				if(tempE.after(geteTime())) {
+					tempE = geteTime();
+					break;
+				}
+				temp = getDateFromSource(tempB,tempE);
+				tempB = TimeUtil.getSecond(tempE, 1);
+				faultMapList.addAll(temp);
+			}
+			faultMapList.addAll(getDateFromSource(tempE,geteTime()));
+			
+		}else {
+			faultMapList.addAll(getDateFromSource(getbTime(),geteTime()));
+		}
+		//新的需要处理的数据
+		 
 		log.debug("new list size:"+faultMapList.size());
 		
-		//获取未结束的预警信息
+		//获取之前未完结的数据
 		List<Map<String,Object>> listun = getUnfinished();
 		log.debug("unfinsh list size:"+listun.size());
 		
@@ -102,11 +130,36 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 	
 		//更新数据
 		update(finalResult);
-		//更新时间
-		updateDate(faultMapList);
+		
+		if(isNeedUpdate(faultMapList)) {
+			//更新时间
+			log.info("update time");
+			updateDate();
+		}else {
+			log.info("no need to update time ");
+		}
+		
 		
 	}
 
+	/**
+	 * 判断是否需要更新更新时间
+	 * @param faultMapList
+	 * @return
+	 */
+	private  boolean isNeedUpdate(List<Map<String, Object>> faultMapList) {
+		if(faultMapList.size()>0) {
+			return true;
+		}else {
+			//已经超过一天 则默认没有数据
+			if(new Date().getTime()-geteTime().getTime()>TimeUtil.DAY_1) {
+				return true;
+			}else {
+				return false;
+			}
+		}
+	}
+	
 
 	protected Date getbTime() {
 		return bthreadLocal.get();
@@ -117,17 +170,35 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 		return ethreadLocal.get();
 	}
 
-	@Override
-	public final void genLogDaily(Date date) {
-		Date b = TimeUtil.getStartTime(date);
-		 bthreadLocal.set(b);
-		Date e = TimeUtil.getEndTime(date);
-		ethreadLocal.set(e);
-		genLog(b,e);
-		
-	}
-
+	/**
+	 * 用于保存记录统计时间表中表示不同类型
+	 * @return
+	 */
+	protected abstract String getTimeSaveType() ;
 	
+	
+	/**
+	 * 获取上次更新时间
+	 * @return
+	 */
+	protected Date getPreTime() {
+		// TODO Auto-generated method stub
+		String type = getTimeSaveType();
+		StatisticsDailyLog log = statisticsDailyLogDao.getDate(type);
+		if(log!=null) {
+			return log.getsDate();
+		}
+		return null;
+	}
+	
+	/**
+	 * 更新时间
+	 * @param listun
+	 */
+	private  void updateDate() {
+		String type = getTimeSaveType();
+		statisticsDailyLogDao.updateDate(type, this.geteTime());
+	}
 	
 	
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class Setting {
+public class SignalSetting {
 	
 	@Autowired
 	private ProjectPropertities projectPropertities;
@@ -32,8 +32,10 @@ public class Setting {
 		return "gatherMsgTime";
 	}
 	
-	public  String getRealDateStatisticsDbName(String signal) {
-		return "Statistics_Real_Date_"+projectPropertities.getProjectId()+"_Signal_"+signal;
+	public String getTerminalId(String signal) {
+		return "terminalNo";
 	}
+	
+	
 
 }
