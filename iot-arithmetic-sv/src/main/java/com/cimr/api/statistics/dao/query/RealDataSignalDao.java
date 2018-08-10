@@ -40,7 +40,7 @@ public class RealDataSignalDao {
 	 */
 	private void findByTerminal(String signal,String terid,List<Criteria> criterias) {
 		if(terid!=null) {
-			Criteria criteria = Criteria.where("terminalNo").is(terid);
+			Criteria criteria = Criteria.where("terId").is(terid);
 			criterias.add(criteria);
 		}
 	}
@@ -96,7 +96,7 @@ public class RealDataSignalDao {
 		
 	}
 
-	public List<Map<String, Object>> findAll(List<String> terIds, Date bTime, Date eTime,
+	public List<Map<String, Object>> findAll(String signal,List<String> terIds, Date bTime, Date eTime,
 			List<AggregationOperation> aggregations) {
 		// TODO Auto-generated method stub
 		MongoDbBaseFinder finder = new MongoDbBaseFinder(statisticsTemp);
@@ -106,13 +106,13 @@ public class RealDataSignalDao {
 			criterias.add(criteria);
 		}
 		if(terIds!=null && terIds.size()>0) {
-			Criteria criteria = Criteria.where("terminalNo").in(terIds);
+			Criteria criteria = Criteria.where("terId").in(terIds);
 			criterias.add(criteria);
 		}
 		if(aggregations==null) {
 			aggregations = new ArrayList<>();
 		}
-		return finder.findByAgg(criterias,DbNameSetting.getFaultStatic() ,aggregations);
+		return finder.findByAgg(criterias,DbNameSetting.getRealDateStatisticsDbName(signal) ,aggregations);
 	}
 	
 	

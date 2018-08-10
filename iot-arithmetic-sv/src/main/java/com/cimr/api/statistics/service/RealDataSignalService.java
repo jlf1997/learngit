@@ -73,7 +73,7 @@ public class RealDataSignalService {
 			endTime = TimeUtil.getStartTime(new Date(endTime)).getTime();
 		}
 		List<AggregationOperation> aggregations = new ArrayList<>();
-		GroupOperation aggregationOil = Aggregation.group("year","month","terminalNo");
+		GroupOperation aggregationOil = Aggregation.group("year","month","terId");
 		aggregations.add(aggregationOil.sum("FQ_DAY_OIL").as("oil").sum("KQ_DAY_WORK").as("work"));
 		List<Map<String,Object>> data = realDataSignalDao.findByTerAndTimeWithPage(signal, bTime, endTime, terid,aggregations);
 		HttpResult res = new HttpResult(true,"");
@@ -99,7 +99,7 @@ public class RealDataSignalService {
 			endTime = TimeUtil.getStartTime(new Date(endTime)).getTime();
 		}
 		List<AggregationOperation> aggregations = new ArrayList<>();
-		GroupOperation aggregationOil = Aggregation.group("year","terminalNo");
+		GroupOperation aggregationOil = Aggregation.group("year","terId");
 		aggregations.add(aggregationOil.sum("FQ_DAY_OIL").as("oil").sum("KQ_DAY_WORK").as("work"));
 		
 		List<Map<String,Object>> data = realDataSignalDao.findByTerAndTimeWithPage(signal, bTime, endTime, terid,aggregations);
@@ -122,7 +122,7 @@ public class RealDataSignalService {
 			eTime = e.getTime();
 		}
 		List<AggregationOperation> aggregations = new ArrayList<>();
-		GroupOperation aggregationOil = Aggregation.group("year","terminalNo");
+		GroupOperation aggregationOil = Aggregation.group("year","terId");
 		if(codes!=null && !StringUtils.isBlank(codes)) {
 			String[] codeStrs = codes.split(",");
 			for(String code: codeStrs) {
@@ -132,7 +132,7 @@ public class RealDataSignalService {
 			
 		}
 		aggregations.add(aggregationOil);
-		List<Map<String,Object>> data = realDataSignalDao.findAll(terIds, new Date(bTime), new Date(eTime),aggregations);
+		List<Map<String,Object>> data = realDataSignalDao.findAll(signal,terIds, new Date(bTime), new Date(eTime),aggregations);
 		HttpResult res = new HttpResult(true,"");
 		res.setData(data);
 		return res;
@@ -152,7 +152,7 @@ public class RealDataSignalService {
 					eTime = e.getTime();
 				}
 				List<AggregationOperation> aggregations = new ArrayList<>();
-				GroupOperation aggregationOil = Aggregation.group("year","month","terminalNo");
+				GroupOperation aggregationOil = Aggregation.group("year","month","terId");
 				if(codes!=null && !StringUtils.isBlank(codes)) {
 					String[] codeStrs = codes.split(",");
 					for(String code: codeStrs) {
@@ -162,7 +162,7 @@ public class RealDataSignalService {
 					
 				}
 				aggregations.add(aggregationOil);
-				List<Map<String,Object>> data = realDataSignalDao.findAll(terIds, new Date(bTime), new Date(eTime),aggregations);
+				List<Map<String,Object>> data = realDataSignalDao.findAll(signal,terIds, new Date(bTime), new Date(eTime),aggregations);
 				HttpResult res = new HttpResult(true,"");
 				res.setData(data);
 				return res;
@@ -171,7 +171,20 @@ public class RealDataSignalService {
 
 	public HttpResult getStatisticsDataDay(String signal, Long bTime, Long eTime, List<String> terIds, String codes) {
 		// TODO Auto-generated method stub
-		return null;
+		if(bTime!=null) {
+			Date b = new Date(bTime);
+			b = TimeUtil.getTheFirstDayOfMonth(b);
+			bTime = b.getTime();
+		}
+		if(eTime!=null) {
+			Date e = new Date(eTime);
+			e = TimeUtil.getTheLastDayOfMonth(e);
+			eTime = e.getTime();
+		}
+		List<Map<String,Object>> data = realDataSignalDao.findAll(signal,terIds, new Date(bTime), new Date(eTime),null);
+		HttpResult res = new HttpResult(true,"");
+		res.setData(data);
+		return res;
 	}
 	
 

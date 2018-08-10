@@ -56,17 +56,19 @@ public class RealDateSignalOilGen extends RealDateSignalGen{
 	 * @param map
 	 */
 	private void pushTask(String key,Map<String, Object> staticsicsMap, Map<String, Object> map) {
+		Long value = 0L;
 		if(map.containsKey(key)) {
-			Long value = Long.parseLong(map.get(key).toString());
-			Long value_IN = 0L;
-			if(staticsicsMap.containsKey(key)) {
-				value_IN = Long.parseLong(staticsicsMap.get(key).toString());
-			}
-			if(value_IN<value) {
-				staticsicsMap.put(key, value);
-			}
+			value = Long.parseLong(map.get(key).toString());
+			
 		}else {
-			log.error(key+" error");
+			log.warn(key+" error");
+		}
+		Long value_IN = 0L;
+		if(staticsicsMap.containsKey(key)) {
+			value_IN = Long.parseLong(staticsicsMap.get(key).toString());
+		}
+		if(value_IN<value) {
+			staticsicsMap.put(key, value);
 		}
 	}
 

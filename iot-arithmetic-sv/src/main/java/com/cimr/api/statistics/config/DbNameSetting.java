@@ -7,7 +7,7 @@ import com.cimr.boot.utils.TimeUtil;
 
 public class DbNameSetting {
 	
-	private static final String type ="_DEV";
+	private static final String type ="_TEST";
 	
 	private static final String ddl = "_D_";
 	
