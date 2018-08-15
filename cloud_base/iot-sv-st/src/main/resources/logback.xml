@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<configuration>
+	<property name="LOG_HOME" value="logs" />
+	<property name="APP_NAME" value="iot-data-center"></property>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{15}#%line %msg\n</pattern>
+        </encoder>
+    </appender>
+	<!-- 按照每天生成日志文件 -->
+	<appender name="file"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!--日志文件输出的文件名 -->
+			<FileNamePattern>${LOG_HOME}/${APP_NAME}-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+			<!--日志文件保留天数 -->
+			<MaxHistory>60</MaxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 当文件大小超过60M时触发滚动,这里设置60M -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}#%line - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+    <logger name="com.cimr">
+        <level value="debug"/>
+    </logger>
+
+     <logger name="org.springframework">
+        <level value="info"/>
+    </logger>
+    
+   
+
+    <root>
+        <level value="error"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="file"/>
+    </root>
+
+</configuration>

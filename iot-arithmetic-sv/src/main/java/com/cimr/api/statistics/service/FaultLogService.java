@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.cimr.api.comm.model.HttpResult;
 import com.cimr.api.comm.model.PageModel;
 import com.cimr.api.statistics.dao.FaultLogDao;
-import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.api.statistics.exception.TimeTooLongException;
 import com.cimr.api.statistics.model.FaultLog;
 
