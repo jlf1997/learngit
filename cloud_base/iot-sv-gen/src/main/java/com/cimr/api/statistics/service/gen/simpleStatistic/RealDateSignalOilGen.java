@@ -38,6 +38,8 @@ public class RealDateSignalOilGen extends RealDateSignalGen{
 	protected void initMap(Map<String, Object> staticsicsMap, Map<String, Object> map) {
 		staticsicsMap.put("FQ_DAY_OIL", 0);
 		staticsicsMap.put("KQ_DAY_WORK", 0);
+		staticsicsMap.put("K_ENG_WORK", 0);
+		staticsicsMap.put("K_DEV_WORK", 0);
 	}
 
 
@@ -47,6 +49,10 @@ public class RealDateSignalOilGen extends RealDateSignalGen{
 		pushTask("FQ_DAY_OIL",staticsicsMap,map);
 		//日工作量
 		pushTask("KQ_DAY_WORK",staticsicsMap,map);
+		
+		pushTask("K_ENG_WORK",staticsicsMap,map);
+		
+		pushTask("K_DEV_WORK",staticsicsMap,map);
 	}
 	
 	@Override

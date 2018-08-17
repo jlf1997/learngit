@@ -20,3 +20,4 @@ iot-zuul-to/mvnw.cmd
 cloud_base/iot-api-auth/.mvn/
 cloud_base/iot-zuul-cimr/.mvn/
 cloud_base/iot-zuul-service/.mvn/
+*.7z
