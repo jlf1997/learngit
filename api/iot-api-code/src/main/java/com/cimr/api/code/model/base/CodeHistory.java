@@ -1,8 +1,11 @@
 package com.cimr.api.code.model.base;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.cimr.boot.model.BaseModel;
@@ -18,7 +21,9 @@ public class CodeHistory extends BaseModel{
 
 	@Id
 	private Long id;
-	
+	/**
+	 * 指令id
+	 */
 	private String codeId;
 	
 	/**
@@ -26,17 +31,40 @@ public class CodeHistory extends BaseModel{
 	 */
 	@Lob
 	private String messageJson;
+	/**
+	 * 回调结果
+	 */
+	@OneToMany(mappedBy = "codeHistory")
+    @org.hibernate.annotations.ForeignKey(name = "none")
+	private List<CallBackLog> callBackLogs;
 	
+	
+	/**
+	 * 回调url
+	 */
+	private String url;
+	/**
+	 * 发送主题：kafka topic，rabbitmq queue
+	 */
+	private String topicKey;
+	/**
+	 * mq类型 kafka，rabbitmq
+	 */
+	private String mqType;
+	/**
+	 * mq地址
+	 */
+	private String mqURI;
+	/**
+	 * 消息发送阶段 0:发送消息 1发送到mq成功 -1 发送到mq失败 2指令执行成功-2指令执行失败
+	 */
 	private Integer status;
 	
-	private String url;
+	/**
+	 * 错误原因
+	 */
+	private String cause;
 	
-	private String topicKey;
-	
-	private String mqType;
-	
-	private String mqURI;
-
 	public Long getId() {
 		return id;
 	}
@@ -100,6 +128,24 @@ public class CodeHistory extends BaseModel{
 	public void setMqURI(String mqURI) {
 		this.mqURI = mqURI;
 	}
+
+	public List<CallBackLog> getCallBackLogs() {
+		return callBackLogs;
+	}
+
+	public void setCallBackLogs(List<CallBackLog> callBackLogs) {
+		this.callBackLogs = callBackLogs;
+	}
+
+	public String getCause() {
+		return cause;
+	}
+
+	public void setCause(String cause) {
+		this.cause = cause;
+	}
+
+	
 	
 	
 	

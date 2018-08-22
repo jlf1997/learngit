@@ -1,5 +1,10 @@
 package com.cimr.api.code.config;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -9,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+
 @Configuration
 public class RabbitConfig {
 	@Autowired
@@ -16,8 +22,7 @@ public class RabbitConfig {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setAddresses(rabbitConstants.getHost());
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitConstants.getHost(),rabbitConstants.getPort());
         connectionFactory.setUsername(rabbitConstants.getUsername());
         connectionFactory.setVirtualHost(rabbitConstants.getVirtualHost());
         connectionFactory.setPassword(rabbitConstants.getPassword());
@@ -34,4 +39,24 @@ public class RabbitConfig {
     public RabbitTemplate rabbitTemplate() {
         return new RabbitTemplate(connectionFactory());
     }
+    
+//    @Bean
+//    public TopicExchange defaultExchange() {
+//    	return new TopicExchange(MyRabbitProperties.EXCHANGE);
+//    }
+    
+//    @Bean
+//    public DirectExchange defaultExchange() {
+//        return new DirectExchange(MyRabbitProperties.EXCHANGE);
+//    }
+//    
+    @Bean
+    public Queue queue() {
+        return new Queue("hello", true);
+    }
+//    
+//    @Bean
+//    public Binding binding0a() {
+//      return BindingBuilder.bind(queue()).to(defaultExchange()).with(MyRabbitProperties.ROUTINGKEY);
+//    }
 }

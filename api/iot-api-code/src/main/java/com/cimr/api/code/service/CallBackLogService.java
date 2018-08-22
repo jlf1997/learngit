@@ -1,4 +1,4 @@
-package com.cimr.api.code.dao;
+package com.cimr.api.code.service;
 
 import java.util.List;
 
@@ -10,42 +10,43 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-import com.cimr.api.code.jpa.mgr.DictJpa;
-import com.cimr.api.code.model.mgr.Dict;
+import com.cimr.api.code.jpa.base.CallBackLogJpa;
+import com.cimr.api.code.model.base.CallBackLog;
 import com.cimr.boot.jpafinder.Finder;
 
-@Repository
-public class DictDao extends Finder<Dict,Long>{
+@Service
+public class CallBackLogService extends Finder<CallBackLog,Long>{
 	
 	
 	@Autowired
-	private DictJpa dictJpa;
+	private CallBackLogJpa callBackLogJpa;
 
 	@Override
-	public JpaSpecificationExecutor<Dict> specjpa() {
+	public JpaSpecificationExecutor<CallBackLog> specjpa() {
 		// TODO Auto-generated method stub
-		return dictJpa;
+		return callBackLogJpa;
 	}
 
 	@Override
-	public JpaRepository<Dict, Long> jpa() {
+	public JpaRepository<CallBackLog, Long> jpa() {
 		// TODO Auto-generated method stub
-		return dictJpa;
+		return callBackLogJpa;
 	}
 
 	@Override
-	public void addWhere(Dict[] t, List<Predicate> predicates, Root<Dict> root, CriteriaQuery<?> query,
+	public void addWhere(CallBackLog[] t, List<Predicate> predicates, Root<CallBackLog> root, CriteriaQuery<?> query,
 			CriteriaBuilder cb) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setSelect(Dict t) {
+	public void setSelect(CallBackLog t) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	
 }

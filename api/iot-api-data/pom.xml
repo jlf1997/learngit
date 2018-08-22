@@ -49,6 +49,7 @@
 		    <artifactId>spring-data-mongodb</artifactId> 
 		</dependency>
 		
+		
 		<!-- redis -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -66,8 +67,6 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
-			
-			
 		</dependency>
 		
 
@@ -158,11 +157,13 @@
 		 	<version>3.4</version>
 		 </dependency>
 		 
-		 
+		 <!-- 
+		 spring cloud
 		 <dependency>
 	        <groupId>org.springframework.cloud</groupId>
 	        <artifactId>spring-cloud-starter-eureka</artifactId>
 	    </dependency>
+	      -->
 	</dependencies>
 	
 	<dependencyManagement>

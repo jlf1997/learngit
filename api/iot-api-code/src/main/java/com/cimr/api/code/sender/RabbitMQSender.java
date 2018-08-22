@@ -24,7 +24,7 @@ public class RabbitMQSender implements MessageSender,RabbitTemplate.ConfirmCallb
 		if(ack) {
 			fallBack.onSuccess();
 		}else {
-			fallBack.onFaild();
+			fallBack.onFaild(cause);
 		}
 	}
 
@@ -32,9 +32,10 @@ public class RabbitMQSender implements MessageSender,RabbitTemplate.ConfirmCallb
 
 	@Override
 	public void send(String key, Object message, SendFallBack fallBack) {
-		// TODO Auto-generated method stub
+//		key = "hello";
 		this.fallBack = fallBack;
-		 CorrelationData correlationData = new CorrelationData(message.toString());
+		rabbitTemplate.setConfirmCallback(this);
+		rabbitTemplate.convertAndSend(key,message);
 	}
 
 

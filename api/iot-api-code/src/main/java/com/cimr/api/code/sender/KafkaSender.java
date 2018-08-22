@@ -31,7 +31,7 @@ public class KafkaSender implements MessageSender{
 
             @Override
             public void onFailure(Throwable ex) {
-            	fallBack.onFaild();
+            	fallBack.onFaild(ex.getMessage());
             }
 
         };

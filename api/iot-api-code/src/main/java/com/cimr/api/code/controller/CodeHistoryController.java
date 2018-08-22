@@ -27,7 +27,7 @@ public class CodeHistoryController {
 		codeSenderObject.setCodeId("2222");
 		codeSenderObject.setNotify_url("http://wwww.baidu.com");
 		codeSenderObject.setTelIds(new ArrayList<>());
-		commandsService.sendCodeToTerminalByKafka("testTopic", codeSenderObject);
+		commandsService.sendCodeToTerminalByKafka("testmessage", codeSenderObject);
 		
 	}
 }

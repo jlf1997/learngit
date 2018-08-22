@@ -43,7 +43,6 @@ public class TerminalLastData {
 			@RequestBody List<TerimalModel> termimals,
 			@PathVariable("projectId") String projectId
 			) {
-	
 		return realTimeDateService.getAllDateInclude(termimals,signal,projectId,fields);
 	}
 	

@@ -33,7 +33,12 @@ private static final Logger log = LoggerFactory.getLogger(NormalRedisDao.class);
 		List<Map<String,Object>> res = new ArrayList<>();
 		Object obj;
     	for(TerimalModel ter:termimals) {
-    		obj  = redisTemplate.opsForValue().get(dbName+":"+ter.getTerId());
+    		try {
+    			obj  = redisTemplate.opsForValue().get(dbName+":"+ter.getTerId());
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    			break;
+    		}
     		Map<String,Object> out =MapResultUtils.parseRedisObject(obj);
     		
     		if(out!=null) {
@@ -57,7 +62,12 @@ private static final Logger log = LoggerFactory.getLogger(NormalRedisDao.class);
 		List<Map<String,Object>> res = new ArrayList<>();
 		Object obj;
     	for(TerimalModel ter:termimals) {
-    		obj  = redisTemplate.opsForValue().get(dbName+":"+ter.getTerId());
+    		try {
+    			obj  = redisTemplate.opsForValue().get(dbName+":"+ter.getTerId());
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    			break;
+    		}
     		Map<String,Object> out =MapResultUtils.parseRedisObject(obj);
     		
     		if(out!=null) {
@@ -86,7 +96,12 @@ private static final Logger log = LoggerFactory.getLogger(NormalRedisDao.class);
 		List<Map<String,Object>> res = new ArrayList<>();
 		Object obj;
     	for(TerimalModel ter:termimals) {
-    		obj = redisTemplate.opsForValue().get(dbName+":"+ter.getTerId());
+    		try {
+    			obj  = redisTemplate.opsForValue().get(dbName+":"+ter.getTerId());
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    			break;
+    		}
     		Map<String,Object> out =MapResultUtils.parseRedisObject(obj);
     		if(out!=null) {
     			out = MapResultUtils.parseBooleanCount(out, countIncludeType, countFields);
