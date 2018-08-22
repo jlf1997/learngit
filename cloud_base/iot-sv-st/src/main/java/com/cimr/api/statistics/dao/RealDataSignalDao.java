@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
-import com.cimr.api.comm.model.PageModel;
 import com.cimr.api.statistics.config.DbNameSetting;
+import com.cimr.boot.comm.model.PageModel;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
 
 @Repository

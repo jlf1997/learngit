@@ -1,4 +1,4 @@
-package com.cimr.api.comm.model;
+package com.cimr.boot.comm.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,56 +1,62 @@
 package com.cimr.boot.mongodb.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-import com.mongodb.MongoURI;
-import com.mongodb.ServerAddress;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoClientURI;
 
 public abstract class AbstractMongoConfig {
 	
 	protected MongoProperties properties;
+	
+	@Autowired
+	private MongoOptionProperties mongoOptionProperties;
 
 	 abstract public MongoTemplate getMongoTemplate() throws Exception;
+	 
+	
+    public MongoClientOptions.Builder mongoClientOptions() {
+        if (mongoOptionProperties == null) {
+            return new MongoClientOptions.Builder();
+        }
+
+        return new MongoClientOptions.Builder()
+                .minConnectionsPerHost(mongoOptionProperties.getMinConnectionPerHost())
+                .connectionsPerHost(mongoOptionProperties.getMaxConnectionPerHost())
+                .threadsAllowedToBlockForConnectionMultiplier(mongoOptionProperties.getThreadsAllowedToBlockForConnectionMultiplier())
+                .serverSelectionTimeout(mongoOptionProperties.getServerSelectionTimeout())
+                .maxWaitTime(mongoOptionProperties.getMaxWaitTime())
+                .maxConnectionIdleTime(mongoOptionProperties.getMaxConnectionIdleTime())
+                .maxConnectionLifeTime(mongoOptionProperties.getMaxConnectionLifeTime())
+                .connectTimeout(mongoOptionProperties.getConnectTimeout())
+                .socketTimeout(mongoOptionProperties.getSocketTimeout())
+                .socketKeepAlive(mongoOptionProperties.getSocketKeepAlive())
+                .sslEnabled(mongoOptionProperties.getSslEnabled())
+                .sslInvalidHostNameAllowed(mongoOptionProperties.getSslInvalidHostNameAllowed())
+                .alwaysUseMBeans(mongoOptionProperties.getAlwaysUseMBeans())
+                .heartbeatFrequency(mongoOptionProperties.getHeartbeatFrequency())
+                .minConnectionsPerHost(mongoOptionProperties.getMinConnectionPerHost())
+                .heartbeatConnectTimeout(mongoOptionProperties.getHeartbeatConnectTimeout())
+                .heartbeatSocketTimeout(mongoOptionProperties.getSocketTimeout())
+                .localThreshold(mongoOptionProperties.getLocalThreshold())
+                ;
+    }	
 	
 	 @SuppressWarnings("deprecation")
 	public MongoDbFactory simpleFactory() throws Exception {
-	        return new SimpleMongoDbFactory(new MongoURI(properties.getUri()));
-	    }
-	 
-	 
-	 //暂时 不使用
-	 private MongoDbFactory mongoDbFactory(AbstractMongoConfig config) throws Exception {
-
-	        List<ServerAddress> addresses = new ArrayList<ServerAddress>();
-	        String uris = config.getProperties().getUri();
-	        String[] uriArray = uris.split(",");
-	        ServerAddress addr;
-	        for(String uri:uriArray) {
-	        	 addr = new ServerAddress("10.100.138.95",27016);
-	        }
-//	        ServerAddress addr = new ServerAddress("10.100.138.95",27016);
-	        ServerAddress addr2 = new ServerAddress("10.100.138.95", 27017);
-	        ServerAddress addr3 = new ServerAddress("10.100.138.96", 27018);
-//	        addresses.add(addr);
-	        addresses.add(addr2);
-	        addresses.add(addr3);
-	        MongoCredential mongoCredential = MongoCredential.createMongoCRCredential(
-	                "mongoProperties.getUsername()",
-	                "mongoProperties.getDatabase()",
-	                "mongoProperties.getPassword()".toCharArray());
-	        List<MongoCredential> credentialsList = new ArrayList<MongoCredential>();
-	        credentialsList.add(mongoCredential);
-	        MongoDbFactory mongoDbFactory =   new SimpleMongoDbFactory(new MongoClient(addresses, credentialsList),
-	                "mongoProperties.getDatabase()");
+		 MongoClientURI mongoClientURI = new MongoClientURI(properties.getUri(),mongoClientOptions());
+		
+		 MongoDbFactory mongoDbFactory =
+				 new SimpleMongoDbFactory(mongoClientURI);
 	        return mongoDbFactory;
 	    }
+	 
+	 
+	
 
 	public MongoProperties getProperties() {
 		return properties;

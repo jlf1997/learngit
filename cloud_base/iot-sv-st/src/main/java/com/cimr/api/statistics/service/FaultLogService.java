@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.comm.model.HttpResult;
-import com.cimr.api.comm.model.PageModel;
 import com.cimr.api.statistics.dao.FaultLogDao;
 import com.cimr.api.statistics.exception.TimeTooLongException;
+import com.cimr.boot.comm.model.PageModel;
 
 @Service
 public class FaultLogService  {

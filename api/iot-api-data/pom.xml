@@ -158,12 +158,12 @@
 		 </dependency>
 		 
 		 <!-- 
-		 spring cloud
+		 spring cloud-->
 		 <dependency>
 	        <groupId>org.springframework.cloud</groupId>
 	        <artifactId>spring-cloud-starter-eureka</artifactId>
 	    </dependency>
-	      -->
+	      
 	</dependencies>
 	
 	<dependencyManagement>

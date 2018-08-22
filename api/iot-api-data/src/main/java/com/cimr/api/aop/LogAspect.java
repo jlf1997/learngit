@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.cimr.api.aop.model.base.ApiAccessLog;
 import com.cimr.api.aop.service.ApiAccessLogService;
-import com.cimr.api.comm.model.HttpResult;
 import com.cimr.boot.utils.LogsUtil;
 
 @Aspect  

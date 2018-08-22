@@ -7,14 +7,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.cimr.boot.convert.EnableHttpConvert;
 import com.cimr.boot.swagger.EnableSwagger2Doc;
-import com.spring4all.mongodb.EnableMongoPlus;
 
 @SpringBootApplication
 @EnableSwagger2Doc
 @EnableHttpConvert
 @EnableScheduling
 @EnableJpaAuditing
-@EnableMongoPlus
 public class IotArithmeticSvApplication {
 
 	public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.cimr.api.comm.model;
+package com.cimr.boot.comm.model;
 
 
 public class HttpResult {
