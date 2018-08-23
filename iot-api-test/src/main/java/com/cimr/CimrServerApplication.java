@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.cimr.boot.convert.EnableHttpConvert;
 import com.cimr.boot.swagger.EnableSwagger2Doc;
-import com.spring4all.mongodb.EnableMongoPlus;
 
 
 
@@ -20,8 +19,6 @@ import com.spring4all.mongodb.EnableMongoPlus;
 @EnableHttpConvert
 @EnableScheduling
 @EnableJpaAuditing
-@EnableMongoPlus
-//@EnableFeignClients
 public class CimrServerApplication {
 	
 

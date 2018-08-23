@@ -1,4 +1,4 @@
-package com.cimr.api.gk.model.mgr;
+package com.cimr.api.comm;
 
 import java.util.Date;
 

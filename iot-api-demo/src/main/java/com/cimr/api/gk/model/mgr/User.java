@@ -1,35 +1,63 @@
-package com.cimr.api.gk.model.mgr;
+	package com.cimr.api.gk.model.mgr;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.cimr.api.comm.Base;
 
-@Table
+@Table(name="td_sys_user")
 @Entity
-public class User extends BaseEntity{
+@org.hibernate.annotations.Table(comment="用户表", appliesTo = "td_sys_user")
+public class User extends Base{
 
-	/**
-	 * 用户id
-	 */
 	@Id
-	private Long userid;
+	public Long id;
+	
+	@ManyToOne
+	@JoinColumn(name="customer_id",columnDefinition="bigint COMMENT '所属客户 '")
+	public Customer customer;
+	
+	@ManyToMany(mappedBy="users")
+	public List<Role> roles;
+	
+	
 	
 	/**
-	 * 用户编号
+	 * 生成租赁商时 需生成一个对应的管理员
 	 */
-	public String userNum;
+	public String username;
 	
-	public String userName;
+	/**
+	 * 
+	 */
+	public transient String pswd;
+	
+	public Integer status;
 	
 	
-	@ManyToMany(mappedBy="users",targetEntity=ApplicationInfo.class)
-	public List<ApplicationInfo> applicationInfos;
+	public String fullname;
 	
-	@OneToMany(mappedBy="user",targetEntity=Terminal.class)
-	public List<Terminal> terminals;
+	public String phone;
+	
+	public String email;
+	
+	public String comment;
+	
+	public Date lastLoginTime;
+	
+	public Float orderId;
+	
+	
+	public String avatar;
+	
+	
+	
+	
 }

@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import feign.Retryer;
+
 /**
  * 加载相关属性类
  * @author Administrator
@@ -17,7 +19,10 @@ public class IotAutoConfiguration {
 
 	
 	
-	
+	@Bean
+    Retryer feignRetryer() {
+        return Retryer.NEVER_RETRY;
+    }
 	
 
 	
