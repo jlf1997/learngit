@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>websocket demo</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+
+    var stompClient = null;
+    
+   
+  
+    var connect = function() {
+    	var terid = $("#terid").val();
+         var socket = new SockJS('/my-websocket');
+         stompClient = Stomp.over(socket);
+         stompClient.connect({"terid":terid}, function(frame) {
+         
+             stompClient.subscribe('/topic/send', function(msg) {
+            	 var data = JSON.parse(msg.body);
+            	
+                     var row = $("#template").clone();
+                     row.find("#message").text(data.message);
+                     row.find("#date").text(data.date);                    
+                     row.appendTo("#datas");//添加到模板的容器中
+                     
+            	 
+             });
+           
+             stompClient.subscribe('/queue/'+terid+'/callback', function(msg) {
+            	 var data = JSON.parse(msg.body);
+            	 $("#datatime").text(data.date);
+            	 $("#num").text(data.num);
+             });
+          
+             
+           
+
+         });
+     };
+
+     var disconnect = function() {
+         if (stompClient != null) {
+             stompClient.disconnect();
+         }
+        
+     }
+
+     var send = function() {
+    	var value =  $("#datamessage").val();
+    	console.log(value);
+         stompClient.send("/app/send", {}, JSON.stringify({        	
+             'message' : value
+         }));
+     }
+     
+     var getInfo = function() {
+    	 var terid = $("#terid").val();
+    	 console.log("========================"+terid);
+          stompClient.send("/app/getRealData", {}, terid);
+      }
+     
+    
+    /*]]>*/
+</script>
+</head>
+<body ng-app="app" ng-controller="MainController">
+
+    <h2>websocket</h2>
+     <button type="button" ng-disabled="data.connected" onclick="getInfo()">获取实时数据</button><br /> <br />
+     
+    <label>WebSocket连接状态:</label>
+     <input type="text"
+            id="terid" placeholder="请输入内容..." />
+    <button type="button" ng-disabled="data.connected" onclick="connect()">连接</button>
+    <button type="button" onclick="disconnect()"
+        ng-disabled="!data.connected">断开</button>
+    <br />
+    <br />
+    <div ng-show="data.connected">
+        <label id="datatime"></label> <br /> <br /> 
+       <div>模拟数值:</div>  <label id="num"></label> <br /> <br /> 
+        
+        <input type="text"
+            id="datamessage" placeholder="请输入内容..." />
+        <button onclick="send()" type="button">发送</button>
+        <br /> <br /> 消息列表： <br />
+        <table id="datas">
+            <thead>
+                <tr>
+                    <th>内容</th>
+                    <th>时间</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="template">
+                    <td  id="message"></td>
+                    <td id = "date"></td>
+                  
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -23,3 +23,5 @@ cloud_base/iot-zuul-service/.mvn/
 *.7z
 api/iot-api-code/target/
 api/iot-api-data/target/
+iot-api-demo/.factorypath
+iot-api-demo/target/
