@@ -25,3 +25,5 @@ api/iot-api-code/target/
 api/iot-api-data/target/
 iot-api-demo/.factorypath
 iot-api-demo/target/
+iot-api-test/target/
+iot-api-demo/.settings/
