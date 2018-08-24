@@ -74,7 +74,7 @@ public class TerminalFaultGen extends DefaultFaultGen{
 	@Override
 	protected Long getCount(Date bTime, Date eTime) {
 		// TODO Auto-generated method stub
-		return 0L;
+		return telLogService.getCount(bTime, eTime);
 	}
 
 

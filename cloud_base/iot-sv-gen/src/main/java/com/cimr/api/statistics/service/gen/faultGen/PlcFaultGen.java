@@ -56,7 +56,7 @@ public  class PlcFaultGen extends DefaultFaultGen{
 	@Override
 	protected Long getCount(Date bTime, Date eTime) {
 		// TODO Auto-generated method stub
-		return 0L;
+		return realDataSignalHistoryDao.getCount(bTime, eTime, projectPropertities.getSingalFault());
 	}
 
 	@Override

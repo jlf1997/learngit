@@ -17,26 +17,26 @@ import com.cimr.api.comm.BaseEntity;
 public class Terminal extends Base{
 
 	@Id
-	public Long id;
+	public String id;
 	
 	@ManyToOne
-	@JoinColumn(name="appliction_id",columnDefinition="bigint COMMENT '所属应用 '")
+	@JoinColumn(name="appliction_id",columnDefinition="varchar(255) COMMENT '所属应用 '")
 	public ApplicationInfo applicationInfo;
 	
 	@ManyToOne
-	@JoinColumn(name="customer_id",columnDefinition="bigint COMMENT '所属客户 '")
+	@JoinColumn(name="customer_id",columnDefinition="varchar(255) COMMENT '所属客户 '")
 	public Customer customer;
 	
 	@OneToOne
-	@JoinColumn(name="sim_card_id",columnDefinition="bigint COMMENT 'sim卡 '")
+	@JoinColumn(name="sim_card_id",columnDefinition="varchar(255) COMMENT 'sim卡 '")
 	public SimCard simCard;
 	
 	@ManyToOne
-	@JoinColumn(name="supplier_id",columnDefinition="bigint COMMENT '供应商信息 '")
+	@JoinColumn(name="supplier_id",columnDefinition="varchar(255) COMMENT '供应商信息 '")
 	public Supplier supplier;
 	
 	@ManyToOne
-	@JoinColumn(name="terminal_type_id",columnDefinition="bigint COMMENT '终端类型信息 '")
+	@JoinColumn(name="terminal_type_id",columnDefinition="varchar(255) COMMENT '终端类型信息 '")
 	public TerminalType terminalType;
 	
 	

@@ -40,10 +40,14 @@ public class FaultSchedule {
     public void faultTimer(){
         //存在单点故障 ，后期使用分布式任务调度框架优化
 		if((projectPropertities.getRole()&ProjectPropertities.FAULT)==ProjectPropertities.FAULT||projectPropertities.isAllRole()) {
-			log.info("begain scan fault");
+//			log.info("begain scan fault");
+			long b = new Date().getTime();
 			terminalFaultGen.genLog();
+			long e = new Date().getTime();
+			log.info("terminalFaultGen takes "+(e-b)+" ms ");
 			plcFaultGen.genLog();
-			log.info("end scan fault");
+			long e2 = new Date().getTime();
+			log.info("plcFaultGen takes "+(e2-e)+" ms ");
 		}
 		
 	
@@ -54,16 +58,17 @@ public class FaultSchedule {
 //	@Scheduled(cron = "0/10 * * * * ? ")
 	@Scheduled(cron = "0 0/2 * * * *")
     public void oilGetTimer(){
-        
+		long b = new Date().getTime();
 		getSignalLogDaily(projectPropertities.getSingalOil(),ProjectPropertities.OIL);
-		
-	
+		long e = new Date().getTime();
+		log.info("realDateSignalOilGen takes "+(e-b)+" ms ");
 	}
 	@Scheduled(cron = "0 0/1 * * * *")
 	 public void faultGetTimer(){
-		log.info("begain statistics fault");
+		long b = new Date().getTime();
 		faultDailyGen.genLog();
-		log.info("end statistics fault");
+		long e = new Date().getTime();
+		log.info("faultDailyGen takes "+(e-b)+" ms ");
 		
 	}
 	
@@ -71,9 +76,9 @@ public class FaultSchedule {
 		if((projectPropertities.getRole()&role)==role||projectPropertities.isAllRole()) {
 			Date sDate = TimeUtil.getDay(-1);
 			if(statisticsDailyLogDao.getDate("signal_"+signal, sDate)==null) {
-				log.info("begain scan "+signal);
+//				log.info("begain scan "+signal);
 				realDateSignalOilGen.genLog();
-				log.info("end scan "+signal);
+//				log.info("end scan "+signal);
 			}else {//控制不重复生成
 				
 			}

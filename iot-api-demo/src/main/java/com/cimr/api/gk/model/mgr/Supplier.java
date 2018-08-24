@@ -26,22 +26,26 @@ import com.cimr.api.comm.Base;
 public class Supplier extends Base{
 
 	@Id
-	@Column(name="id",columnDefinition="bigint COMMENT '主键 '")
-	public Long id;
+	@Column(name="id",columnDefinition="varchar(255) COMMENT '主键 '")
+	public String id;
 	
 	/**
 	 * 供应商名称
 	 */
+	@Column(name="supplier_name",columnDefinition="varchar(255) COMMENT '供应商名称'")
 	public String supplierName;
 	
-	
+	@ManyToOne
+	@JoinColumn(name="area_id",columnDefinition="varchar(255) COMMENT '地区信息 '")
+	public Area area;
 	/**
 	 * 具体地址
 	 */
+	@Column(name="address",columnDefinition="varchar(255) COMMENT '具体地址'")
 	public String address;
 	
 	@ManyToOne
-	@JoinColumn(name="industry_id",columnDefinition="bigint COMMENT '行业类别 '")
+	@JoinColumn(name="industry_id",columnDefinition="varchar(255) COMMENT '行业类别 '")
 	public Industry industry;
 
 	

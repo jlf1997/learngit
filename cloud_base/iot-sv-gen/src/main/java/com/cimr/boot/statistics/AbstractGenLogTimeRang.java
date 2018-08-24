@@ -1,9 +1,18 @@
 package com.cimr.boot.statistics;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +25,9 @@ import com.cimr.boot.utils.TimeUtil;
 public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 	
 	private static final Logger log = LoggerFactory.getLogger(AbstractGenLogTimeRang.class);
+	
+	@Resource(name="executorServiceForMongo")
+	public ExecutorService executorService;
 	
 	@Autowired
 	private StatisticsDailyLogDao statisticsDailyLogDao;
@@ -81,6 +93,14 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 		
 	}
 	
+	/**
+	 * 单次最大处理数
+	 */
+	private Long maxDealRecordSize = 100000L;
+	
+	private Long maxGetDateFromDbRecordSize = 10000L;
+	
+	
 	private final void genLog(Date bTime,Date eTime) {
 		//保存最后的结果
 		List<Object> finalResult = new ArrayList<>();
@@ -94,28 +114,49 @@ public abstract class AbstractGenLogTimeRang implements GenLogTimeRang{
 			return;
 		}
 		long count = getCount(getbTime(),geteTime());
-		List<Map<String,Object>> faultMapList = new ArrayList<>();
-		List<Map<String,Object>> temp = null;
-		if(count>100000) {
-			log.info("cout too much:"+count);
-			Date tempB = getbTime();
-			Date tempE = null;
-			for(int i=0;i<10;i++) {
-				tempE = TimeUtil.getHour(tempB, 1);
-				tempE = TimeUtil.getSecond(tempE, -1);
-				if(tempE.after(geteTime())) {
-					tempE = geteTime();
-					break;
-				}
-				temp = getDateFromSource(tempB,tempE);
-				tempB = TimeUtil.getSecond(tempE, 1);
-				faultMapList.addAll(temp);
+		log.debug("cout size:"+count);
+		List<Map<String,Object>> faultMapList = Collections.synchronizedList(new ArrayList<>());
+//		List<Map<String,Object>> temp = null;
+		if(count>maxDealRecordSize) {
+			log.debug("超过单次处理上限:"+maxDealRecordSize);
+			//降级为每日处理
+			eTime=TimeUtil.getEndTime(bTime);	
+			ethreadLocal.set(eTime);
+			log.debug("b:{},e:{}",getbTime(),geteTime());
+			count = getCount(getbTime(),geteTime());
+			log.debug("cout size:"+count);
+		}
+		if(count>maxGetDateFromDbRecordSize) {
+			int numSize = (int) (count/maxDealRecordSize);
+			log.debug("cout too much:"+count);
+			int rangeTime = (int) ((eTime.getTime()-bTime.getTime())/(numSize*1000));
+			List<Callable<Boolean>> tasks = new ArrayList<>();
+			log.debug("numSize:"+numSize);
+			for(int i=0;i<numSize;i++) {
+				Date tempB = TimeUtil.getSecond(getbTime(), rangeTime*i);
+				Date tempE = TimeUtil.getSecond(getbTime(), rangeTime*(i+1)-1);
+				tasks.add(new Callable<Boolean>() {
+					@Override
+					public Boolean call() throws Exception {
+						log.debug("b:{},e:{}",tempB,tempE);
+						long eee = new Date().getTime();
+						List<Map<String,Object>> temp = getDateFromSource(tempB,tempE);
+						long bbb = new Date().getTime();
+						log.debug("cost:"+(bbb-eee)/1000+" size:"+temp.size());
+						faultMapList.addAll(temp);
+						return true;
+					}
+				});
 			}
-			faultMapList.addAll(getDateFromSource(tempE,geteTime()));
-			
-		}else {
+			try {
+				executorService.invokeAll(tasks);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}else {//处理一天的数据
 			faultMapList.addAll(getDateFromSource(getbTime(),geteTime()));
 		}
+		
 		//新的需要处理的数据
 		 
 		log.debug("new list size:"+faultMapList.size());

@@ -27,6 +27,9 @@ public class TelLogService {
 		String year = TimeUtil.getYear(btime);
 		return telLogDao.findAllByDay(year,btime,eTime);
 	}
-	
+	public Long getCount(Date btime,Date eTime){
+		String year = TimeUtil.getYear(btime);
+		return telLogDao.getCount(year,btime,eTime);
+	}
 	
 }

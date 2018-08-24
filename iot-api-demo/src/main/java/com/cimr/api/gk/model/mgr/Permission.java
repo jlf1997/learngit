@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,7 +19,7 @@ public class Permission extends Base{
 	
 	
   @Id	
-  public Long id;
+  public String id;
 	
   /**
    * 权限关键字
@@ -58,8 +59,8 @@ public class Permission extends Base{
   private String href;
   
   
-  @ManyToMany
-  public List<Role> roles;
+  @OneToMany(mappedBy="permission")
+  public List<PermissionRole> permissionRoles;
 
   
 

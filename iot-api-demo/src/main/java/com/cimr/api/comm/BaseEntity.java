@@ -16,20 +16,29 @@ public class BaseEntity<T> implements java.io.Serializable{
  
 	private static final long serialVersionUID = 1L;
 
+	@Column(name="create_by",columnDefinition="varchar(255) COMMENT '创建人id '")
 	private String createBy;
-	private Date createTime;
+	
+	
 	/**
 	 * 创建时间
 	 */
-	@CreatedDate	
-	@Column(updatable=false)
+	@CreatedDate
+	@Column(name="create_time",columnDefinition="datetime COMMENT '创建时间 '")
+	private Date createTime;
+	
+		
+	@Column(name="update_by",columnDefinition="varchar(255) COMMENT '修改人id '")
 	private String updateBy;
 	
 	/**
 	 * 最后更新时间
 	 */
 	@LastModifiedDate
+	@Column(name="update_time",columnDefinition="datetime COMMENT '最后修改时间 '")
 	private Date updateTime;
+	
+	
 	private Integer delFlag;
 	
 	/**

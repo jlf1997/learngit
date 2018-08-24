@@ -15,11 +15,11 @@ import com.cimr.api.comm.Base;
 
 @Table(name="tb_application_info")
 @Entity
-@org.hibernate.annotations.Table(comment="应用表", appliesTo = "tb_application_info") 
+@org.hibernate.annotations.Table(comment="项目表", appliesTo = "tb_application_info") 
 public class ApplicationInfo extends Base{
 
 	@Id
-	public Long id;
+	public String id;
 	
 	
 	/**
@@ -31,15 +31,15 @@ public class ApplicationInfo extends Base{
 	@Column(name="app_no",columnDefinition="varchar(255) COMMENT '项目编号 '",nullable=false,unique=true)
 	public String appNo;
 	
-	@ManyToMany
-	public List<Customer> customers;
+	@OneToMany(mappedBy="applicationInfo")
+	public List<ApplicationCustomer> applicationCustomers;
 	
 	@OneToMany(mappedBy="applicationInfo",targetEntity=Terminal.class)
 	public List<Terminal> terminals;
 	
 	
 	@ManyToOne
-	@JoinColumn(name="industry_id",columnDefinition="bigint COMMENT '行业类别 '")
+	@JoinColumn(name="industry_id",columnDefinition="varchar(255) COMMENT '行业类别 '")
 	public Industry industry;
 	
 	/**
@@ -51,13 +51,13 @@ public class ApplicationInfo extends Base{
 	/**
 	 * 负责人电话
 	 */
-	@Column(name="headPhone",columnDefinition="tinytext COMMENT '负责人电话 '",nullable=false)
+	@Column(name="head_phone",columnDefinition="varchar(25) COMMENT '负责人电话 '",nullable=false)
 	public String headPhone;
 	
 	/**
 	 * 负责人姓名
 	 */
-	@Column(name="headName",columnDefinition="tinytext COMMENT '负责人姓名 '",nullable=false)
+	@Column(name="head_name",columnDefinition="varchar(50) COMMENT '负责人姓名 '",nullable=false)
 	public String headName;
 	
 	

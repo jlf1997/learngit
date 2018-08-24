@@ -2,6 +2,7 @@ package com.cimr.api.gk.model.mgr;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -17,11 +18,12 @@ public class Industry extends Base{
 	/**
 	 * 行业名称
 	 */
-	public String name;
+	@Column(name="industry_name",columnDefinition="varchar(50) COMMENT '行业名称 '")
+	public String industryName;
 	
 	
 	@Id
-	public Long id;
+	public String id;
 	
 	@OneToMany(mappedBy="industry")
 	public List<Supplier> suppliers;

@@ -49,10 +49,6 @@ public class FaultLogService  {
 		} catch (TimeTooLongException e) {
 			result = new HttpResult(true,e.getMessage());
 			return result;
-		}catch (Exception e) {
-			e.printStackTrace();
-			result = new HttpResult(true,"出现异常");
-			return result;
 		}
 		
 	}

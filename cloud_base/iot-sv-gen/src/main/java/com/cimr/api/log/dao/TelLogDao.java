@@ -55,5 +55,27 @@ public class TelLogDao {
 		return finder.findAll(query,DbNameSetting.getTelFaultDbName(year));
 	}
 	
+	/**
+	 * 获取原始tel错误数据总数
+	 * @param year
+	 * @param faultStartTime
+	 * @param faultEndTime
+	 * @return
+	 */
+	public Long getCount(String year,Date faultStartTime,Date faultEndTime) {
+		MongoDbBaseFinder finder = new MongoDbBaseFinder(logTemp);
+		
+		Query query = new Query();
+		query.with(new Sort(new Order(Direction.ASC,"faultTime")));
+		if(faultStartTime!=null && faultEndTime!=null) {
+			Criteria criteria = Criteria.where("faultTime").gte(faultStartTime);
+			criteria.lte(faultEndTime);
+			query.addCriteria(criteria);
+		}
+		Criteria criteriaPj = Criteria.where("projectNo").is(projectPropertities.getProjectId());
+		query.addCriteria(criteriaPj);
+		return finder.getCount(query, DbNameSetting.getTelFaultDbName(year));
+	}
+	
 	
 }

@@ -2,6 +2,7 @@ package com.cimr.api.gk.model.mgr;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,17 +18,18 @@ public class SimCardPayHistory extends Base{
 
 	
 	@Id
-	public Long id;
+	public String id;
 	
 	
 	@ManyToOne
-	@JoinColumn(name="sim_card_id",columnDefinition="bigint COMMENT 'sim卡 '")
+	@JoinColumn(name="sim_card_id",columnDefinition="varchar(255) COMMENT 'sim卡 '")
 	public SimCard simCard; 
 	
 	
 	/**
 	 * 缴费金额
 	 */
+	@Column(name="account",columnDefinition="varchar(255) COMMENT '缴费金额'")
 	public String account;
 	
 	

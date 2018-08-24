@@ -17,7 +17,7 @@ import com.cimr.api.comm.BaseEntity;
 public class TerminalType extends Base{
 
 	@Id
-	public Long id;
+	public String id;
 	
 	@OneToMany(mappedBy="terminalType",targetEntity=Terminal.class)
 	public List<Terminal> terminals;
