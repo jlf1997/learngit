@@ -44,12 +44,12 @@ public class MgrConfig extends AbstractSqlDataSourceConfig{
 	}
 
 	   @Bean(name = "entityManagerFactoryMgr")
-	   public LocalContainerEntityManagerFactoryBean entityManagerFactoryMgr(EntityManagerFactoryBuilder builder) {
+	   public LocalContainerEntityManagerFactoryBean setLocalContainerEntityManagerFactoryBean(EntityManagerFactoryBuilder builder) {
 	       return super.entityManagerFactoryMgr(builder);
 	   }
 	   
 	   @Bean(name = "transactionManagerMgr")
-	   public PlatformTransactionManager transactionManagerMgr(EntityManagerFactoryBuilder builder) {
+	   public PlatformTransactionManager setPlatformTransactionManager(EntityManagerFactoryBuilder builder) {
 	       return super.transactionManagerMgr(builder);
 	   }
 	   

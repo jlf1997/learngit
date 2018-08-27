@@ -18,7 +18,6 @@ public class IotAutoConfiguration {
 
 	@Bean(name="executorServiceForMongo")
 	@Primary
-    @ConditionalOnMissingBean
 	public ExecutorService getMongoPoolExecutorService() {
 		ExecutorService executorService = Executors.newFixedThreadPool(100);
 		return executorService;
@@ -26,7 +25,6 @@ public class IotAutoConfiguration {
 
 	
 	@Bean(name="executorServiceForSendCodeByKafka")
-    @ConditionalOnMissingBean
 	public ExecutorService getExecutorService() {
 		ExecutorService executorService = Executors.newFixedThreadPool(10);
 		return executorService;

@@ -47,12 +47,12 @@ public class BaseConfig extends AbstractSqlDataSourceConfig{
     * @return
     */
    @Bean(name = "entityManagerFactoryBase")
-   public LocalContainerEntityManagerFactoryBean entityManagerFactoryMgr(EntityManagerFactoryBuilder builder) {
+   public LocalContainerEntityManagerFactoryBean setLocalContainerEntityManagerFactoryBean(EntityManagerFactoryBuilder builder) {
        return super.entityManagerFactoryMgr(builder);
    }
    
    @Bean(name = "transactionManagerBase")
-   public PlatformTransactionManager transactionManagerMgr(EntityManagerFactoryBuilder builder) {
+   public PlatformTransactionManager setPlatformTransactionManager(EntityManagerFactoryBuilder builder) {
        return super.transactionManagerMgr(builder);
    }
 

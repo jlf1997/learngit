@@ -23,6 +23,19 @@ public abstract class AbstractSqlDataSourceConfig {
 	
 	protected abstract Map<String, String> getVendorProperties(DataSource dataSource);
 	
+	/**
+	 * 设定指定的LocalContainerEntityManagerFactoryBean：连接工厂
+	 * @param builder
+	 * @return
+	 */
+	protected abstract LocalContainerEntityManagerFactoryBean setLocalContainerEntityManagerFactoryBean(EntityManagerFactoryBuilder builder);
+	/**
+	 * 设定指定的PlatformTransactionManager：事务管理器
+	 * @param builder
+	 * @return
+	 */
+	protected abstract PlatformTransactionManager setPlatformTransactionManager(EntityManagerFactoryBuilder builder);
+	
 	
 	@Autowired
     protected JpaProperties jpaProperties;
