@@ -13,9 +13,8 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.stereotype.Service;
 
-import com.cimr.api.comm.model.HttpResult;
 import com.cimr.api.statistics.dao.RealDataSignalDao;
-import com.cimr.api.statistics.model.FaultField;
+import com.cimr.boot.comm.model.HttpResult;
 import com.cimr.boot.utils.TimeUtil;
 
 @Service

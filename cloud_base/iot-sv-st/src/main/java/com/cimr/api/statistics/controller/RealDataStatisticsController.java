@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cimr.api.comm.model.HttpResult;
 import com.cimr.api.statistics.service.RealDataSignalService;
+import com.cimr.boot.comm.model.HttpResult;
 
 @RestController
 @RequestMapping("statistics/realdata")

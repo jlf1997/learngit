@@ -60,6 +60,7 @@ public class CodeHistory extends BaseModel{
 	 */
 	private Integer status;
 	
+	
 	/**
 	 * 错误原因
 	 */
@@ -144,6 +145,8 @@ public class CodeHistory extends BaseModel{
 	public void setCause(String cause) {
 		this.cause = cause;
 	}
+
+
 
 	
 	

@@ -33,6 +33,7 @@ import com.cimr.api.code.sender.MessageSender;
 import com.cimr.api.code.sender.RabbitMQSender;
 import com.cimr.api.code.sender.SendFallBack;
 import com.cimr.boot.model.BaseModel;
+import com.cimr.boot.utils.GsonUtil;
 
 @Service
 public class CommandsService {

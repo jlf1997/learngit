@@ -15,8 +15,9 @@ import com.cimr.boot.swagger.EnableSwagger2Doc;
 @SpringBootApplication
 @EnableSwagger2Doc
 @EnableHttpConvert
-@EnableScheduling
 @EnableJpaAuditing
+@EnableScheduling
+
 //@EnableFeignClients
 public class CimrServerApplication {
 	

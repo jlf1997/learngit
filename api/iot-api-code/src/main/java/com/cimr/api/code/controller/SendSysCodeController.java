@@ -1,7 +1,5 @@
 package com.cimr.api.code.controller;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -13,14 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cimr.api.code.model.base.CodeHistory;
 import com.cimr.api.code.model.mgr.Message;
 import com.cimr.api.code.po.CodeSenderObject;
 import com.cimr.api.code.service.CodeHistoryService;
 import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.util.MessageUtil;
-import com.cimr.api.comm.model.HttpResult;
-import com.cimr.boot.model.BaseModel;
+import com.cimr.boot.comm.model.HttpResult;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

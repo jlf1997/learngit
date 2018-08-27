@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.cimr.api.aop.model.base.ApiAccessLog;
 import com.cimr.api.aop.service.ApiAccessLogService;
+import com.cimr.boot.comm.model.HttpResult;
 import com.cimr.boot.utils.LogsUtil;
 
 @Aspect  
@@ -74,12 +75,13 @@ public class LogAspect {
 	        	c = pjp.proceed();  
 	            log.setRes(true);
 	        } catch (Throwable e) {  
-//	            e.printStackTrace();  
 	            log.setCauses(LogsUtil.getStackTrace(e));
 	            log.setRes(false);
 	            long end = new Date().getTime();
 		        log.setTime(end-b);
 		        apiAccessLogService.save(log);
+		        HttpResult res = new HttpResult(false,"发生异常");
+		        return res;
 	        }  
 	        return c;  
 	    }  

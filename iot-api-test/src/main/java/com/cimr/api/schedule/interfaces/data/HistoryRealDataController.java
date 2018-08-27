@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 
-@FeignClient(name= "iot-api-data")
+@FeignClient(name= "iot-api-history")
 @Hystrix
 public interface HistoryRealDataController {
   
@@ -36,7 +36,7 @@ public interface HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", allowMultiple = true,dataType = "string", name = "sortBy", value = "排序字段", required = false),
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "sortType", value = "排序字段", required = false,allowableValues="ASC,DESC")
 		}) 
-	@RequestMapping(value= "/history/realdata/app/{terid}/{singal}/all/{projectId}",method=RequestMethod.GET)
+	@RequestMapping(value= "/realdata/app/{terid}/{singal}/all/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersAllRealData(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,
@@ -67,7 +67,7 @@ public interface HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "sortType", value = "排序类型", required = false,allowableValues="ASC,DESC"),
 		@ApiImplicitParam(paramType = "query", allowMultiple = true,dataType = "string", name = "fields", value = "查询的字段", required = false)
 		}) 
-	@RequestMapping(value= "/history/realdata/app/{terid}/{singal}/include/{projectId}",method=RequestMethod.GET)
+	@RequestMapping(value= "/realdata/app/{terid}/{singal}/include/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersRealDataIncludeFields(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,
@@ -97,7 +97,7 @@ public interface HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "sortType", value = "排序类型", required = false,allowableValues="ASC,DESC"),
 		@ApiImplicitParam(paramType = "query", allowMultiple = true,dataType = "string", name = "fields", value = "排除的字段", required = false)
 	})  
-	@RequestMapping(value= "/history/realdata/app/{terid}/{singal}/exclude/{projectId}",method=RequestMethod.GET)
+	@RequestMapping(value= "/realdata/app/{terid}/{singal}/exclude/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersRealDataExcludeFields(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,
@@ -131,7 +131,7 @@ public interface HistoryRealDataController {
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countIncludeType", value = "统计字段类型：排除或包含", required = false,allowableValues="INCLUDE,EXCLUDE"),
 		@ApiImplicitParam(paramType = "query", dataType = "string", name = "countFields", value = "需要统计的字段或排除的字段", required = false,allowMultiple=true)
 		}) 
-	@RequestMapping(value= "/history/realdata/app/booleancount/{terid}/{singal}/all/{projectId}",method=RequestMethod.GET)
+	@RequestMapping(value= "/realdata/app/booleancount/{terid}/{singal}/all/{projectId}",method=RequestMethod.GET)
 	public List<Map<String,Object>> findTersAllRealDataBooleanCount(
 			@PathVariable("singal") String singal,
 			@PathVariable(value="terid",required=true) String terid,

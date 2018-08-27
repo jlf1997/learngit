@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.dev.model.mgr.Signal;
 import com.cimr.api.dev.service.SignalService;
+import com.cimr.boot.comm.model.HttpResult;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,10 +31,12 @@ public class SignalController {
 		@ApiImplicitParam(paramType = "path", dataType = "String", name = "projectId", value = "信息id", required = true) }
 	) 
 	@RequestMapping(value="/info/{projectId}",method=RequestMethod.GET)
-	public List<Signal> findDevInfoById(@PathVariable(value = "projectId") String projectId) {
+	public HttpResult findDevInfoById(@PathVariable(value = "projectId") String projectId) {
 		Signal t = new Signal();
 		t.setProjectId(projectId);
-		List<Signal> res = signalService.findAll(t);
+		List<Signal> data = signalService.findAll(t);
+		HttpResult res = new HttpResult(true,"");
+		res.setData(data);
 		return res;
 	}
 }

@@ -20,7 +20,7 @@ import com.cimr.api.code.service.CodeHistoryService;
 import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.service.configs.MessageHandle;
 import com.cimr.api.code.util.MessageUtil;
-import com.cimr.api.comm.model.HttpResult;
+import com.cimr.boot.comm.model.HttpResult;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -338,7 +338,7 @@ public class MessageUtil {
 		
 		for(int i=0;i<end-begin+1;i++) {
 			if(i<newValue.size()) {
-				code[end-i-2] = "0x"+newValue.get(i);
+				code[end-i-1] = "0x"+newValue.get(i);
 			}
 			
 		}

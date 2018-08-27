@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cimr.api.comm.model.TerimalModel;
 import com.cimr.api.dev.model.mgr.Terminal;
 import com.cimr.api.dev.service.TerminalService;
+import com.cimr.boot.comm.model.HttpResult;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,11 +43,13 @@ public class TerminalController {
 		@ApiImplicitParam(paramType = "path", dataType = "String", name = "terminalId", value = "信息id", required = true) }
 	) 
 	@RequestMapping(value="/info/{terminalId}",method=RequestMethod.GET)
-	public Terminal findDevInfoById(@PathVariable(value = "terminalId") String terminalId) {
+	public HttpResult findDevInfoById(@PathVariable(value = "terminalId") String terminalId) {
 		Terminal t = new Terminal();
 		t.setId(terminalId);
 		Terminal res = terminalService.find(t);
-		return res;
+		HttpResult httpResult = new HttpResult(true,"");
+		httpResult.setData(res);
+		return httpResult;
 	}
 	
 	
@@ -56,14 +59,17 @@ public class TerminalController {
 	@ApiOperation(value = "根据id串查询设备信息", notes = ""			
 			)	  
 	@RequestMapping(value="/infos/ids",method=RequestMethod.POST)	
-	public List<Terminal> findDevInfoByIds(	
+	public HttpResult findDevInfoByIds(	
 			@RequestBody List<TerimalModel> termimals
 			) {
 		List<String> ids = new ArrayList<>();
 		termimals.forEach(action->{
 			ids.add(action.getTerId());
 		});
-		return terminalService.findDevsByIds(ids);
+		List<Terminal> res =  terminalService.findDevsByIds(ids);
+		HttpResult httpResult = new HttpResult(true,"");
+		httpResult.setData(res);
+		return httpResult;
 	}
 	
 	
@@ -78,7 +84,7 @@ public class TerminalController {
 		@ApiImplicitParam(paramType = "query", dataType = "String", name = "projectNo", value = "项目编号", required = false)
 		}) 
 	@RequestMapping(value="/infos",method=RequestMethod.GET)	
-	public List<Terminal> findDevInfos(
+	public HttpResult findDevInfos(
 			@RequestParam(name="terminalId",required=false) String terminalId,
 			@RequestParam(name="tenantNo",required=false) String tenantNo,
 			@RequestParam(name="terminalName",required=false) String terminalName,
@@ -90,7 +96,9 @@ public class TerminalController {
 		t.setId(terminalId);
 		t.setTerminalName(terminalName);
 		List<Terminal> res = terminalService.findAll(t);
-		return res;
+		HttpResult httpResult = new HttpResult(true,"");
+		httpResult.setData(res);
+		return httpResult;
 	}
 	
 

@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-@FeignClient(name= "iot-api-data")
+@FeignClient(name= "iot-api-realdata")
 @Hystrix
 @RequestMapping("/runtimeInfo")
 public interface TerminalRuntimeInfoController {

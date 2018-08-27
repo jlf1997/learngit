@@ -27,3 +27,6 @@ iot-api-demo/.factorypath
 iot-api-demo/target/
 iot-api-test/target/
 iot-api-demo/.settings/
+api/iot-api-realdata/target/
+api/iot-api-history/target/
+api/iot-api-data - backup/target/
