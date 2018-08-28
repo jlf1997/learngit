@@ -30,3 +30,4 @@ iot-api-demo/.settings/
 api/iot-api-realdata/target/
 api/iot-api-history/target/
 api/iot-api-data - backup/target/
+cloud_base/boot/target/
