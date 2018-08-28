@@ -8,8 +8,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cimr.boot.statistics.AbstractGenLogTimeRang;
 import com.cimr.boot.utils.TimeUtil;
+import com.cimr.util.AbstractGenLogTimeRang;
 
 public abstract class AbstractDailyGen  extends AbstractGenLogTimeRang{
 	

@@ -7,17 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.cimr.api.statistics.dao.FaultLogDao;
-import com.cimr.api.statistics.dao.StaticsticsLogDao;
 import com.cimr.api.statistics.model.FaultLog;
-import com.cimr.api.statistics.model.StaticsticsLog;
 import com.cimr.boot.utils.IdGener;
 import com.cimr.boot.utils.TimeUtil;
 

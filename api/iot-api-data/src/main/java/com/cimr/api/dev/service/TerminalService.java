@@ -69,7 +69,7 @@ public class TerminalService extends Finder<Terminal,Long>{
 				List<Predicate> predicateList = new ArrayList<>();
 				for(String id:ids)  {
 					if(id!=null) {
-						predicateList.add(sdjo.eq( "terminalId", id));
+						predicateList.add(sdjo.eq( "id", id));
 					}
 					
 					

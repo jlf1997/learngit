@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cimr.api.statistics.model.FaultLog;
-import com.cimr.boot.statistics.AbstractGenLogTimeRang;
+import com.cimr.util.AbstractGenLogTimeRang;
 
 public abstract class AbstractFaultLogGen extends AbstractGenLogTimeRang{
 	

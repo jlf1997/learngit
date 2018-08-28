@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cimr.api.comm.configuration.ProjectPropertities;
-import com.cimr.api.comm.configuration.SignalSetting;
 import com.cimr.api.history.dao.RealDataSignalHistoryDao;
 import com.cimr.api.statistics.config.DbNameSetting;
 import com.cimr.api.statistics.service.interfaces.statisticsDailyGen.StaticsicsGen;
