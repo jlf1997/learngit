@@ -1,5 +1,6 @@
 package com.cimr.api.code.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("iot.code")
@@ -24,7 +25,19 @@ public class CodeProperties {
 	private String appLicenseCode = "0";
 	
 	
+	//1 rabbit 0 kafka
+	private Integer senderType = 0;
 	
+	
+	
+
+	public Integer getSenderType() {
+		return senderType;
+	}
+
+	public void setSenderType(Integer senderType) {
+		this.senderType = senderType;
+	}
 
 	public String getAppLicenseCode() {
 		return appLicenseCode;

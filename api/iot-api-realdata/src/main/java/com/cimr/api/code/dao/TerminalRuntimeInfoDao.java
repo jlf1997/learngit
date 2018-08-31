@@ -11,9 +11,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.cimr.api.code.config.RedisProperties;
-import com.cimr.api.code.util.RedisTemplateFactory;
 import com.cimr.api.comm.model.TerimalModel;
 import com.cimr.boot.redis.RedisTemplateConfig;
+import com.cimr.boot.redis.RedisTemplateFactory;
 
 @Repository
 public class TerminalRuntimeInfoDao {

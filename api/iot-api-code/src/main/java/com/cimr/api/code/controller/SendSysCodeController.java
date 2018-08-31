@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(description="系统指令操作，只提供给管控平台使用",tags= {"systemCode"})
 @RestController
-@RequestMapping("/code")
+@RequestMapping("/system")
 public class SendSysCodeController {
 
 	
@@ -38,7 +38,7 @@ public class SendSysCodeController {
 	
 	@ApiOperation(value = "向终端发送系统命令，可自定义参数，api中未限制，所有给的参数将全部传给终端"			
 			)	
-	@RequestMapping(value="/system/command",method=RequestMethod.POST)
+	@RequestMapping(value="/command",method=RequestMethod.POST)
 	public HttpResult sendSysCommemd(
 			HttpServletRequest request,
 			@RequestParam(name="title",required=true) Integer title,
@@ -66,7 +66,7 @@ public class SendSysCodeController {
 	
 	@ApiOperation(value = "向终端发送系统命令：清除信号配置缓存"			
 			)	
-	@RequestMapping(value="/system/clean",method=RequestMethod.POST)
+	@RequestMapping(value="/clean",method=RequestMethod.POST)
 	public HttpResult sendSysCommemdClean(
 			HttpServletRequest request,
 			@RequestBody CodeSenderObject codeSenderObject) {

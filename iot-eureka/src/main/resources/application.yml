@@ -1,26 +1,5 @@
-server:
-  port: 8888                    # 指定该Eureka实例的端口
-node2:
-  172.16.20.115
-node1:
-  172.16.20.97
-
-  
-eureka:
-  server:
-    enable-self-preservation: false
-    eviction-interval-timer-in-ms: 4000
-  instance:
-    hostname: localhost         # 指定该Eureka实例的主机名
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      defaultZone: http://${node2}:8888/eureka/
-#172.16.20.115
-#172.16.20.97
 spring:
-  application:
-    name: eureka-server
+  profiles:
+    active: 138
 
 

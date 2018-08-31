@@ -10,18 +10,28 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 
 @Configuration
+@ConditionalOnExpression("${iot.code.sender-type}==1")
 public class RabbitConfig {
 	@Autowired
     private MyRabbitProperties rabbitConstants;
+	
+	
+	@Autowired
+	private CodeProperties codeProperties;
 
     @Bean
     public ConnectionFactory connectionFactory() {
+    	if(codeProperties.getSenderType()==0) {
+    		return null;
+    	}
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitConstants.getHost(),rabbitConstants.getPort());
         connectionFactory.setUsername(rabbitConstants.getUsername());
         connectionFactory.setVirtualHost(rabbitConstants.getVirtualHost());

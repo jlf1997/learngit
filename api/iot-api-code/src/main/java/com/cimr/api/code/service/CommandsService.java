@@ -43,9 +43,7 @@ public class CommandsService {
 	private CommandsDao commandsDao;
 	@Autowired
 	private CallBackLogService callBackLogService;
-	
-	@Value("${iot.mq.type:2}")
-	private Integer senderType;
+
 	
 	@Autowired
 	private KafkaTemplate kafkaTemplate;
@@ -111,7 +109,7 @@ public class CommandsService {
 	 */
 	public Long sendCodeToTerminalByKafka(String message,CodeSenderObject codeSenderObject) {
 		
-		if(senderType==1) {
+		if(codeProperties.getSenderType()==1) {
 			messageSender =new RabbitMQSender(rabbitTemplate);
 		}else {
 			messageSender = new KafkaSender(kafkaTemplate);
@@ -157,7 +155,7 @@ public class CommandsService {
 	private void sendMessageSuccess(Long resId,CodeSenderObject codeSenderObject) {
 		 CodeResultNotiyObject codeResult = new CodeResultNotiyObject();
          codeResult.setCodeId(codeSenderObject.getCodeId());
-         codeResult.setReturn_code("FAILD");
+         codeResult.setReturn_code("SUCCESS");
         
          codeResult.setStatus(1);
          CodeHistory t = new CodeHistory();

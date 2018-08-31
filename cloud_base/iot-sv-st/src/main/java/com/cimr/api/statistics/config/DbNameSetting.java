@@ -2,12 +2,20 @@ package com.cimr.api.statistics.config;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.cimr.api.comm.configuration.ProjectPropertities;
 import com.cimr.boot.utils.TimeUtil;
-
+@Component
 public class DbNameSetting {
 	
-	private static final String type ="_TEST";
+	private static  String type;
+	
+	@Value(value = "${iot.dbname.setting.type:DEMO}")
+	public void setLogBrokerList(String typec) {
+		type = "_"+typec;
+	}
 	
 	private static final String ddl = "_D_";
 	

@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(description="指令据相关操作",tags= {"appCode"})
 @RestController
-@RequestMapping("/code")
+@RequestMapping("/app")
 public class SendCodeController {
 	
 	private static final Logger log = LoggerFactory.getLogger(SendCodeController.class);
@@ -50,7 +50,7 @@ public class SendCodeController {
 
 	@ApiOperation(value = "应用向终端发指令", notes = ""			
 			)
-	@RequestMapping(value="/app/ter/code",method=RequestMethod.POST)
+	@RequestMapping(value="/ter/code",method=RequestMethod.POST)
 	public HttpResult sendCode(
 			@RequestParam("cmdId") String cmdId,
 			@RequestParam("cmdTitle") Integer cmdTitle,
@@ -94,7 +94,7 @@ public class SendCodeController {
 	
 	@ApiOperation(value = "应用设置终端调试", notes = "cmdContents与telIds均以逗号隔开"			
 			)	
-	@RequestMapping(value="/app/ter/debug",method=RequestMethod.POST)
+	@RequestMapping(value="/ter/debug",method=RequestMethod.POST)
 	public HttpResult sendDebug(
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
@@ -122,7 +122,7 @@ public class SendCodeController {
 	
 	@ApiOperation(value = "应用设置终端解除调试", notes = ""			
 			)	
-	@RequestMapping(value="/app/ter/endDebug",method=RequestMethod.POST)
+	@RequestMapping(value="/ter/endDebug",method=RequestMethod.POST)
 	public HttpResult sendEndDebug(
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
@@ -152,7 +152,7 @@ public class SendCodeController {
 	
 	@ApiOperation(value = "发送指令 获取实时数据"			
 			)	
-	@RequestMapping(value="/app/ter/realData",method=RequestMethod.POST)
+	@RequestMapping(value="/ter/realData",method=RequestMethod.POST)
 	public HttpResult sendCodeToGetRealData(
 			@RequestParam("signal") String signal,
 			@RequestBody CodeSenderObject codeSenderObject) {
@@ -171,7 +171,7 @@ public class SendCodeController {
 	
 	@ApiOperation(value = "应用向终端发延时锁机指令", notes = ""			
 			)
-	@RequestMapping(value="/app/ter/code/delayLock",method=RequestMethod.POST)
+	@RequestMapping(value="/ter/code/delayLock",method=RequestMethod.POST)
 	public HttpResult sendCode(
 			@RequestParam("cmdId") String cmdId,
 			@RequestParam("cmdTitle") Integer cmdTitle,
