@@ -40,8 +40,8 @@ public class DbNameSetting {
 	 * @param year
 	 * @return
 	 */
-	public static String getFaultLogName(String year) {
-		return "TEL_FAULT_"+year+"_"+middle+ProjectPropertities.projectId+type;
+	public static String getFaultLogName() {
+		return "TEL_FAULT"+middle+ProjectPropertities.projectId+type;
 	}
 	
 	//=========================统计数据==========================================

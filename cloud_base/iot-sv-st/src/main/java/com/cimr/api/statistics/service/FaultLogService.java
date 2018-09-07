@@ -11,6 +11,7 @@ import com.cimr.api.statistics.dao.FaultLogDao;
 import com.cimr.api.statistics.exception.TimeTooLongException;
 import com.cimr.boot.comm.model.HttpResult;
 import com.cimr.boot.comm.model.PageModel;
+import com.cimr.boot.utils.LogsUtil;
 
 @Service
 public class FaultLogService  {
@@ -42,11 +43,12 @@ public class FaultLogService  {
 			result.setData(page);
 			return result;
 		} catch (TimeTooLongException e) {
-			result = new HttpResult(true,e.getMessage());
+			result = new HttpResult(false,"查询时间范围超过限制");
 			return result;
 		}catch (Exception e) {
-			e.printStackTrace();
-			result = new HttpResult(true,"出现异常");
+			String cause = LogsUtil.getStackTrace(e);
+			log.error(cause);
+			result = new HttpResult(false,"服务器发生异常");
 			return result;
 		}
 		

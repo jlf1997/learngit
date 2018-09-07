@@ -29,11 +29,13 @@ import com.cimr.api.code.model.mgr.Commands;
 import com.cimr.api.code.po.CodeResultNotiyObject;
 import com.cimr.api.code.po.CodeSenderObject;
 import com.cimr.api.code.sender.KafkaSender;
+import com.cimr.api.code.sender.MQCallBack;
 import com.cimr.api.code.sender.MessageSender;
 import com.cimr.api.code.sender.RabbitMQSender;
 import com.cimr.api.code.sender.SendFallBack;
 import com.cimr.boot.model.BaseModel;
 import com.cimr.boot.utils.GsonUtil;
+import com.cimr.boot.utils.LogsUtil;
 
 @Service
 public class CommandsService {
@@ -44,6 +46,8 @@ public class CommandsService {
 	@Autowired
 	private CallBackLogService callBackLogService;
 
+	
+	
 	
 	@Autowired
 	private KafkaTemplate kafkaTemplate;
@@ -56,8 +60,16 @@ public class CommandsService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-//	@Resource(name="RabbitSender")
-	private MessageSender messageSender;
+	@Autowired
+	private MQCallBack mqCallBack;
+	
+
+	
+	
+	@Autowired
+	private RabbitMQSender rabbitMQSender;
+	@Autowired
+	private KafkaSender kafkaSender;
 	
 	@Autowired
 	private CodeHistoryService codeHistoryService;
@@ -104,132 +116,40 @@ public class CommandsService {
 	}
 	
 	/**
-	 * 通过kafka向中终端发送指令,并在发送结束后，反馈结果
+	 * 向中终端发送指令,并在发送结束后，反馈结果
 	 * @param message
 	 */
-	public Long sendCodeToTerminalByKafka(String message,CodeSenderObject codeSenderObject) {
-		
-		if(codeProperties.getSenderType()==1) {
-			messageSender =new RabbitMQSender(rabbitTemplate);
-		}else {
-			messageSender = new KafkaSender(kafkaTemplate);
-		}
+	public Long sendCodeToTerminal(String message,CodeSenderObject codeSenderObject) {
 		String mqtype = "";
-		if(messageSender instanceof KafkaSender) {
+		if(codeProperties.getSenderType()==0) {
 			mqtype = "kafka";
-		}
-		if(messageSender instanceof RabbitMQSender) {
+		}else {
 			mqtype = "rabbit";
 		}
 		Long resId = commandsService.saveHistory(mqtype,"",codeProperties.getTopicAppToTer(),message,codeSenderObject);
 		executorService.execute(new Runnable() {
 			@Override
 			public void run() {
-				
-				SendFallBack fallback = new SendFallBack() {
-					
-					@Override
-					public void onSuccess() {
-						sendMessageSuccess(resId,codeSenderObject);
-					}
-
-					@Override
-					public void onFaild(String cause) {
-						senMessageFaild(resId, codeSenderObject, cause);
-					}
-					
-				};
-				try {
-					messageSender.send(codeProperties.getTopicAppToTer(),message,fallback);
-				}catch(Exception e) {
-					senMessageFaild(resId, codeSenderObject, e.getMessage());
+				MessageSender messageSender;
+				if(codeProperties.getSenderType()==1) {
+					messageSender =rabbitMQSender;
+				}else {
+					messageSender = kafkaSender;
 				}
-				
+				try {
+					messageSender.send(resId+"",codeProperties.getTopicAppToTer(),message);
+				}catch(Exception e) {
+					String cause = LogsUtil.getStackTrace(e);
+					log.error("发送消息失败："+cause);
+					mqCallBack.senMessageFaild(resId, cause);
+				}
 			}
-			
 		});
 		return resId;
 	}
 	
 	
-	private void sendMessageSuccess(Long resId,CodeSenderObject codeSenderObject) {
-		 CodeResultNotiyObject codeResult = new CodeResultNotiyObject();
-         codeResult.setCodeId(codeSenderObject.getCodeId());
-         codeResult.setReturn_code("SUCCESS");
-        
-         codeResult.setStatus(1);
-         CodeHistory t = new CodeHistory();
-         t.setId(resId);
-         t = codeHistoryService.find(t);
-         if(t!=null) {
-        	 t.setStatus(1);
-             codeHistoryService.save(t);
-         }
-         codeResult.setCodeHistory(t);
-         notiyCodeResutl(codeSenderObject.getNotify_url(),codeResult);
-	}
-	
-	private void senMessageFaild(Long resId,CodeSenderObject codeSenderObject,String cause) {
-		 CodeResultNotiyObject codeResult = new CodeResultNotiyObject();
-         codeResult.setCodeId(codeSenderObject.getCodeId());
-         codeResult.setReturn_code("FAILD");
-         codeResult.setReturn_message("发送失败:"+cause);
-         codeResult.setStatus(-1);
-         CodeHistory t = new CodeHistory();
-         t.setId(resId);
-         t = codeHistoryService.find(t);
-         if(t!=null) {
-        	 t.setStatus(-1);
-        	 t.setCause(cause);
-             codeHistoryService.save(t);
-         }
-         codeResult.setCodeHistory(t);
-         notiyCodeResutl(codeSenderObject.getNotify_url(),codeResult);
-	}
-	
-	
-	
-	/**
-	 * 通知指令发送结果
-	 */
-	public void notiyCodeResutl(String url,CodeResultNotiyObject result) {
-		HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		log.info("url:"+url);
-		MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
-        params.add("return_code", result.getReturn_code());
-        params.add("return_message", result.getReturn_message());
-        params.add("codeId", result.getCodeId());
-        params.add("sendStauts",result.getStatus()+"");
-        HttpEntity entity = new HttpEntity( params,headers);
-        ResponseEntity<String> rss =null;
-        CallBackLog callBackLog = new CallBackLog();
-        callBackLog.setCodeHistory(result.getCodeHistory());
-        try {
-        	rss =  restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-        }catch(Exception e) {
-        	log.error("connection faild :"+e.getMessage());
-        	callBackLog.setCause(e.getMessage());
-        }
-        
-        if(rss.getStatusCode()==HttpStatus.OK) {
-        	if("success".equals(rss.getBody())){
-        		callBackLog.setHttpCode(200);
-        		log.info("success");
-        	}else {
-        		callBackLog.setHttpCode(-1);
-        		log.error("error");
-        	}
-        }else {
-        	callBackLog.setHttpCode(rss.getStatusCode().value());
-        	log.error("error");
-        }
-        
-        callBackLogService.save(callBackLog);
-        
-        
-	}
+
 	
 	
 	

@@ -1,8 +1,6 @@
 package com.cimr.api.statistics.service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,21 +11,16 @@ import org.springframework.stereotype.Service;
 
 import com.cimr.api.statistics.dao.FaultLogDao;
 import com.cimr.api.statistics.exception.TimeTooLongException;
-import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.boot.comm.model.HttpResult;
 
 @Service
 public class FaultLogService  {
 	
-	@Autowired
-	private FaultLogDao faultLogDao;
-	
-	
 	
 	private static final Logger log = LoggerFactory.getLogger(FaultLogService.class);
 
-
-	
+	@Autowired
+	private FaultLogDao faultLogDao;
 	
 	/**
 	 * 获取所有预警信息
@@ -52,30 +45,37 @@ public class FaultLogService  {
 		}
 		
 	}
-	
-	
-	
-	/**
-	 * 将需要更新与新增的数据分离
-	 * @param resutl
-	 * @return
-	 */
-	public List<FaultLog> getPreList(List<FaultLog> resutl){
-		List<FaultLog> updList = new ArrayList<>();
-		Iterator<FaultLog> iterator = resutl.iterator();
-		FaultLog faultLog;
-		while(iterator.hasNext()) {
-			faultLog = iterator.next();
-			if(faultLog.getYear()!=null) {
-				updList.add(faultLog);
-				iterator.remove();
-			}
-		}
-		return updList;
-	}
-
+//	
+//	
+//	
+//	/**
+//	 * 将需要更新与新增的数据分离
+//	 * @param resutl
+//	 * @return
+//	 */
+//	public List<FaultLog> getPreList(List<FaultLog> resutl){
+//		List<FaultLog> updList = new ArrayList<>();
+//		Iterator<FaultLog> iterator = resutl.iterator();
+//		FaultLog faultLog;
+//		while(iterator.hasNext()) {
+//			faultLog = iterator.next();
+//			if(faultLog.getYear()!=null) {
+//				updList.add(faultLog);
+//				iterator.remove();
+//			}
+//		}
+//		return updList;
+//	}
+//
 	public Long getCount(Date bTime, Date eTime) {
 		// TODO Auto-generated method stub
 		return faultLogDao.getCount(bTime,eTime);
 	}
+
+
+
+
+	
+	
+	
 }

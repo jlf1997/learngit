@@ -2,7 +2,7 @@
 <!DOCTYPE logback>
 <configuration>
 	<property name="LOG_HOME" value="logs" />
-	<property name="APP_NAME" value="iot-api-data"></property>
+	<property name="APP_NAME" value="iot-api-test"></property>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -33,7 +33,7 @@
 	
 	<appender name="LOGSTASH"      class="net.logstash.logback.appender.LogstashTcpSocketAppender">
 	   <destination>175.6.77.235:9601</destination>     <!--指定logstash ip：监听端口 tcpAppender  可自己实现如kafka传输等-->
-	   <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" ><customFields>{"appname":"iot-api-test"}</customFields></encoder>
+	   <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" ><customFields>{"appname":"${APP_NAME}"}</customFields></encoder>
 	   <keepAliveDuration>5 minutes</keepAliveDuration>
 	</appender>
 	

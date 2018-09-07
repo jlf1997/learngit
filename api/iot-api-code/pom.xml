@@ -115,7 +115,7 @@
      </profile>
      <profile>
          <!-- 测试环境 -->
-         <id>sit</id>
+         <id>test</id>
          <properties>
              <profiles.active>sit</profiles.active>
          </properties>

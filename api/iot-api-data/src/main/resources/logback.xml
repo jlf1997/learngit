@@ -29,18 +29,33 @@
 		</encoder>
 	</appender>
 	
+	
+	
+	<appender name="LOGSTASH"      class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+	   <destination>175.6.77.235:9601</destination>     <!--指定logstash ip：监听端口 tcpAppender  可自己实现如kafka传输等-->
+	   <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" ><customFields>{"appname":"${APP_NAME}"}</customFields></encoder>
+	   <keepAliveDuration>5 minutes</keepAliveDuration>
+	</appender>
+	
+	<appender name="api-async" class="ch.qos.logback.classic.AsyncAppender">
+	   <appender-ref ref="LOGSTASH"/>
+	   <queueSize>8192</queueSize>
+	   <discardingThreshold>0</discardingThreshold>
+	</appender>
+	
     <logger name="com.cimr">
-        <level value="debug"/>
+        <level value="info"/>
     </logger>
 
      <logger name="org.springframework">
         <level value="info"/>
     </logger>
 
-    <root>
-        <level value="error"/>
+     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="file"/>
+        <appender-ref ref="api-async" />
     </root>
+	
 
 </configuration>

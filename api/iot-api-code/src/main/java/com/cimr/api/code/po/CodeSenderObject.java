@@ -15,8 +15,16 @@ public class CodeSenderObject {
 	 */
 	private String notify_url;
 	
-	
+	/**
+	 * 回调用：指定对应的codeid
+	 */
 	private String codeId;
+	
+	
+	/**
+	 * 指令内容
+	 */
+	private String cmdContents;
 
 	
 
@@ -42,6 +50,14 @@ public class CodeSenderObject {
 
 	public void setCodeId(String codeId) {
 		this.codeId = codeId;
+	}
+
+	public String getCmdContents() {
+		return cmdContents;
+	}
+
+	public void setCmdContents(String cmdContents) {
+		this.cmdContents = cmdContents;
 	}
 
 

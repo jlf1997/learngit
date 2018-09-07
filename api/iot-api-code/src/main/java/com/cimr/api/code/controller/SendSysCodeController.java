@@ -55,7 +55,7 @@ public class SendSysCodeController {
 			
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			Long idHistory  =commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
+			Long idHistory  =commandsService.sendCodeToTerminal(messageJson,codeSenderObject);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpResult(false,"发送失败");
@@ -80,7 +80,7 @@ public class SendSysCodeController {
 			
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			Long idHistory = commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
+			Long idHistory = commandsService.sendCodeToTerminal(messageJson,codeSenderObject);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new HttpResult(false,"发送失败");

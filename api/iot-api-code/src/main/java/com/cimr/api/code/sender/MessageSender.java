@@ -1,7 +1,9 @@
 package com.cimr.api.code.sender;
 
 public interface  MessageSender {
-	public void send(String key,Object message,SendFallBack fallBack);
+	public void send(String id,String key,Object message);
+	
+//	public void setCallBack(SendFallBack callBack);
 	
 
 	

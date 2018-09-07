@@ -64,6 +64,7 @@ public class CodeHistory extends BaseModel{
 	/**
 	 * 错误原因
 	 */
+	@Lob
 	private String cause;
 	
 	public Long getId() {

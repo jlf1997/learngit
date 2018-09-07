@@ -21,6 +21,7 @@ import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.service.configs.MessageHandle;
 import com.cimr.api.code.util.MessageUtil;
 import com.cimr.boot.comm.model.HttpResult;
+import com.cimr.boot.utils.LogsUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,8 +34,7 @@ public class SendCodeController {
 	
 	private static final Logger log = LoggerFactory.getLogger(SendCodeController.class);
 	
-	@Autowired
-	private CodeHistoryService codeHistoryService;
+
 	
 	@Autowired
 	private MessageHandle handle;
@@ -52,9 +52,10 @@ public class SendCodeController {
 			)
 	@RequestMapping(value="/ter/code",method=RequestMethod.POST)
 	public HttpResult sendCode(
-			@RequestParam("cmdId") String cmdId,
-			@RequestParam("cmdTitle") Integer cmdTitle,
-			@RequestParam("cmdType") Integer cmdType,
+			@RequestParam(name="cmdId",required=false) String cmdId,
+			@RequestParam(name="cmdEncode",required=false) Integer cmdEncode,
+			@RequestParam(name="cmdTitle",required=true) Integer cmdTitle,
+			@RequestParam(name="cmdType",required=true) Integer cmdType,
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		HttpResult res ;
@@ -65,27 +66,30 @@ public class SendCodeController {
 					||codeSenderObject.getTelIds().size()==0) {
 				return new HttpResult(false,"参数错误，发送失败");
 			}
-			String cmdContents = commandsService.getCommandsById(cmdId);
+			String cmdContents = codeSenderObject.getCmdContents();
+			if(cmdId!=null) {
+				cmdContents = commandsService.getCommandsById(cmdId);
+			}
 			//判断指令是否错误
 			if(cmdContents==null ) {
-				res = new HttpResult(false,"指令id错误或未获得许可");
+				res = new HttpResult(false,"指令错误");
 				return res;
 			}
 			if(StringUtils.isBlank(cmdContents)) {
 				res = new HttpResult(false,"指令内容为空");
 				return res;
 			}
-		
-			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
+			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle, cmdContents,cmdEncode, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			Long idHistory = commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
-			 res = new HttpResult(true,"发送成功");
-			 res.setData(idHistory);
-			 return res;
+			Long idHistory = commandsService.sendCodeToTerminal(messageJson,codeSenderObject);
+			res = new HttpResult(true,"发送成功");
+			res.setData(idHistory);
+			return res;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new HttpResult(false,"数据服务出现异常，发送失败"+e.getMessage());
+			String cause = LogsUtil.getStackTrace(e);
+			log.error(cause);
+			return new HttpResult(false,"数据服务出现异常，发送失败"+cause);
 		}
 		
 	}
@@ -105,16 +109,17 @@ public class SendCodeController {
 					||codeSenderObject.getTelIds().size()==0) {
 				return new HttpResult(false,"参数错误，发送失败");
 			}
-			message = MessageUtil.getMessage(90,2,null, null, null, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
+			message = MessageUtil.getMessage(90,2,null, null, null,null, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			Long idHistory = commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
+			Long idHistory = commandsService.sendCodeToTerminal(messageJson,codeSenderObject);
 			 res = new HttpResult(true,"发送成功");
 			 res.setData(idHistory);
 			 return res;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new HttpResult(false,"发送失败");
+			String cause = LogsUtil.getStackTrace(e);
+			log.error(cause);
+			return new HttpResult(false,"数据服务出现异常，发送失败"+cause);
 		}
 	
 	}
@@ -133,18 +138,19 @@ public class SendCodeController {
 					||codeSenderObject.getTelIds().size()==0) {
 				return new HttpResult(false,"参数错误，发送失败");
 			}
-			message = MessageUtil.getMessage(90,3,null, null, null
+			message = MessageUtil.getMessage(90,3,null, null, null,null
 					, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 
-			Long idHistory = commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
+			Long idHistory = commandsService.sendCodeToTerminal(messageJson,codeSenderObject);
 			 res = new HttpResult(true,"发送成功");
 			 res.setData(idHistory);
 			 return res;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new HttpResult(false,"发送失败");
+			String cause = LogsUtil.getStackTrace(e);
+			log.error(cause);
+			return new HttpResult(false,"数据服务出现异常，发送失败"+cause);
 		}
 	}
 	
@@ -172,8 +178,9 @@ public class SendCodeController {
 	@ApiOperation(value = "应用向终端发延时锁机指令", notes = ""			
 			)
 	@RequestMapping(value="/ter/code/delayLock",method=RequestMethod.POST)
-	public HttpResult sendCode(
-			@RequestParam("cmdId") String cmdId,
+	public HttpResult sendCodeDelayLock(
+			@RequestParam(name="cmdId",required=false) String cmdId,
+			@RequestParam(name="cmdEncode",required=false) Integer cmdEncode,
 			@RequestParam("cmdTitle") Integer cmdTitle,
 			@RequestParam("cmdType") Integer cmdType,
 			@RequestParam("delay") Integer delay,
@@ -186,10 +193,13 @@ public class SendCodeController {
 					||codeSenderObject.getTelIds().size()==0) {
 				return new HttpResult(false,"参数错误，发送失败");
 			}
-			String cmdContents = commandsService.getCommandsById(cmdId);
+			String cmdContents = codeSenderObject.getCmdContents();
+			if(cmdId!=null) {
+				cmdContents = commandsService.getCommandsById(cmdId);
+			}
 			//判断指令是否错误
 			if(cmdContents==null ) {
-				res = new HttpResult(false,"指令id错误或未获得许可");
+				res = new HttpResult(false,"指令内容错误");
 				return res;
 			}
 			if(StringUtils.isBlank(cmdContents)) {
@@ -204,16 +214,17 @@ public class SendCodeController {
 			cmdContents = MessageUtil.parseCommerCode(cmdContents,6,7,chars);
 			
 			message = MessageUtil.getMessage(90,1,cmdType, cmdTitle
-					, cmdContents, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
+					, cmdContents,cmdEncode, MessageUtil.convertTerminalModelListToStringList(codeSenderObject.getTelIds()));
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
-			commandsService.sendCodeToTerminalByKafka(messageJson,codeSenderObject);
+			commandsService.sendCodeToTerminal(messageJson,codeSenderObject);
 			 res = new HttpResult(true,"发送成功");
 //			 res.setData(commandsService.saveHistory(messageJson,codeSenderObject));
 			 return res;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new HttpResult(false,"出现异常，发送失败");
+			String cause = LogsUtil.getStackTrace(e);
+			log.error(cause);
+			return new HttpResult(false,"数据服务出现异常，发送失败"+cause);
 		}
 	
 	}

@@ -67,7 +67,6 @@ public class FastGson {
 	 */
 	public  <T> T jsonToObj(String jsonstr,Class<T> cls) {		
 		if(jsonstr==null || isJson(jsonstr))
-			
 			return gs.fromJson(jsonstr, cls);
 		return null;
 	}

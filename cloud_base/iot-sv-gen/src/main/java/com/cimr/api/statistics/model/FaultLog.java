@@ -1,7 +1,6 @@
 package com.cimr.api.statistics.model;
 
 import java.util.Date;
-import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,37 +10,17 @@ import org.bson.types.ObjectId;
 
 import com.cimr.boot.utils.TimeUtil;
 
-@Table
-@Entity
-public class FaultLog {
-	public FaultLog() {
-		
-	}
+
+public class FaultLog{
 	
-	public FaultLog(Map<String,Object> map) {
-		this.id = (Long)map.get("_id");
-		this.bTime = (Date) map.get("bTime");
-		this.creTime = (Date) map.get("creTime");
-		this.updTime = (Date) map.get("updTime");
-		this.code = (String)map.get("code");
-		this.endTime = (Date) map.get("endTime");
-		this.faultType = (Integer) map.get("faultType");
-		this.terId = (String) map.get("terId");
-		this.orgId = (ObjectId) map.get("orgId");
-	}
-	
-	
-	
-//	public static  String getDbName(String yearAndMonth) {
-//		return "TEL_FAULT_"+yearAndMonth;
-//	}
 	
 	public static Integer TERERROR = 1;
 	
 	public static Integer PLCERROR = 2;
 
+	
 	@Id
-	private Long id;
+	private ObjectId id;
 	
 	private Date updTime;
 	
@@ -58,7 +37,15 @@ public class FaultLog {
 	/**
 	 * 故障码
 	 */
-	private String code;
+	private String warningKey;
+	
+	/**
+	 * 预警状态
+	 */
+	private Integer warningStauts;
+	
+	
+	private Boolean removed;
 	/**
 	 * 终端id
 	 */
@@ -108,12 +95,22 @@ public class FaultLog {
 		this.endTime = endTime;
 	}
 
-	public String getCode() {
-		return code;
+	
+
+	public String getWarningKey() {
+		return warningKey;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setWarningKey(String warningKey) {
+		this.warningKey = warningKey;
+	}
+
+	public Integer getWarningStauts() {
+		return warningStauts;
+	}
+
+	public void setWarningStauts(Integer warningStauts) {
+		this.warningStauts = warningStauts;
 	}
 
 	public String getTerId() {
@@ -132,11 +129,12 @@ public class FaultLog {
 		this.faultType = faultType;
 	}
 
-	public Long getId() {
+
+	public ObjectId getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(ObjectId id) {
 		this.id = id;
 	}
 
@@ -200,6 +198,14 @@ public class FaultLog {
 
 	public void setDay(String day) {
 		this.day = day;
+	}
+
+	public Boolean getRemoved() {
+		return removed;
+	}
+
+	public void setRemoved(Boolean removed) {
+		this.removed = removed;
 	}
 
 	

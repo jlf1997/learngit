@@ -64,7 +64,7 @@ public abstract class AbstractMessageHandle implements MessageHandle{
 	protected void sendRealDataMessage(List<String> telIds) {
 		Message message = null;
 		try {
-			message = MessageUtil.getMessage(90,4,null, null, null, telIds);
+			message = MessageUtil.getMessage(90,4,null, null, null,null, telIds);
 			String messageJson=message.toJson();
 			log.debug("message:"+messageJson);
 			kafkaTemplate.send(codeProperties.getTopicAppToTer(),messageJson);

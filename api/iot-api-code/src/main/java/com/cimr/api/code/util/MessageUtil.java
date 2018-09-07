@@ -51,8 +51,8 @@ public class MessageUtil {
 	 * @return 消息指令对象
 	 * @throws UnsupportedEncodingException
 	 */
-	public static Message getMessage(int type,int title,Integer cmdType,Integer cmdTitle,String cmdContents,List<String> telIds) throws UnsupportedEncodingException {
-	   return MessageUtil.getMessage(1, type, title, cmdType, cmdTitle, cmdContents, telIds);
+	public static Message getMessage(int type,int title,Integer cmdType,Integer cmdTitle,String cmdContents,Integer cmdEncode,List<String> telIds) throws UnsupportedEncodingException {
+	   return MessageUtil.getMessage(1, type, title, cmdType, cmdTitle, cmdContents, cmdEncode,telIds);
 	}
 	
 	
@@ -65,7 +65,7 @@ public class MessageUtil {
 	 * @return 消息指令对象
 	 * @throws UnsupportedEncodingException
 	 */
-	public static Message getMessage(int version,int type,int title,Integer cmdType,Integer cmdTitle,String cmdContents,List<String> telIds) throws UnsupportedEncodingException {
+	public static Message getMessage(int version,int type,int title,Integer cmdType,Integer cmdTitle,String cmdContents,Integer cmdEncode,List<String> telIds) throws UnsupportedEncodingException {
 		Message message = new Message();
 		message.setProducerId("app");
 		message.setConsumerId("iot");
@@ -83,8 +83,13 @@ public class MessageUtil {
 			data.put("cmdTitle", cmdTitle);
 		}
 		if(cmdContents!=null) {
-			cmdContents = parseCmdWithStr(cmdContents);
+			if(cmdEncode==null) {//兼容之前的数据格式
+				cmdContents = parseCmdWithStr(cmdContents);
+			}
 			data.put("cmdContent", cmdContents);	
+		}
+		if(cmdEncode!=null) {
+			data.put("cmdEncode", cmdEncode);
 		}
 			
 		if(telIds!=null) {
@@ -338,7 +343,8 @@ public class MessageUtil {
 		
 		for(int i=0;i<end-begin+1;i++) {
 			if(i<newValue.size()) {
-				code[end-i-1] = "0x"+newValue.get(i);
+//				code[end-i-1] = "0x"+newValue.get(i);
+				code[end-i-1] = newValue.get(i);
 			}
 			
 		}

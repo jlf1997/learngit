@@ -64,6 +64,11 @@ public class RabbitConfig {
     public Queue queue() {
         return new Queue("hello", true);
     }
+    
+    @Bean
+    public Queue queue1() {
+        return new Queue("DATA_PUBLISH", true);
+    }
 //    
 //    @Bean
 //    public Binding binding0a() {
