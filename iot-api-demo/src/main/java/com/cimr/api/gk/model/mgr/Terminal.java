@@ -46,5 +46,6 @@ public class Terminal extends Base{
 	@Column(name="status",columnDefinition="int COMMENT '状态 '",nullable=false)
 	public Integer status;
 	
-	
+	@Column(name="remark",columnDefinition="varchar(255) COMMENT '备注 '",nullable=false)
+	public String remark;
 }

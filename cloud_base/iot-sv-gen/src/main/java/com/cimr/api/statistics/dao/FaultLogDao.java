@@ -2,8 +2,6 @@ package com.cimr.api.statistics.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,14 +14,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import com.cimr.api.comm.model.PageModel;
 import com.cimr.api.statistics.config.DbNameSetting;
 import com.cimr.api.statistics.exception.TimeTooLongException;
-import com.cimr.api.statistics.model.FaultLog;
 import com.cimr.boot.mongodb.MongoDbBaseFinder;
 import com.cimr.boot.utils.TimeUtil;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 
 @Repository

@@ -76,8 +76,7 @@ public abstract class AbstractLogAspect {
 				@Override
 				public void run() {
 					try {
-						
-						 saveLog(this.levl,this.log);
+						saveLog(this.levl,this.log);
 					}catch(Exception e) {
 						e.printStackTrace();
 					}

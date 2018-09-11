@@ -18,10 +18,10 @@ public class Commandcontroller {
 	private CommandsService commandsService;
 	
 	
-	@GetMapping("/contents/{id}")
-	public HttpResult getCommandsById(@PathVariable(value = "id") String id){
+	@GetMapping("/contents/{number}")
+	public HttpResult getCommandsById(@PathVariable(value = "number") String number){
 		HttpResult res = new HttpResult(true,"success");
-		Commands com = commandsService.getCommandsById(id);
+		Commands com = commandsService.getCommandsByNumber(number);
 		res.setData(com);
 		return res;
 	}

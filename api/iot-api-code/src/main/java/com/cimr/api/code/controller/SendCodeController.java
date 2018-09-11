@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cimr.api.code.model.mgr.Message;
 import com.cimr.api.code.po.CodeSenderObject;
-import com.cimr.api.code.service.CodeHistoryService;
 import com.cimr.api.code.service.CommandsService;
 import com.cimr.api.code.service.configs.MessageHandle;
 import com.cimr.api.code.util.MessageUtil;
@@ -52,8 +51,8 @@ public class SendCodeController {
 			)
 	@RequestMapping(value="/ter/code",method=RequestMethod.POST)
 	public HttpResult sendCode(
-			@RequestParam(name="cmdId",required=false) String cmdId,
-			@RequestParam(name="cmdEncode",required=false) Integer cmdEncode,
+//			@RequestParam(name="cmdId",required=false) String cmdId,
+			@RequestParam(name="cmdEncode",required=true) Integer cmdEncode,
 			@RequestParam(name="cmdTitle",required=true) Integer cmdTitle,
 			@RequestParam(name="cmdType",required=true) Integer cmdType,
 			@RequestBody CodeSenderObject codeSenderObject) {
@@ -67,9 +66,9 @@ public class SendCodeController {
 				return new HttpResult(false,"参数错误，发送失败");
 			}
 			String cmdContents = codeSenderObject.getCmdContents();
-			if(cmdId!=null) {
-				cmdContents = commandsService.getCommandsById(cmdId);
-			}
+//			if(cmdId!=null) {
+//				cmdContents = commandsService.getCommandsById(cmdId);
+//			}
 			//判断指令是否错误
 			if(cmdContents==null ) {
 				res = new HttpResult(false,"指令错误");
@@ -179,7 +178,7 @@ public class SendCodeController {
 			)
 	@RequestMapping(value="/ter/code/delayLock",method=RequestMethod.POST)
 	public HttpResult sendCodeDelayLock(
-			@RequestParam(name="cmdId",required=false) String cmdId,
+//			@RequestParam(name="cmdId",required=false) String cmdId,
 			@RequestParam(name="cmdEncode",required=false) Integer cmdEncode,
 			@RequestParam("cmdTitle") Integer cmdTitle,
 			@RequestParam("cmdType") Integer cmdType,
@@ -194,9 +193,9 @@ public class SendCodeController {
 				return new HttpResult(false,"参数错误，发送失败");
 			}
 			String cmdContents = codeSenderObject.getCmdContents();
-			if(cmdId!=null) {
-				cmdContents = commandsService.getCommandsById(cmdId);
-			}
+//			if(cmdId!=null) {
+//				cmdContents = commandsService.getCommandsById(cmdId);
+//			}
 			//判断指令是否错误
 			if(cmdContents==null ) {
 				res = new HttpResult(false,"指令内容错误");

@@ -41,9 +41,10 @@ public class CommandsService   extends Finder<Commands,Long>{
 	 * @param id
 	 * @return
 	 */
-	public Commands getCommandsById(String id) {
+	public Commands getCommandsByNumber(String number) {
 		Commands t = new Commands();
-		t.setId(id);
+		t.setNumber(number);
+//		t.setId(id);
 //		t.setAppLicense("0");
 		Commands res = find(t);
 //		if(res!=null) {

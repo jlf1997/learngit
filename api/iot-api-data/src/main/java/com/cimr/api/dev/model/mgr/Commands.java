@@ -25,10 +25,10 @@ public class Commands extends BaseEntity{
 	@DBFinder(added=true,opType=Oper.EQ)
 	private String Id;
 	
-//	/**
-//	 * 指令编号
-//	 */;
-//	private String number;
+	/**
+	 * 指令编号
+	 */;
+	private String number;
 //	/**
 //	 * 指令名称
 //	 */;
@@ -104,6 +104,12 @@ public class Commands extends BaseEntity{
 	}
 	public void setCmdEncode(Integer cmdEncode) {
 		this.cmdEncode = cmdEncode;
+	}
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
 	}
 	
 	

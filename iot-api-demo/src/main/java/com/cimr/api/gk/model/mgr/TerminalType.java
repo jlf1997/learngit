@@ -48,4 +48,7 @@ public class TerminalType extends Base{
 	public Integer status;
 	
 	
+	@Column(name="remark",columnDefinition="varchar(255) COMMENT '备注 '",nullable=false)
+	public String remark;
+	
 }
