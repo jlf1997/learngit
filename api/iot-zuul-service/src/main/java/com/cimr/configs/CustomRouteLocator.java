@@ -12,9 +12,9 @@ import org.springframework.cloud.netflix.zuul.filters.SimpleRouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.util.StringUtils;
 
+import com.cimr.api.routers.model.ZuulRoute;
+import com.cimr.api.routers.service.ZuulRouteService;
 import com.cimr.boot.utils.CacheManager;
-import com.cimr.routers.model.ZuulRoute;
-import com.cimr.routers.service.ZuulRouteService;
 public class CustomRouteLocator extends SimpleRouteLocator implements RefreshableRouteLocator {
 	 
     public final static Logger logger = LoggerFactory.getLogger(CustomRouteLocator.class);

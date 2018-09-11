@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import com.cimr.routers.service.ZuulRouteService;
+import com.cimr.api.routers.service.ZuulRouteService;
  
 @Component
 public class CustomZuulConfig {

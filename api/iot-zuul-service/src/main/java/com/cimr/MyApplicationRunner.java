@@ -7,9 +7,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.cimr.api.routers.model.ZuulRoute;
+import com.cimr.api.routers.service.ZuulRouteService;
 import com.cimr.boot.utils.CacheManager;
-import com.cimr.routers.model.ZuulRoute;
-import com.cimr.routers.service.ZuulRouteService;
 
 @Component
 public class MyApplicationRunner implements ApplicationRunner{
