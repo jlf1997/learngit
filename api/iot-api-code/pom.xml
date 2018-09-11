@@ -33,8 +33,30 @@
             <artifactId>boot</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.cimr</groupId>
+            <artifactId>boot-mongo-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>com.cimr</groupId>
+            <artifactId>boot-mysql-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.cimr</groupId>
+            <artifactId>boot-redis-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 	
-
+ 		<dependency>
+            <groupId>com.cimr</groupId>
+            <artifactId>boot-web-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 		 
 		
 		

@@ -32,9 +32,16 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		
-		<dependency>
+        
+        <dependency>
             <groupId>com.cimr</groupId>
-            <artifactId>boot</artifactId>
+            <artifactId>boot-web-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>com.cimr</groupId>
+            <artifactId>boot-mysql-starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 		

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.cimr.api.statistics.dao.FaultLogDao;
 import com.cimr.api.statistics.exception.TimeTooLongException;
+import com.cimr.boot.comm.PageModel;
 import com.cimr.boot.comm.model.HttpResult;
-import com.cimr.boot.comm.model.PageModel;
 import com.cimr.boot.utils.LogsUtil;
 
 @Service

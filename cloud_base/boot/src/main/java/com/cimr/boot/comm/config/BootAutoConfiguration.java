@@ -5,9 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import com.cimr.boot.exception.DefaultHandlleException;
-import com.cimr.boot.exception.HandlleException;
-import com.cimr.boot.mongodb.config.MongoOptionProperties;
 import com.cimr.boot.websocket.DefaultWebSocketChannelInter;
 import com.cimr.boot.websocket.WebSocketChannelInter;
 
@@ -20,11 +17,7 @@ import com.cimr.boot.websocket.WebSocketChannelInter;
 public class BootAutoConfiguration {
 
 	
-	@Bean
-    @ConditionalOnMissingBean
-	public MongoOptionProperties mongoOptionProperties() {
-		return new MongoOptionProperties();
-	}
+
 	
 	@Bean
 	@Primary
@@ -34,11 +27,6 @@ public class BootAutoConfiguration {
 	}
 	
 	
-	@Bean
-	@Primary
-	@ConditionalOnMissingBean
-	public HandlleException getHandlleException() {
-		return new DefaultHandlleException();
-	}
+	
 	
 }

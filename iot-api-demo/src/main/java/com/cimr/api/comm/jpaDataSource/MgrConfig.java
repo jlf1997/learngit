@@ -15,7 +15,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.cimr.boot.sql.config.AbstractSqlDataSourceConfig;
+import com.cimr.boot.config.AbstractSqlDataSourceConfig;
 
 @Configuration
 @EnableTransactionManagement
