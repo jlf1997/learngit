@@ -31,3 +31,11 @@ api/iot-api-realdata/target/
 api/iot-api-history/target/
 api/iot-api-data - backup/target/
 cloud_base/boot/target/
+*.class
+boot/boot-mongo-starter/target/
+boot/boot-mysql-starter/target/
+boot/boot-web-starter/target/
+demo/iot-api-test/target/
+demo/iot-api-demo/target/
+boot/boot/target/
+boot/boot-redis-starter/target/

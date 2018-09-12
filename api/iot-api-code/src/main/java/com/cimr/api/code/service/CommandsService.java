@@ -57,8 +57,7 @@ public class CommandsService {
 	
 	@Autowired
 	private CodeProperties codeProperties;
-	@Autowired
-	private RestTemplate restTemplate;
+
 	
 	@Autowired
 	private MQCallBack mqCallBack;

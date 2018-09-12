@@ -28,11 +28,7 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-            <groupId>com.cimr</groupId>
-            <artifactId>boot</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+	
         
 		<dependency>
             <groupId>com.cimr</groupId>
@@ -65,12 +61,12 @@
 		
 		 
 		 <!-- 
-		 spring cloud-
+		 spring cloud -->
 		 <dependency>
 	        <groupId>org.springframework.cloud</groupId>
 	        <artifactId>spring-cloud-starter-eureka</artifactId>
 	    </dependency>
-	    -->
+	   
 	    
 	    <dependency>
 		    <groupId>com.alibaba</groupId>

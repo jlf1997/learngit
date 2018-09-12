@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.code.dao.TerminalRuntimeInfoDao;
-import com.cimr.api.comm.model.TerimalModel;
+import com.cimr.api.code.model.TerimalModel;
 
 @Service
 public class TerminalRuntimeInfoService {

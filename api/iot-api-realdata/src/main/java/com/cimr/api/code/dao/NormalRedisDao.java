@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.cimr.api.comm.model.TerimalModel;
+import com.cimr.api.code.model.TerimalModel;
 import com.cimr.boot.utils.LogsUtil;
 import com.cimr.util.MapResultUtils;
 

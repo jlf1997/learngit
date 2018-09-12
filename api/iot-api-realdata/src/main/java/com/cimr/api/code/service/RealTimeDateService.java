@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cimr.api.code.dao.TerRealDataDao;
-import com.cimr.api.comm.model.TerimalModel;
+import com.cimr.api.code.model.TerimalModel;
 
 
 @SuppressWarnings("rawtypes")

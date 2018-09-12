@@ -37,7 +37,7 @@ public class TerminalReciver {
 				bytes[i] = Byte.parseByte(strs[i]);
 			}
 			String  messageJson = new String(bytes); 
-			log.debug("从主题DATA_PUBLISH收到的消息"+messageJson);
+			log.info("从主题DATA_PUBLISH收到的消息"+messageJson);
 			warnningMessage = GsonUtil.jsonToObj(messageJson, TerminalMessage.class);
 		}catch(Exception e) {
 			String causes = LogsUtil.getStackTrace(e);
