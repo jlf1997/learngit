@@ -1,7 +1,8 @@
-node1:
-  175.6.65.239
-node2:
-  127.0.0.1
+
+logback:
+  url: 172.16.20.40:9601
+node1: 172.16.20.179
+node2: 172.16.20.177
 server:
   port: 8200
   
@@ -10,9 +11,9 @@ spring:
     name: zuul-service
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://175.6.73.138:3406/iot_zuul?characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://172.16.20.209:3306/iot_zuul?characterEncoding=utf8&useSSL=false
     username: root
-    password: root  
+    password: cimr@123  
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,9 +24,10 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
+    hostname: ${spring.cloud.client.ipAddress}
   client:
     service-url: 
-      defaultZone: http://${node2}:8888/eureka/
+      defaultZone: http://${node2}:8888/eureka/,http://${node1}:8888/eureka/
 zuul: 
   ignored-services: '*'
   host:
@@ -58,6 +60,14 @@ hystrix:
 ribbon: 
   ConnectTimeout: 3000
   ReadTimeout: 60000
+
+
+            
+
+       
+
+      
+       
 
 
             

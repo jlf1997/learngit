@@ -51,6 +51,7 @@ public abstract class AbstractLogAspect {
 	        try {  
 	        	c = pjp.proceed();  
 	        	HttpResult httpResult = (HttpResult)c;
+	        	log.setApiCode(httpResult.getApiCode());
 	            log.setRes(true);
 	            if(!httpResult.isSuccess()) {
 	        		level = "error";

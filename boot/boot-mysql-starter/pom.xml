@@ -73,6 +73,13 @@
 		
   </dependencies>
   
+     <distributionManagement>
+	  <snapshotRepository>
+	    <id>cimr_cloud</id>
+	    <url>http://nexus.cs-icloud.gov.cn/nexus/content/repositories/cimr_cloud</url>
+	  </snapshotRepository>
+	</distributionManagement>
+  
   <build>
 		<pluginManagement>
 			<plugins>

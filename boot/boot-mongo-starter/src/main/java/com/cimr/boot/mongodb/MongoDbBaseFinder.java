@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -214,5 +215,14 @@ public class MongoDbBaseFinder {
 	 */
 	public Long getCount(Query query,String collectionName) {
 		return template.count(query, collectionName);
+	}
+	
+	
+	/**
+	 * 获取所有表名
+	 * @return
+	 */
+	public Set<String> getCollections() {
+		return template.getCollectionNames();
 	}
 }

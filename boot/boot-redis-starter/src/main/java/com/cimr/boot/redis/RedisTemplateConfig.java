@@ -1,13 +1,16 @@
 package com.cimr.boot.redis;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -16,19 +19,33 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.hash.HashMapper;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.support.collections.RedisProperties;
 
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.cimr.boot.redis.utils.MyHashMapper;
+import com.cimr.boot.utils.LogsUtil;
 
 @Configuration
 @EnableAutoConfiguration  
-public class RedisTemplateConfig {
+public class RedisTemplateConfig extends RedisAutoConfiguration{
 
 	
 	private static final Logger log = LoggerFactory.getLogger(RedisTemplateConfig.class);
 
 	@Autowired
 	private JedisConnectionFactory factory;
+	
+	
+   private JedisConnectionFactory getJedisConnectionFactory() {
+	   JedisConnectionFactory jedisConnectionFactory =  new JedisConnectionFactory();
+	    try {
+			BeanUtils.copyProperties(jedisConnectionFactory, factory);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			LogsUtil.getStackTrace(e);
+		}
+	    return jedisConnectionFactory;
+	   
+   }
 	
  
 	/**
@@ -39,6 +56,7 @@ public class RedisTemplateConfig {
 
 		
 	 public <String, V> RedisTemplate<String, V> getJacksonStringTemplate(Class<V> clazz) {
+		 JedisConnectionFactory factory = getJedisConnectionFactory();
 	        RedisTemplate<String, V> redisTemplate = new RedisTemplate<String, V>();
 	        redisTemplate.setConnectionFactory(factory);
 	        redisTemplate.setKeySerializer(new StringRedisSerializer());	       
@@ -47,7 +65,6 @@ public class RedisTemplateConfig {
 	        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
 	        // 不是注入方法的话，必须调用它。Spring注入的话，会在注入时调用
 	        redisTemplate.afterPropertiesSet();
-
 	        return redisTemplate;
 	  }
 	
@@ -60,8 +77,10 @@ public class RedisTemplateConfig {
 
 	 public <String, V> RedisTemplate<String, V> getFastJsonStringTemplate(int databaseIndex,Class<V> clazz) {
 	        RedisTemplate<String, V> redisTemplate = new RedisTemplate<String, V>();
-//	        factory.setDatabase(databaseIndex);
+	        JedisConnectionFactory factory = getJedisConnectionFactory();
+	        factory.setDatabase(databaseIndex);
 	        redisTemplate.setConnectionFactory(factory);
+	        log.info("设置库号："+databaseIndex);
 	        redisTemplate.setKeySerializer(new StringRedisSerializer());
 	        redisTemplate.setValueSerializer(new FastJsonRedisSerializer<V>(clazz));
 	        redisTemplate.setHashKeySerializer(new StringRedisSerializer());

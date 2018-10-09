@@ -39,3 +39,8 @@ demo/iot-api-test/target/
 demo/iot-api-demo/target/
 boot/boot/target/
 boot/boot-redis-starter/target/
+sv/.svn/
+boot/.svn/
+boot/iot-master/.svn/
+base/.svn/
+api/microservice-client-messagesystem/target/

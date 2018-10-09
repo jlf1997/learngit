@@ -15,6 +15,10 @@ import com.cimr.api.statistics.service.FaultLogService;
 import com.cimr.api.statistics.service.FaultStatisticsService;
 import com.cimr.boot.comm.model.HttpResult;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 @RequestMapping("statistics/fault")
 @RestController
 public class FaultStatisticsController {
@@ -26,6 +30,18 @@ public class FaultStatisticsController {
 	@Autowired
 	private FaultLogService faultLogService;
 
+	
+	@ApiOperation(value = "分页查询异常信息",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "pageNumber", value = "页号", required = true),
+		@ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页条数", required = true),
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "endTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "status", value = "异常状态", required = false),
+		@ApiImplicitParam(paramType = "query", name = "code", value = "异常码", required = false),
+		@ApiImplicitParam(paramType = "query", name = "terid", value = "终端id", required = false)
+		}) 
 	@GetMapping("/page")
 	public HttpResult findByPage(
 			@RequestParam(value="pageNumber",defaultValue="0") Integer pageNumber,
@@ -44,7 +60,13 @@ public class FaultStatisticsController {
 		
 	}
 
-	
+	@ApiOperation(value = "异常信息每日统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "codes", value = "异常码", required = false)
+		}) 
 	@PostMapping("/day")
 	public HttpResult getStatisticsDataDay(
 			@RequestParam(name="bTime",required=true) Long bTime,
@@ -57,6 +79,13 @@ public class FaultStatisticsController {
 		return result;
 	}
 	
+	@ApiOperation(value = "异常信息每月统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "codes", value = "异常码", required = false)
+		}) 
 	@PostMapping("/month")
 	public HttpResult getStatisticsDataMonth(
 			@RequestParam(name="bTime",required=true) Long bTime,
@@ -70,7 +99,13 @@ public class FaultStatisticsController {
 	}
 	
 
-	
+	@ApiOperation(value = "异常信息每年统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "codes", value = "异常码", required = false)
+		}) 
 	@PostMapping("/year")
 	public HttpResult getStatisticsDataYear(
 			@RequestParam(name="bTime",required=true) Long bTime,

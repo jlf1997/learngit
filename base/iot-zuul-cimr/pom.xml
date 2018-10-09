@@ -99,8 +99,40 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
+	<profiles>
+     <profile>
+         <!-- 本地开发环境 -->
+         <id>dev</id>
+         <properties>
+             <profiles.active>dev</profiles.active>
+         </properties>
+         <activation>
+             <activeByDefault>true</activeByDefault>
+         </activation>
+     </profile>
+     <profile>
+         <!-- 测试环境 -->
+         <id>test</id>
+         <properties>
+             <profiles.active>test</profiles.active>
+         </properties>
+          <activation>
+             <activeByDefault>false</activeByDefault>
+         </activation>
+     </profile>
+     <profile>
+         <!-- 生产环境 -->
+         <id>pro</id>
+         <properties>
+             <profiles.active>pro</profiles.active>
+         </properties>
+     </profile>
+     
+ 	</profiles>
 
 	<build>
+	<finalName>${project.name}-${profiles.active}-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -116,6 +148,13 @@
                         <target>1.8</target>
                     </configuration>
                 </plugin>
+                 <plugin>
+	                <artifactId>maven-resources-plugin</artifactId>
+	                <configuration>
+	                    <encoding>utf-8</encoding>
+	                    <useDefaultDelimiters>true</useDefaultDelimiters>
+	                </configuration>
+	            </plugin>
 		</plugins>
 	</build>
 

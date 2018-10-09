@@ -13,6 +13,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -28,6 +30,10 @@ import com.cimr.boot.model.BaseModel;
 
 public abstract class FindBase<T extends BaseModel,ID extends Serializable>  {
 	
+	
+	
+	
+
 	/**
 	 * JpaSpecificationExecutor对象
 	 */

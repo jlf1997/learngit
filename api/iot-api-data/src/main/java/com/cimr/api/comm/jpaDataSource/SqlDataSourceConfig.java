@@ -24,6 +24,7 @@ public class SqlDataSourceConfig {
     @Qualifier("baseDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.druid.base")
     public DataSource primaryDatasource() {
+		
 		return DruidDataSourceBuilder.create().build();
     }
 

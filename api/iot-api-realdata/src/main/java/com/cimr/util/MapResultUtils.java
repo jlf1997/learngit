@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.cimr.boot.utils.GsonUtil;
 
 public class MapResultUtils {
@@ -208,8 +209,8 @@ public class MapResultUtils {
 		if(obj instanceof Map) {
 			out = (Map<String,Object>) obj;
 		}else if(obj instanceof String) {
-			out = GsonUtil.jsonToObj((String)obj, Map.class);
-//			out = (Map<String, Object>) JSON.parse((String)obj);
+//			out = GsonUtil.jsonToObj((String)obj, Map.class);
+			out = (Map<String, Object>) JSON.parse((String)obj);
 			
 		}else {
 			log.error("暂时不支持除String 以及 map 类型外的redis对象");

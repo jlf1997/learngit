@@ -155,8 +155,18 @@ public class MessageUtil {
 				String ele = en.nextElement();
 				if(!"title".equals(ele)
 					&& !"type".equals(ele)
-					&& !"version".equals(ele)) {
+					&& !"version".equals(ele)
+					&& !"cmdType".equals(ele) 
+					&& !"cmdTitle".equals(ele)
+					&& !"cmdEncode".equals(ele)	
+					) {
 					data.put(ele, request.getParameter(ele));
+				}
+				if("cmdType".equals(ele)
+						|| "cmdTitle".equals(ele)	
+						|| "cmdEncode".equals(ele)	
+				   ) {
+					data.put(ele, Byte.valueOf(request.getParameter(ele)));
 				}
 			
 			}
@@ -341,13 +351,19 @@ public class MessageUtil {
 		String[] code = codes.split(",");
 		List<String> newValue = getStringFromCharBy2(chars);
 		
-		for(int i=0;i<end-begin+1;i++) {
-			if(i<newValue.size()) {
-//				code[end-i-1] = "0x"+newValue.get(i);
-				code[end-i-1] = newValue.get(i);
+		if(newValue.size()==1) {
+			code[end-2] = newValue.get(0);
+			code[end-1] = "00";
+		}else {
+			for(int i=0;i<end-begin+1;i++) {
+				if(i<newValue.size()) {
+//					code[end-i-1] = "0x"+newValue.get(i);
+					code[end-i-1] = newValue.get(i);
+				}
+				
 			}
-			
 		}
+		
 		return StringUtils.join(code, ",");
 	}
 	

@@ -38,9 +38,7 @@ public class ApplicationInfo extends Base{
 	public List<Terminal> terminals;
 	
 	
-	@ManyToOne
-	@JoinColumn(name="industry_id",columnDefinition="varchar(255) COMMENT '行业类别 '")
-	public Industry industry;
+	public String industry;
 	
 	/**
 	 * 备注

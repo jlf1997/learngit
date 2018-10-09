@@ -1,5 +1,6 @@
 package com.cimr.boot.comm.model;
 
+import com.cimr.boot.utils.StringUtil;
 
 public class HttpResult {
 	
@@ -8,6 +9,9 @@ public class HttpResult {
 	private Object data;
 
 	private String message;
+	
+	private String apiCode;
+
 	
 	private Integer code;
 	
@@ -22,7 +26,11 @@ public class HttpResult {
 
 	public HttpResult(boolean success, String message) {
 		this.success = success;
-		this.message = message;
+		if (message!=null && StringUtil.valid(message) && message.indexOf("not have permission") >= 0) {
+			this.message = "没有权限";
+		} else {
+			this.message = message;
+		}
 	}
 
 	public Object getData() {
@@ -58,6 +66,17 @@ public class HttpResult {
 	public void setCode(Integer code) {
 		this.code = code;
 	}
+
+	public String getApiCode() {
+		return apiCode;
+	}
+
+	public void setApiCode(String apiCode) {
+		this.apiCode = apiCode;
+	}
+
+	
+	
 	
 	
 }

@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-@Api(description="设备相关操作",tags= {"signal"})
+@Api(description="信号相关",tags= {"signal"})
 @RestController
 @RequestMapping("/dev/signal")
 public class SignalController {

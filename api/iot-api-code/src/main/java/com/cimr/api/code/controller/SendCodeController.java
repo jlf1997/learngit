@@ -26,7 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 
-@Api(description="指令据相关操作",tags= {"appCode"})
+@Api(description="终端指令据相关操作",tags= {"appCode"})
 @RestController
 @RequestMapping("/app")
 public class SendCodeController {
@@ -47,7 +47,7 @@ public class SendCodeController {
 	
 	
 
-	@ApiOperation(value = "应用向终端发指令", notes = ""			
+	@ApiOperation(value = "发送终端指令", notes = ""			
 			)
 	@RequestMapping(value="/ter/code",method=RequestMethod.POST)
 	public HttpResult sendCode(
@@ -58,7 +58,6 @@ public class SendCodeController {
 			@RequestBody CodeSenderObject codeSenderObject) {
 		Message message = null;
 		HttpResult res ;
-	
 		try {
 			if(codeSenderObject==null 
 					||codeSenderObject.getTelIds()==null
@@ -95,7 +94,7 @@ public class SendCodeController {
 	
 	
 	
-	@ApiOperation(value = "应用设置终端调试", notes = "cmdContents与telIds均以逗号隔开"			
+	@ApiOperation(value = "终端调试指令", notes = "cmdContents与telIds均以逗号隔开"			
 			)	
 	@RequestMapping(value="/ter/debug",method=RequestMethod.POST)
 	public HttpResult sendDebug(
@@ -124,7 +123,7 @@ public class SendCodeController {
 	}
 	
 	
-	@ApiOperation(value = "应用设置终端解除调试", notes = ""			
+	@ApiOperation(value = "终端解除调试指令", notes = ""			
 			)	
 	@RequestMapping(value="/ter/endDebug",method=RequestMethod.POST)
 	public HttpResult sendEndDebug(
@@ -155,26 +154,26 @@ public class SendCodeController {
 	
 	
 	
-	@ApiOperation(value = "发送指令 获取实时数据"			
-			)	
-	@RequestMapping(value="/ter/realData",method=RequestMethod.POST)
-	public HttpResult sendCodeToGetRealData(
-			@RequestParam("signal") String signal,
-			@RequestBody CodeSenderObject codeSenderObject) {
-	    List<String> ids = new ArrayList<>();
-	    codeSenderObject.getTelIds().forEach(action->{
-	    	ids.add(action.getTerId());
-	    });
-		handle.getRealData(ids);
-		return new HttpResult(true,"发送成功");
-	}
+//	@ApiOperation(value = "发送指令 获取实时数据"			
+//			)	
+//	@RequestMapping(value="/ter/realData",method=RequestMethod.POST)
+//	public HttpResult sendCodeToGetRealData(
+//			@RequestParam("signal") String signal,
+//			@RequestBody CodeSenderObject codeSenderObject) {
+//	    List<String> ids = new ArrayList<>();
+//	    codeSenderObject.getTelIds().forEach(action->{
+//	    	ids.add(action.getTerId());
+//	    });
+//		handle.getRealData(ids);
+//		return new HttpResult(true,"发送成功");
+//	}
 	
 	
 	
 	
 	
 	
-	@ApiOperation(value = "应用向终端发延时锁机指令", notes = ""			
+	@ApiOperation(value = "延时锁机指令", notes = ""			
 			)
 	@RequestMapping(value="/ter/code/delayLock",method=RequestMethod.POST)
 	public HttpResult sendCodeDelayLock(

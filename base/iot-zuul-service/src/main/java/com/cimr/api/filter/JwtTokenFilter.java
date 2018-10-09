@@ -18,6 +18,7 @@ import com.cimr.api.token.JwtTokenFactory;
 import com.cimr.boot.comm.model.HttpResult;
 import com.cimr.boot.utils.CacheManager;
 import com.cimr.boot.utils.GsonUtil;
+import com.cimr.util.HostUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -51,7 +52,8 @@ public  class JwtTokenFilter extends ZuulFilter{
         	}else {
         		ctx.setSendZuulResponse(false);  
                 ctx.setResponseStatusCode(401); 
-                log.error("token error:token 过期或错误");
+                String ip = HostUtil.getLocalIp(request);
+                log.error("token error:token 过期或错误,访问ip:"+ip);
                 HttpResult result = new HttpResult(false,"token error");
                 ctx.setResponseBody(GsonUtil.objToJson(result));// 返回错误内容  
                 ctx.set("isOK",false);

@@ -19,6 +19,8 @@ public class BaseEntity<T> implements java.io.Serializable{
 	@Column(name="create_by",columnDefinition="varchar(255) COMMENT '创建人id '")
 	private String createBy;
 	
+	private String owner;
+	
 	
 	/**
 	 * 创建时间
@@ -40,6 +42,8 @@ public class BaseEntity<T> implements java.io.Serializable{
 	
 	
 	private Integer delFlag;
+	
+	private String remark;
 	
 	/**
 	 * 在插入记录前,填充实体记录 
@@ -98,4 +102,20 @@ public class BaseEntity<T> implements java.io.Serializable{
 		this.delFlag = delFlag;
 	}
 
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }

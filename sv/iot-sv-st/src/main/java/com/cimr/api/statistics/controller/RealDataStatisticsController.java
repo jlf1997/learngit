@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cimr.api.statistics.service.RealDataSignalService;
 import com.cimr.boot.comm.model.HttpResult;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("statistics/realdata")
 public class RealDataStatisticsController {
@@ -21,6 +25,15 @@ public class RealDataStatisticsController {
 	@Autowired
 	private RealDataSignalService RealDataSignalService;
 	
+	
+	@ApiOperation(value = "指定终端实时信息每日统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "signal", value = "信号", required = true),
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "terid", value = "终端id", required = true)
+		}) 
 	@GetMapping("/{signal}/day")
 	public HttpResult getStatisticsDataDay(
 			@PathVariable(name="signal") String signal,
@@ -33,6 +46,15 @@ public class RealDataStatisticsController {
 		return result;
 	}
 	
+
+	@ApiOperation(value = "指定终端实时信息每月统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "signal", value = "信号", required = false),
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "terid", value = "终端id", required = true)
+		}) 
 	@GetMapping("/{signal}/month")
 	public HttpResult getStatisticsDataMonth(
 			@PathVariable(name="signal") String signal,
@@ -46,7 +68,15 @@ public class RealDataStatisticsController {
 	}
 	
 
-	
+
+	@ApiOperation(value = "指定终端实时信息每年统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "signal", value = "信号", required = true),
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "terid", value = "终端id", required = true)
+		}) 
 	@GetMapping("/{signal}/year")
 	public HttpResult getStatisticsDataYear(
 			@PathVariable(name="signal") String signal,
@@ -58,7 +88,15 @@ public class RealDataStatisticsController {
 		result = RealDataSignalService.getStatisticsDataYear(signal, bTime, eTime, terid);
 		return result;
 	}
-	
+
+	@ApiOperation(value = "终端实时信息每日统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "signal", value = "信号", required = true),
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "codes", value = "指令", required = false)
+		}) 
 	@PostMapping("/{signal}/day")
 	public HttpResult getStatisticsDataDayp(
 			@PathVariable(name="signal") String signal,
@@ -71,7 +109,15 @@ public class RealDataStatisticsController {
 		result = RealDataSignalService.getStatisticsDataDay(signal, bTime, eTime, terIds,codes);
 		return result;
 	}
-	
+
+	@ApiOperation(value = "终端实时信息每月统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "signal", value = "信号", required = true),
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "codes", value = "指令", required = false)
+		}) 
 	@PostMapping("/{signal}/month")
 	public HttpResult getStatisticsDataMonthp(
 			@PathVariable(name="signal") String signal,
@@ -86,7 +132,14 @@ public class RealDataStatisticsController {
 	}
 	
 
-	
+	@ApiOperation(value = "终端实时信息每月统计",notes=""		
+			)	
+	@ApiImplicitParams({ 
+		@ApiImplicitParam(paramType = "query", name = "signal", value = "信号", required = true),
+		@ApiImplicitParam(paramType = "query", name = "bTime", value = "开始时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "eTime", value = "结束时间", required = true),
+		@ApiImplicitParam(paramType = "query", name = "codes", value = "指令", required = false)
+		}) 
 	@PostMapping("/{signal}/year")
 	public HttpResult getStatisticsDataYearp(
 			@PathVariable(name="signal") String signal,

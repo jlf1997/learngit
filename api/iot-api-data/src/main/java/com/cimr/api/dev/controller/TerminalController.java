@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
  *
  */
 
-@Api(description="项目信号相关操作",tags= {"terminal"})
+@Api(description="终端相关操作",tags= {"terminal"})
 @RestController
 @RequestMapping("/dev")
 public class TerminalController {

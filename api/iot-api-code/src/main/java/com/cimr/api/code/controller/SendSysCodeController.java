@@ -36,7 +36,8 @@ public class SendSysCodeController {
 	@Autowired
 	private CommandsService commandsService;
 	
-	@ApiOperation(value = "向终端发送系统命令，可自定义参数，api中未限制，所有给的参数将全部传给终端"			
+	@ApiOperation(value = "发送系统指令"
+			,notes="可自定义参数，api中未限制，所有给的参数将全部传给终端"			
 			)	
 	@RequestMapping(value="/command",method=RequestMethod.POST)
 	public HttpResult sendSysCommemd(
@@ -64,7 +65,7 @@ public class SendSysCodeController {
 	}
 	
 	
-	@ApiOperation(value = "向终端发送系统命令：清除信号配置缓存"			
+	@ApiOperation(value = "清除信号配置缓存指令"			
 			)	
 	@RequestMapping(value="/clean",method=RequestMethod.POST)
 	public HttpResult sendSysCommemdClean(
@@ -89,13 +90,5 @@ public class SendSysCodeController {
 	}
 	
 	
-//	@KafkaListener(topics="topicTest")
-//	private void listener(String message) {
-//		System.out.println("getMessge:"+message);
-//	}
-//	@RequestMapping(value="/demo",method=RequestMethod.GET)
-//	public  String sendMessageDemo() {
-//		KafkaTemplate.send("topicTest","message test from clused");
-//		return "success";
-//	}
+
 }

@@ -96,10 +96,7 @@
            <artifactId>spring-boot-starter-websocket</artifactId>  
        </dependency>  
        
-         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
+       
         
         <dependency>
 	        <groupId>com.alibaba</groupId>
@@ -126,6 +123,13 @@
 		 	<version>3.4</version>
 		 </dependency>
   </dependencies>
+  
+<distributionManagement>
+  <snapshotRepository>
+    <id>cimr_cloud</id>
+    <url>http://nexus.cs-icloud.gov.cn/nexus/content/repositories/cimr_cloud</url>
+  </snapshotRepository>
+</distributionManagement>
   
   <build>
 		<pluginManagement>

@@ -26,9 +26,8 @@ public class RedisTemplateFactory {
 	 * 获取默认的fastjson序列化template
 	 * @return
 	 */
-	@Bean("fastJsonredisTemplate")
+	@Bean(name = "fastJsonredisTemplate")
 	@Primary
-	@ConditionalOnMissingBean
 	public RedisTemplate getRedisTemplateIndex0() {
 		 RedisTemplate<String, Object> redisTemplate ;
 		 redisTemplate =

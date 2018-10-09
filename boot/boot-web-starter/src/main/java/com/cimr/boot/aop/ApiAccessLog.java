@@ -44,6 +44,11 @@ public class ApiAccessLog {
 	 */
 	private String queryString;
 	
+	/**
+	 * api唯一标识
+	 */
+	private String apiCode;
+	
 
 	public Long getId() {
 		return id;
@@ -107,6 +112,14 @@ public class ApiAccessLog {
 
 	public void setQueryString(String queryString) {
 		this.queryString = queryString;
+	}
+
+	public String getApiCode() {
+		return apiCode;
+	}
+
+	public void setApiCode(String apiCode) {
+		this.apiCode = apiCode;
 	}
 
 	

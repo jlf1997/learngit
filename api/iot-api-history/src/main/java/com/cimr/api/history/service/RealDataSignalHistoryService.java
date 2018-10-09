@@ -17,7 +17,17 @@ public class RealDataSignalHistoryService {
 	
 
 	
-
+	/**
+	 * 查询终端所有
+	 * @param singal
+	 * @param projectId
+	 * @param terid
+	 * @param beg
+	 * @param end
+	 * @param sortBy
+	 * @param sortType
+	 * @return
+	 */
 	public List<Map<String, Object>> findTersAllRealData(String singal,String projectId, String terid, Long beg, Long end,String[] sortBy,String sortType) {
 		return realdataSignalHistoryDao.findAllDataByTimeAndSingal(singal,projectId,terid, beg, end,sortBy,sortType,0);
 	} 

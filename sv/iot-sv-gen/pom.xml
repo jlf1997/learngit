@@ -17,6 +17,16 @@
 		<version>1.5.13.RELEASE</version>		
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
+	 <repositories> 
+		 <repository> 
+	            <id>cimr_cloud</id> 
+	            <name>cimr_cloud</name> 
+	            <url>http://nexus.cs-icloud.gov.cn/nexus/content/repositories/cimr_cloud</url> 
+	            <releases><enabled>false</enabled></releases> 
+	            <snapshots><enabled>true</enabled></snapshots> 
+	     </repository>
+     </repositories> 
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,11 +38,7 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-            <groupId>com.cimr</groupId>
-            <artifactId>boot</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+	
         
         <dependency>
             <groupId>com.cimr</groupId>
@@ -88,7 +94,7 @@
          <!-- 本地开发环境 -->
          <id>dev</id>
          <properties>
-             <profiles.active>138</profiles.active>
+             <profiles.active>dev</profiles.active>
          </properties>
          <activation>
              <activeByDefault>true</activeByDefault>
@@ -96,9 +102,9 @@
      </profile>
      <profile>
          <!-- 测试环境 -->
-         <id>sit</id>
+         <id>test</id>
          <properties>
-             <profiles.active>sit</profiles.active>
+             <profiles.active>test</profiles.active>
          </properties>
           <activation>
              <activeByDefault>false</activeByDefault>
@@ -115,6 +121,7 @@
  </profiles>
 
 	<build>
+	<finalName>${project.name}-${profiles.active}-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

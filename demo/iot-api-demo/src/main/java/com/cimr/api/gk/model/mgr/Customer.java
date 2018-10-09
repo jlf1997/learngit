@@ -75,5 +75,7 @@ public class Customer extends Base{
 	 * 父节点id
 	 */
 	@Column(name="parent_id",columnDefinition="varchar(255) COMMENT '父节点id '",nullable=false)
-	public Long parentId;
+	public String parentId;
+	
+	
 }

@@ -32,7 +32,7 @@ public class HistoryRealDataController {
 	 * @param terid
 	 * @return
 	 */
-	@ApiOperation(value = "根据信号id 查询对应终端的所有历史数据", notes = "查询所有字段"			
+	@ApiOperation(value = "查询所有历史数据", notes = "查询所有字段"			
 			)	  
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(paramType = "path", dataType = "String", name = "singal", value = "信号", required = true),
@@ -67,7 +67,7 @@ public class HistoryRealDataController {
 	 * @param terid
 	 * @return
 	 */
-	@ApiOperation(value = "根据信号id 查询对应终端的所有历史数据", notes = "可通过fields指定需要的字段，为空时查询所有字段"			
+	@ApiOperation(value = "查询需要展示的历史数据", notes = "可通过fields指定需要的字段，为空时查询所有字段"			
 			)	  
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(paramType = "path", dataType = "String", name = "singal", value = "信号", required = true),
@@ -102,7 +102,7 @@ public class HistoryRealDataController {
 	 * @param terid
 	 * @return
 	 */
-	@ApiOperation(value = "根据信号id 查询对应终端的所有历史数据", notes = "可通过fields指定需要过滤的字段，为空时查询所有字段"			
+	@ApiOperation(value = "过滤查询历史数据", notes = "可通过fields指定需要过滤的字段，为空时查询所有字段"			
 			)	  
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(paramType = "path", dataType = "String", name = "singal", value = "信号", required = true),
@@ -138,7 +138,7 @@ public class HistoryRealDataController {
 	 * @param terid
 	 * @return
 	 */
-	@ApiOperation(value = "根据信号id 查询对应终端的所有历史数据", notes = "统计字段自动会被排除出查询字段"			
+	@ApiOperation(value = "布尔类型统计的历史数据查询", notes = "统计字段自动会被排除出查询字段"			
 			)	  
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(paramType = "path", dataType = "String", name = "singal", value = "信号", required = true),

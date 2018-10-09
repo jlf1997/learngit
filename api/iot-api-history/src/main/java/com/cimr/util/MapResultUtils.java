@@ -9,6 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import com.mongodb.util.JSON;
 
+
+/**
+ * 处理map结果集合
+ * @author Administrator
+ *
+ */
 public class MapResultUtils {
 	
 	

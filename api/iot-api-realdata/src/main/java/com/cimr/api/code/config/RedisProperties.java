@@ -7,6 +7,7 @@ public class RedisProperties {
 	public static final String NEW_DATA = "NEW_DATA_";
 	
 	public static final String RUNNTIME = "TERMINAL_RUNTIME_INFO";
+	
 	/**
 	 * 实时数据库编号
 	 */
