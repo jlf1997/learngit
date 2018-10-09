@@ -44,3 +44,8 @@ boot/.svn/
 boot/iot-master/.svn/
 base/.svn/
 api/microservice-client-messagesystem/target/
+api/.svn/
+boot/iot-master/target/
+boot/iot-master/
+api/microservice-client-messagesystem/
+api/cimrjobclient/target/
