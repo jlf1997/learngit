@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>异常!</title>
+        #parse("/common/common.html")
+        <script src="#url('/static/comm/js/artTemplate.js')"></script>
+        <script type="text/javascript">
+            AppCommon.include.load("#url('/static/comm/js/error/error.js')","js");
+        </script>
+    </head>
+    <body>
+        <div class="error-box"></div>
+    </body>
+</html>
+
+<script id="error-template" type="text/html">
+    <br><br>
+    {${ex.message}}
+    <br>
+    {${ex}}
+    <!--<% Exception ex = (Exception)request.getAttribute("exception"); %>-->
+    <!--<H2>Exception: <%= ex.getMessage();%></H2>-->
+    <!--<% ex.printStackTrace(new java.io.PrintWriter(out)); %>-->
+</script>

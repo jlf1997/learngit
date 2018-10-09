@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+.layui-custom-tenant .layui-form-checkbox span{
+    width: 110px;
+    text-align: center;
+}
+.layui-custom-tenant .layui-form-checkbox{
+    margin:5px;
+}
+.layui-custom-project{
+    margin:20px;
+}
+.layui-custom-project .layui-form-checkbox span{
+    width: 103px;
+    text-align: center;
+}
+.layui-custom-project .layui-form-checkbox{
+    margin:3px;
+}

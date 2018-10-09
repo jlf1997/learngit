@@ -1,0 +1,54 @@
+<!--左侧导航-->
+<script type="text/javascript" >
+    AppCommon.include.load("#url('/static/comm/js/menu/menu.js')","js");
+</script>
+    <div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side">
+        <ul class="layui-nav layui-nav-tree beg-navbar">
+
+            <div class="menuTree_box"></div>
+
+##            <li class="layui-nav-item"><a href="javascript:;"><i class="fa fa-cubes" aria-hidden="true" data-icon="fa-cubes"></i><cite>基本元素</cite><span class="layui-nav-more"></span></a>
+##                <dl class="layui-nav-child">
+##                    <dd id="demo_page" menu="demo/nav/page?name=按钮"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>按钮</cite></a></dd>
+##                    <dd id="demo_page" menu="demo/nav/page?name=表单"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>表单</cite></a></dd>
+##                    <dd id="demo_page" menu="demo/nav/page?name=导航／面包屑"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>导航／面包屑</cite></a></dd>
+##                    <dd id="demo_page" menu="demo/nav/page?name=分页"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>分页</cite></a></dd>
+##                    <dd id="demo_page" menu="demo/nav/page?name=辅助元素"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>辅助元素</cite></a></dd>
+##                    <dd id="demo_page" menu="demo/nav/page?name=选项卡"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>选项卡</cite></a></dd>
+##                    <dd id="demo_page" menu="demo/nav/page?name=静态表格"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>静态表格</cite></a></dd>
+##                    <dd id="demo_page" menu="demo/nav/page?name=面板"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>面板</cite></a></dd>
+##                </dl>
+##            </li>
+##            <li class="layui-nav-item"><a href="javascript:;"><i class="fa fa-cogs" aria-hidden="true" data-icon="fa-cogs"></i><cite>例子</cite><span class="layui-nav-more"></span></a>
+##                <dl class="layui-nav-child">
+##                    <dd id="example_getList_layui" menu="example/nav/getList_layui"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>列表</cite></a></dd>
+##                </dl>
+##            </li>
+            <input id="layoutMenu" type="hidden" value="${layoutMenu}">
+            <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span>
+        </ul>
+    </div>
+<script id="menuTree_template" type="text/html">
+    {{each data menuLevel1 i}}
+    <li class="layui-nav-item"><a href="javascript:;"><i class="fa fa-cogs" aria-hidden="true" data-icon="fa-cogs"></i><cite>{{data[i].menuName}}</cite><span class="layui-nav-more"></span></a>
+        <dl class="layui-nav-child">
+
+                    {{each menuLevel1.children menuLevel2 j}}
+            <dd id="{{menuLevel2.menuKey}}" menu="{{menuLevel2.href}}" target="{{menuLevel2.target}}"><a href="#{{menuLevel2.menuKey}}" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>{{menuLevel2.menuName}}</cite></a></dd>
+                    {{/each}}
+        </dl>
+    </li>
+    {{/each}}
+
+
+##<% for(var i = 0; i < data.length; i++){ %>
+##    <li class="layui-nav-item"><a href="javascript:;"><i class="fa fa-cogs" aria-hidden="true" data-icon="fa-cogs"></i><cite><%=data[i].menuName%></cite><span class="layui-nav-more"></span></a>
+##        <dl class="layui-nav-child">
+##    <% for(var j = 0; j < data[i].children.length; j++){ %>
+##            <dd id="<%=data[i].children[j].menuKey%>" menu="manager/nav/userManager"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite><%=data[i].children[j].menuName%></cite></a></dd>
+##    <% } %>
+##        </dl>
+##    </li>
+##<% } %>
+</script>
+<!--左侧导航END-->

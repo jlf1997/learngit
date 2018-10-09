@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    #parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+</head>
+<script type="text/javascript" xmlns:e="http://www.w3.org/1999/html">
+    AppCommon.include.load("#url('/static/comm/js/manager/menuManagement.js')", "js");
+</script>
+<body style="padding: 20px">
+<div class="layui-tab-item layui-show">
+    <div class="menuManagement_box"></div>
+</div>
+
+<script id="menuManagementList_template" type="text/html">
+    <div style="text-align: left;">
+        <form class="layui-form" lay-filter="searchForm" action="">
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal" id="addBtn">添加菜单</button>
+            </div>
+        </form>
+    </div>
+    <div id="tb_list" lay-filter="tb_list" style="width:100%; margin-top: 18px"></div>
+
+</script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="editBtn">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteBtn">删除</a>
+</script>
+
+<script id="menuManagementForm_template" type="text/html">
+    <div class="layui-show manager-box-style">
+        <form class="layui-form" action="">
+        <input type="hidden" id="id" value="{{menuBo.id}}" >
+        <div class="layui-form-item">
+                <label class="layui-form-label">菜单关键字</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="menuKey" name="menuKey" required  lay-verify="menuKey" placeholder="请输入菜单关键字" autocomplete="off" class="layui-input" value="{{menuBo.menuKey}}">
+                </div>
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="menuName" name="menuName" required  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input" value="{{menuBo.menuName}}">
+                </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-inline" lay-filter="parentId" style="width:450px;">
+                <input disabled class="layui-input" id="parentId" name="parentId" lay-verify="required" lay-search="" lay-filter="parentId" data-id="{{menuBo.parentId}}"  data-level="{{parentMenuLevel}}" value="{{parentMenuName}}"></input>
+                <ul id="menuTree" style="position:fixed;z-index:999;background-color: #e2e2e2;width:450px;display: none;"></ul>
+            </div>
+            <div class="layui-input-inline" style="width:40px;">
+                <button class="layui-btn layui-btn-sm selectMenu_add" id="selectMenu"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+                <label class="layui-form-label">图标</label>
+                <div class="layui-input-inline" lay-filter="menuIcon" style="width:auto;">
+                    <i id="menuIcon" class="{{menuBo.menuIcon}}" style="line-height:38px;height:38px"></i><span>{{menuBo.menuIcon}}</span>
+                </div>
+                <div class="layui-input-inline" style="width:40px;">
+                    <button class="layui-btn layui-btn-sm selectIcon_add" id="selectIcon"><i class="layui-icon">&#xe61f;</i></button>
+                </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">说明</label>
+            <div class="layui-input-inline">
+                <input style="width:502px;" type="text" id="comment" name="comment" placeholder="请输入说明内容" autocomplete="off" class="layui-input" value="{{menuBo&&menuBo.comment}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+                <label class="layui-form-label">打开方式</label>
+                <div class="layui-input-inline">
+                    <select id="target" name="target" lay-verify="required" lay-search="">
+                        {{if menuBo.target=="_self"}}
+                        <option value="_self" selected="selected">本页面</option>
+                        <option value="_blank" >新页面</option>
+                        {{/if}}
+                        {{if menuBo.target=="_blank"}}
+                        <option value="_blank" selected="selected">新页面</option>
+                        <option value="_self" >本页面</option>
+                        {{/if}}
+                    </select>
+                </div>
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="orderId" name="orderId" lay-verify="number" placeholder="请输入排序号" autocomplete="off" class="layui-input" value="{{menuBo&&menuBo.orderId}}">
+                </div>
+
+        </div>
+        <div class="layui-form-item" id="href_edit">
+            <label class="layui-form-label">链接</label>
+            <div class="layui-input-inline">
+                <input style="width:502px;" type="text" id="href" name="href" placeholder="请输入链接" autocomplete="off" class="layui-input" value="{{menuBo&&menuBo.href}}">
+            </div>
+        </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <label style="color: red">菜单关键字：模块名_业务名，如user_management</label>
+                    <br>
+                    <br>
+                    <label style="color: red">链接：如user/nav/management</label>
+                </div>
+            </div>
+        <br>
+        <div class="button-align">
+            #hasPermission('menu:save','<button class="layui-btn layui-btn-normal" id="saveBtn" lay-submit="" lay-filter="saveBtn">提交</button>')
+            <button class="layui-btn layui-btn-normal" id="cancelBtn">取消</button>
+        </div>
+
+        </form>
+    </div>
+</script>
+
+<script id="menuManagementForm_template_add" type="text/html">
+    <div class="layui-show manager-box-style">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单关键字</label>
+            <div class="layui-input-inline">
+                <input type="text" id="menuKey_add" name="menuKey_add" lay-verify="menuKey_add" placeholder="请输入菜单关键字" autocomplete="off" class="layui-input" value="">
+            </div>
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="menuName_add" name="menuName_add" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-inline" id="parentId_div" lay-filter="parentId" style="width:450px;">
+                <input disabled class="layui-input" id="parentId_add" name="parentId_add" lay-verify="required" lay-search="" value="" lay-filter="parentId" data-id="" data-level=""/>
+                <ul id="menuTree_add" style="position:fixed;z-index:999;background-color: #e2e2e2;width:450px;display: none;"></ul>
+            </div>
+            <div class="layui-input-inline" style="width:40px;">
+                <button class="layui-btn layui-btn-sm selectMenu_add" id="selectMenu_add"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标</label>
+            <div class="layui-input-inline" id="menuIcon_div" lay-filter="menuIcon" style="width:auto;">
+                <i  id="menuIcon_add" class="" style="line-height:38px;height:38px"></i><span></span>
+            </div>
+            <div class="layui-input-inline" style="width:40px;">
+                <button class="layui-btn layui-btn-sm selectIcon_add" id="selectIcon_add"><i class="layui-icon">&#xe61f;</i></button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">说明</label>
+            <div class="layui-input-inline">
+                <input style="width:502px;" type="text" id="comment_add" name="comment_add" placeholder="请输入说明内容" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">打开方式</label>
+            <div class="layui-input-inline">
+                <select id="target_add" name="target_add"  lay-search="">
+                    <option value="_blank" selected="selected">新页面</option>
+                    <option value="_self" selected="selected">本页面</option>
+                </select>
+            </div>
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="text" id="orderId_add" name="orderId_add" lay-verify="number" placeholder="请输入排序号" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item" id="href_div">
+            <label class="layui-form-label">链接</label>
+            <div class="layui-input-inline">
+                <input style="width:502px;" type="text" id="href_add" name="href_add" placeholder="请输入链接" autocomplete="off" class="layui-input" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label style="color: red">菜单关键字：模块名_业务名，如user_management</label>
+                <br>
+                <br>
+                <label style="color: red">链接：如user/nav/management</label>
+            </div>
+        </div>
+    <br>
+     <div class="button-align">
+         <button class="layui-btn layui-btn-normal" lay-submit="" id="saveBtn_add" lay-filter="saveBtn_add">提交</button>
+         <button class="layui-btn layui-btn-normal" id="cancelBtn_add">取消</button>
+    </div>
+    </form>
+    </div>
+</script>
+
+<script id="menuManagementForm_template_sub" type="text/html">
+    <div class="layui-show manager-box-style">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单关键字</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="menuKey_sub" name="menuKey_sub" lay-verify="menuKey_add" placeholder="请输入菜单关键字" autocomplete="off" class="layui-input" value="">
+                </div>
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="menuName_sub" name="menuName_sub" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">父级菜单</label>
+                <div class="layui-input-inline" lay-filter="parentId" style="width:450px;">
+                    <input disabled class="layui-input" id="parentId_sub" name="parentId_sub" lay-verify="required" lay-search="" lay-filter="parentId" data-id="{{menuBo.id}}"  data-level="{{menuBo.level}}" value="{{menuBo.menuName}}"></input>
+                    <ul id="menuTree_sub" style="position:fixed;z-index:999;background-color: #e2e2e2;width:450px;display: none;"></ul>
+                </div>
+                <div class="layui-input-inline" style="width:40px;">
+                    <button class="layui-btn layui-btn-sm selectMenu_add" id="selectMenu_sub"><i class="layui-icon">&#xe615;</i></button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">图标</label>
+                <div class="layui-input-inline" lay-filter="menuIcon" style="width:auto;">
+                    <i id="menuIcon_sub" class="" style="line-height:38px;height:38px"></i><span></span>
+                </div>
+                <div class="layui-input-inline" style="width:40px;">
+                    <button class="layui-btn layui-btn-sm selectIcon_add" id="selectIcon_sub"><i class="layui-icon">&#xe61f;</i></button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">说明</label>
+                <div class="layui-input-inline">
+                    <input style="width:502px;" type="text" id="comment_sub" name="comment_sub" placeholder="请输入说明内容" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">打开方式</label>
+                <div class="layui-input-inline">
+                    <select id="target_sub" name="target_add"  lay-search="">
+                        <option value="_blank" selected="selected">新页面</option>
+                        <option value="_self" selected="selected">本页面</option>
+                    </select>
+                </div>
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="orderId_sub" name="orderId_sub" lay-verify="number" placeholder="请输入排序号" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">链接</label>
+                <div class="layui-input-inline">
+                    <input style="width:502px;" type="text" id="href_sub" name="href_sub" placeholder="请输入链接" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <label style="color: red">菜单关键字：模块名_业务名，如user_management</label>
+                    <br>
+                    <br>
+                    <label style="color: red">链接：如user/nav/management</label>
+                </div>
+            </div>
+            <br>
+
+             <div class="button-align">
+                 <button class="layui-btn layui-btn-normal" lay-submit="" id="saveBtn_sub" lay-filter="saveBtn_sub">提交</button>
+                 <button class="layui-btn layui-btn-normal" id="cancelBtn_sub">取消</button>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script id="menuManagementForm_permission" type="text/html">
+    <form class="layui-form" action="" url="permission">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分配角色</label>
+            <div class="layui-input-block">
+                {{each data as object i }}
+                <input type="checkbox" name="role[{{index}}]" title="{{object.roleName}}" value="{{object.id}}" id="{{object.id}}" lay-filter="{{object.id}}">
+                {{/each}}
+            </div>
+        </div>
+    </form>
+    <div class="layui-input-block">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtnPer" id="saveBtnPer">提交</button>
+        <button class="layui-btn layui-btn-normal" id="cancelBtnPer">取消</button>
+    </div>
+</script>
+</body>
+</html>

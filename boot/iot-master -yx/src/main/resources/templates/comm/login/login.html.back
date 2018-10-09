@@ -1,0 +1,48 @@
+<html>
+<head>
+	<title>登录</title>
+	#parse("common/common.html")
+	<link href="#url('/static/comm/css/login.css')" rel="stylesheet">
+	<script src="#url('/static/comm/js/MD5.js')"></script>
+	<script src="#url('/static/comm/js/cloud.js')"></script>
+
+	<script type="text/javascript">
+		AppCommon.include.load("#url('/static/comm/js/login/login.js')","js");
+	</script>
+</head>
+<body style="background-color:#1c77ac; background-repeat:no-repeat; background-position:center top; overflow:hidden;">
+	<div id="mainBody">
+		<div id="cloud1" class="cloud"></div>
+		<div id="cloud2" class="cloud"></div>
+	</div>
+	<div class="loginbody">
+		<br><br><br><br><br><br>
+		<div style="margin:0 auto;border:1px solid #000;width:400px;height:250px;overflow:hidden;">
+			<div class="layui-colla-item" style="background-color: white; z-index:100;">
+				<h2 class="layui-colla-title">基础开发平台&nbsp;&nbsp;&nbsp;&nbsp;</h2>
+				<div class="layui-colla-content layui-show">
+					<br>
+					<div>
+						<!--<label class="layui-input-label">用户名</label>-->
+						<div class="layui-input-inline">
+							<input id="username" type="input" required  lay-verify="required" placeholder="请输入用户名" class="layui-input">
+						</div>
+					</div>
+					<br>
+					<div>
+						<!--<label class="layui-input-label">密&nbsp&nbsp&nbsp&nbsp码</label>-->
+						<div class="layui-input-inline">
+							<input id="pswd" type="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<br>
+					<button id="loginBtn" class="layui-btn layui-btn-radius" style="width: 130px;">登录</button>
+					<br>
+					<br>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

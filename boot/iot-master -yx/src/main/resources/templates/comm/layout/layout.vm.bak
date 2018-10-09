@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <title>开发框架</title>
+
+        #parse("./common/common.html")
+##        <script type="text/javascript">
+##            AppCommon.include.load("#url('/static/js/layout/layout.js')","js");
+##        </script>
+        <!-- Bootstrap -->
+##        <link href="#url('/static/bootstrap/css/bootstrap.css')" rel="stylesheet">
+##        <script src="#url('/static/bootstrap/js/bootstrap.js')"></script>
+    </head>
+
+    <body class="layui-layout-body">
+        <div id="page_box" class="layui-layout layui-layout-admin">
+            <div id="header" class="layui-header">#parse("./comm/layout/header.vm")</div>
+##            <div id= "content" >
+                <div id="left" class="layui-side layui-bg-black">#parse("./comm/layout/left.vm")</div>
+                <div id="main" class="layui-body" style="bottom:0px; padding: 10px; 10px; margin-bottom: auto;">
+                    $screen_content
+                </div>
+##            </div>
+##            <div id="footer" class="layui-footer">#parse( '../comm/view/layout/footer.vm' )</div>
+        </div>
+    </body>
+
+    <script src="#url('/static/comm/js/artTemplate.js')"></script>
+    <script type="text/javascript">
+        //JavaScript代码区域
+        layui.use('element', function(){
+            var element = layui.element;
+            element.init()
+        });
+
+        $(function () {
+            $("#${layoutMenu}").addClass("layui-this");
+
+            $("#logoutBtn").click(function () {
+                layer.load();
+                var postData = {
+                };
+                var onSuccess = function (data) {
+                    layer.closeAll('loading');
+                    if (!data.success) {
+                        layer.msg(data.error);
+                    } else {
+                        layer.msg("退出成功！",function () {
+                            window.location.reload();
+                        });
+                    }
+                };
+                var onerror = function (data) {
+                    alert(data);
+                };
+                AppCommon.ajax.execute({
+                    'url':AppCommon.url.getBaseURL()+"/ajax/logout",
+                    'data':postData,
+                    'success':onSuccess,
+                    'error':onerror
+                });
+            });
+        });
+
+        function navMenu(btn) {
+            var thisBtn=$(btn);
+            var targetUrl=thisBtn.attr("_url");
+            if(!targetUrl){
+                var thisMenu=thisBtn.parents("dd[menu]");
+                var menuCode=thisMenu.attr("menu");
+                if(!!menuCode){
+                    targetUrl= "#url('"+menuCode+"')";
+                    window.location.href=targetUrl;
+                }
+            }
+            return false;
+        }
+    </script>
+</html>

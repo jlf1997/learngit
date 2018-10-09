@@ -1,0 +1,26 @@
+<div class="layui-header">
+    <div class="layui-logo">开发框架</div>
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                ${layoutUsername}
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="">基本资料</a></dd>
+                <dd><a href="">安全设置</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a id="logoutBtn" href="#">退了</a></li>
+    </ul>
+</div>
+##<nav class="navbar navbar-default layui-bg-gray" role="navigation">
+##    <div class="navbar-header">
+##        <a class="navbar-brand" href="#">财务管理系统</a>
+##    </div>
+##    <div>
+##        <ul class="nav navbar-nav"><!--.navbar-fixed-top和.navbar-fixed-bottom可以使导航栏固定在顶部和底部， .navbar-static-top会使导航栏随页面滚动吗， .navbar-inverse实现背景颜色和文字颜色互换-->
+##            <li class="username-box"><a href="#">${layoutUsername}</a></li>
+##            <li><a id="logoutBtn" href="#">退出</a></li>
+##        </ul>
+##    </div>
+##</nav>

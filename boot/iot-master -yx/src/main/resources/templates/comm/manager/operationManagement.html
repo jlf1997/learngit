@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+</head>
+<script type="text/javascript" >
+    AppCommon.include.load("#url('/static/comm/js/manager/operationManagment.js')","js");
+</script>
+<body style="padding: 20px">
+<div class="layui-tab-item layui-show">
+    <div class="operationManagement_box"></div>
+</div>
+<script id="operationManagementList_template" type="text/html">
+    <div style="text-align: left;">
+        <form class="layui-form" lay-filter="searchForm" action="">
+            <div class="layui-inline">
+                <!--<label class="layui-form-label">关键字</label>-->
+                <div class="layui-input-inline">
+                    <input name="operationName" type="text" placeholder="操作名称" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="searchBtn">查询</button>
+                <button class="layui-btn layui-btn-normal" id="addBtn">添加</button>
+            </div>
+        </form>
+    </div>
+
+    <div style="margin-right: 10px;">
+        <table id="tb_list" lay-filter="tb_list"></table>
+    </div>
+</script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="editBtn">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteBtn">删除</a>
+</script>
+
+<script id="operationManagementForm_template" type="text/html">
+    <div class="layui-show manager-box-style">
+        <form class="layui-form" id="layerForm">
+            <input type="hidden" id="id" name="id" value="{{id}}">
+            <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">操作关键字</label>
+	                <!--<div class="layui-input-inline">-->
+	                <input type="text" id="operationKey" name="operationKey" lay-verify="operationKey" placeholder="请输入角色关键字" autocomplete="off" class="layui-input" value="{{operationKey}}" style="width: 500px;">
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">操作名称</label>
+	                <!--<div class="layui-input-inline">-->
+	                <input type="text" id="operationName" name="operationName" lay-verify="required" placeholder="请输入操作名称" autocomplete="off" class="layui-input" value="{{operationName}}" style="width: 500px;">
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">排序</label>
+	                <!--<div class="layui-input-inline">-->
+	                <input type="text" id="orderId" name="orderId" lay-verify="number" placeholder="请输入序号" autocomplete="off" class="layui-input" value="{{orderId}}" style="width: 500px;">
+	                <!--</div>-->
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">说明</label>
+	                <!--<div class="layui-input-inline">-->
+	                <textarea placeholder="请输入内容" id="comment" name="comment" class="layui-textarea" style="width: 500px;">{{comment}}</textarea>
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-input-block">
+	                <label style="color: red">操作关键字：模块名:业务名，如user:add</label>
+	            </div>
+	        </div>
+	        <br>
+            <div class="button-align">
+                    <button class="layui-btn" id="saveBtn" lay-submit="" lay-filter="saveBtn">提交</button>
+                    <button class="layui-btn" id="cancelBtn">取消</button>
+            </div>
+        </form>
+    </div>
+</script>
+</body>
+</html>
+

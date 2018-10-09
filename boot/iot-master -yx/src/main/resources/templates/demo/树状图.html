@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+       #parse('/comm/common.htm')
+       <script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+       <script type="text/javascript" src="#url('/static/comm/ECharts/gallery/echarts-all-3.js')"></script>
+   </head>
+   <body style="height: 100%; margin: 0;padding: 10px" >
+       <div id="chart2" style="height:500px;"></div>
+       <script type="text/javascript">
+           // 基于准备好的dom，初始化echarts实例
+           var mapChart = echarts.init(document.getElementById('chart2'));
+           //图表
+
+           var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+
+           option = {
+               color: colors,
+
+               tooltip: {
+                   trigger: 'axis',
+                   axisPointer: {
+                       animation: false
+                   }
+               },
+               legend: {
+                   data:[ '开工率']
+               },
+               grid: {
+                   top: 70,
+                   bottom: 50
+               },
+               xAxis: [
+                   {
+                       type: 'category',
+                       axisTick: {
+                           alignWithLabel: true
+                       },
+                       axisLine: {
+                           onZero: false,
+                           lineStyle: {
+                               color: colors[1]
+                           }
+                       },
+                       axisPointer: {
+                           label: {
+                               formatter: function (params) {
+                                   return '开工率  ' + params.value
+
+                               }
+                           }
+                       },
+                       data: ["2017-9-6", "2017-9-7", "2017-9-8", "2017-9-9", "2017-9-10", "2017-9-11", "2017-9-12"]
+                   }
+               ],
+               yAxis: [
+                   {
+                       name : '开工率(%)',
+                       type: 'value',
+                       min:20,
+                       max:100,
+                   }
+               ],
+               series: [
+
+                   {
+                       type:'line',
+                       smooth: true,
+                       data: [23.9, 25.9, 51.1, 28.7, 88.3, 69.2, 21.6]
+                   }
+               ]
+           };
+           // 使用刚指定的配置项和数据显示图表。
+           mapChart.setOption(option);
+           //自适应
+           window.onresize = mapChart.resize;
+       </script>
+   </body>
+</html>

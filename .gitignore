@@ -49,3 +49,4 @@ boot/iot-master/target/
 boot/iot-master/
 api/microservice-client-messagesystem/
 api/cimrjobclient/target/
+boot/iot-master -yx/target/

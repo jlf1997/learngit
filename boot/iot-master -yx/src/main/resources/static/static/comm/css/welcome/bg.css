@@ -1,0 +1,123 @@
+@charset "utf-8";
+.dot {
+	font-size:14px;
+	font-family:"宋体";
+	color:#333333;
+}
+/*页脚导航*/
+#switch {
+	height:22px;
+	width:157px;
+	margin:-20px auto;
+	display:block;
+}
+#switch-content {
+	float:left;
+	background:url(../../img/welcome/Switch_bg.png) no-repeat;
+	height:22px;
+	width:157px;
+	margin:0px auto;
+}
+#toolbar {
+	
+	height:100%;
+	list-style:none;
+	margin:0 auto;
+	display:block;
+	width:157px;
+}
+#toolbar li {
+	float:left;
+	display:block;
+	width:16px;
+	height:17px;
+	text-align:center;
+	margin-top:3px;
+	margin-left:26px;
+	overflow:hidden;
+}
+#switch .inactive {
+	display:block;
+	width:16px;
+	height:17px;
+	float:left;
+	text-align:center;
+	cursor:pointer;
+	font-size:14px;
+}
+.inactive a {
+	background:url(../../img/welcome/switch_tab1.png) no-repeat;
+	font-size:14px;
+	color:#333333;
+	text-decoration:none;
+}
+#switch .active {
+	color:#4998fa;
+	display:block;
+	width:16px;
+	height:17px;
+	float:left;
+	text-align:center;
+	cursor:pointer;
+}
+.active a {
+	background:url(../../img/welcome/switch_tab2.png) no-repeat;
+	font-size:14px;
+	color:#4998fa;
+	text-decoration:none;
+}
+#switch li a {
+	display:block;
+	width:16px;
+	height:17px;
+}
+/**/
+.page1 {
+	width:1200px;
+	margin:0 auto;
+	height:100%
+}
+.page1 .content {
+	width:1200px;
+	height:400px;
+}
+
+/**/
+.page4 {
+	width:1200px;
+	height:100%;
+	margin:0 auto;
+}
+.page4 .content {
+	width:1200px;
+	height:380px;
+	position:relative;
+}
+
+/*外套*/
+.body_bj { /*此部分支持chrome，也支持firefox*/
+    background:url(../../img/login/devbj.jpg) no-repeat center fixed; background-attachment: fixed; background-size: cover;     /*以下是IE部分，使用滤镜*/
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/login/bj.jpg', sizingMethod='scale');
+background-repeat: no-repeat; background-positon: 100% 100%; margin: 0; padding: 0; overflow: hidden; height: 100%; }
+#particles-js { width: 100%; height: 100%; /* background: #000; */ background-size: cover; background-position: 50% 50%; background-repeat: no-repeat; }
+#frame {
+	background:url(../../img/login/bj.jpg) no-repeat center ;
+	height:100%; 
+	overflow: hidden;
+	margin: 0 auto;
+	width: 100%;
+	top:10px;
+}
+#scroller {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+#content {
+	width: 6144px;
+}
+.section {
+	width: 1200px;
+	float: left;
+	height: 100%;
+}

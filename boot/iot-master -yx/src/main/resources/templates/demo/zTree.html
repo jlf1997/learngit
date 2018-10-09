@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<TITLE> ZTREE DEMO - edit</TITLE>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	#parse('/comm/common.htm')
+	<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+	<link rel="stylesheet" href="../css/zTree.css" type="text/css">
+	<link rel="stylesheet" href="../css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="../layui/css/layui.css"  media="all">
+	<script type="text/javascript" src="../js/zTreeStyle/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../js/zTreeStyle/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="../js/zTreeStyle/jquery.ztree.excheck.js"></script>
+	<script type="text/javascript" src="../js/zTreeStyle/jquery.ztree.exedit.js"></script>
+	<SCRIPT type="text/javascript">
+		<!--
+		var setting = {
+			edit: {
+				enable: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				beforeDrag: beforeDrag
+			},
+			check: {
+				enable: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+
+		var zNodes =[			
+			{ id:1, pId:0, name:"随意勾选 1", open:true},
+			{ id:11, pId:1, name:"随意勾选 1-1", open:true},
+			{ id:111, pId:11, name:"随意勾选 1-1-1"},
+			{ id:1111, pId:111, name:"随意勾选 1-1-1-1"},
+			{ id:1112, pId:111, name:"随意勾选 1-1-1-2"},
+			{ id:11121, pId:1112, name:"随意勾选 1-1-1-2-1"},
+			{ id:112, pId:11, name:"随意勾选 1-1-2"},
+			{ id:1121, pId:112, name:"随意勾选 1-1-2-1"},
+			{ id:12, pId:1, name:"随意勾选 1-2", open:true},
+			{ id:121, pId:12, name:"随意勾选 1-2-1"},
+			{ id:122, pId:12, name:"随意勾选 1-2-2"},
+			{ id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
+			{ id:21, pId:2, name:"随意勾选 2-1"},
+			{ id:22, pId:2, name:"随意勾选 2-2", open:true},
+			{ id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
+			{ id:222, pId:22, name:"随意勾选 2-2-2"},
+			{ id:23, pId:2, name:"随意勾选 2-3"}
+		];
+
+		function beforeDrag(treeId, treeNodes) {
+			return false;
+		}
+		
+		var code;
+		
+		function setEdit() {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+			remove = $("#remove").attr("checked"),
+			rename = $("#rename").attr("checked"),
+			removeTitle = $.trim($("#removeTitle").get(0).value),
+			renameTitle = $.trim($("#renameTitle").get(0).value);
+			zTree.setting.edit.showRemoveBtn = remove;
+			zTree.setting.edit.showRenameBtn = rename;
+			zTree.setting.edit.removeTitle = removeTitle;
+			zTree.setting.edit.renameTitle = renameTitle;
+			showCode(['setting.edit.showRemoveBtn = ' + remove, 'setting.edit.showRenameBtn = ' + rename,
+				'setting.edit.removeTitle = "' + removeTitle +'"', 'setting.edit.renameTitle = "' + renameTitle + '"']);
+		}
+		function showCode(str) {
+			var code = $("#code");
+			code.empty();
+			for (var i=0, l=str.length; i<l; i++) {
+				code.append("<li>"+str[i]+"</li>");
+			}
+		}
+		
+		function setCheck() {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+			py = $("#py").attr("checked")? "p":"",
+			sy = $("#sy").attr("checked")? "s":"",
+			pn = $("#pn").attr("checked")? "p":"",
+			sn = $("#sn").attr("checked")? "s":"",
+			type = { "Y":py + sy, "N":pn + sn};
+			zTree.setting.check.chkboxType = type;
+			showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+		}
+		function showCode(str) {
+			if (!code) code = $("#code");
+			code.empty();
+			code.append("<li>"+str+"</li>");
+		}
+		
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			setEdit();
+			$("#remove").bind("change", setEdit);
+			$("#rename").bind("change", setEdit);
+			$("#removeTitle").bind("propertychange", setEdit)
+			.bind("input", setEdit);
+			$("#renameTitle").bind("propertychange", setEdit)
+			.bind("input", setEdit);
+			
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			setCheck();
+			$("#py").bind("change", setCheck);
+			$("#sy").bind("change", setCheck);
+			$("#pn").bind("change", setCheck);
+			$("#sn").bind("change", setCheck);
+			
+		});
+		//-->
+	</SCRIPT>
+</HEAD>
+
+<BODY>
+<blockquote class="layui-elem-quote">
+  基本 增 / 删 / 改 节点完全一致的  Checkbox 勾选操作
+</blockquote>
+<div class="content_wrap" style="width:100%;">
+	<div class="zTreeDemoBackground left" style="width:100%;">
+		<ul id="treeDemo" class="ztree" style="width: 100%;border: none;padding: 0;"></ul>
+	</div>
+</div>
+</BODY>
+</HTML>

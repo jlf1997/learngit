@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+</head>
+<div class="animated fadeIn">
+    <img src="${request.contextPath}/verifyCode/generateVerifyCode" id="code">
+</div>
+<body  style="padding: 10px">
+<script>
+    $("#code").click(function () {
+        $(this).attr('src', AppCommon.url.getBaseURL()+'/verifyCode/generateVerifyCode?time' + new Date());
+    });
+</script>
+</body>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<!--引入JS-->
+<script type="text/javascript">
+    AppCommon.include.load("#url('/static/js/common/commonUpload.js')", "js");
+    AppCommon.include.load("#url('/static/js/example/fileupload.js')", "js");
+</script>
+</head>
+<!--页面静态部分-->
+<body  style="padding: 10px">
+<div class="layui-tab-item layui-show">
+    <div class="fileContent">
+        <div class="layui-upload">
+            <button type="button" class="layui-btn" id="testUpload">选择文件</button>
+            <button type="button" class="layui-btn" id="testUploadBindAction">开始上传</button>
+        </div>
+    </div>
+</div>
+</body>

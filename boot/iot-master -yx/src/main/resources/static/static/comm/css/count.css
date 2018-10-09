@@ -1,0 +1,11 @@
+body{background:url(../../image/bj.jpg) no-repeat center; padding: 20px}
+.positionBox{ position: relative; background-color: rgba(0,0,0,.2);}
+.left-line{ position: absolute; left: 20px; top: 20px; background:url(../../image/leftj.png) no-repeat; width: 183px; height: 313px; }
+.right-line{ position: absolute; right: 20px; top: 20px; background:url(../../image/rightj.png) no-repeat; width: 183px; height: 313px; }
+.leftB-line{ position: absolute; left: 20px; bottom: 20px; background:url(../../image/leftdownj.png) no-repeat; width: 183px; height: 313px; }
+.rightB-line{ position: absolute; right: 20px; bottom: 20px; background:url(../../image/rightdownj.png) no-repeat; width: 183px; height: 313px; }
+.findBox{ margin:10px 0 30px;;}
+.findBox label{ color: #fff}
+.boxHeight{ padding: 20px;}
+.layui-input-inline{ width: 275px;}
+.textSite{ position: absolute; left:50%; top: 8%; font-size: 12px; color: #999;text-align: center; margin-left: -40px}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse('comm/common.htm')
+    <script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig"></script>
+</head>
+
+<script type="text/javascript" >
+    AppCommon.include.load("#url('/static/js/sysmanage/list_file.js')","js");
+</script>
+<body  style="padding: 20px">
+<div class="layui-tab-item layui-show">
+    <div class="fileManager_box"></div>
+</div>
+
+<script id="fileManagerList_template" type="text/html">
+    <div style="text-align: left;">
+        <form class="layui-form" lay-filter="searchForm" action="">
+            <div class="layui-inline">
+                <!--<label class="layui-form-label">文件名称</label>-->
+                <div class="layui-input-inline">
+                    <input name="fullnameInput" type="text" placeholder="文件名称" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="searchBtn">查询</button>
+                <!--<button class="layui-btn" id="addBtn">添加</button>-->
+            </div>
+        </form>
+    </div>
+
+    <div style="width:100%">
+        <table id="tb_list" lay-filter="tb_list" style="width:100%"></table>
+    </div>
+</script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteBtn">删除</a>
+</script>
+</body>
+</html>
