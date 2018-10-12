@@ -117,7 +117,7 @@
  </profiles>
 
 	<build>
-		<finalName>${project.name}-${profiles.active}-${project.version}</finalName>
+		<finalName>${project.name}-${profiles.active}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

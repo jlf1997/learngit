@@ -22,6 +22,7 @@ public class DefaultLogAspect extends AbstractLogAspect{
 	public void saveLog(String level, ApiAccessLog log) {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();  
 		if("info".equals(level)) {
+			
 			logs.info("接口调用结果："+gson.toJson(log));
 			return;
 		}
@@ -30,6 +31,7 @@ public class DefaultLogAspect extends AbstractLogAspect{
 			return;
 		}
 		if("error".equals(level)) {
+			logs.error(log.getCauses());
 			logs.error("接口调用结果："+gson.toJson(log));
 			return;
 		}
