@@ -1,5 +1,6 @@
 package com.cimr.boot.redis;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
@@ -14,6 +15,7 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.hash.HashMapper;
@@ -25,6 +27,8 @@ import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.cimr.boot.redis.utils.MyHashMapper;
 import com.cimr.boot.utils.LogsUtil;
 
+import redis.clients.jedis.JedisPoolConfig;
+
 @Configuration
 @EnableAutoConfiguration  
 public class RedisTemplateConfig extends RedisAutoConfiguration{
@@ -34,17 +38,39 @@ public class RedisTemplateConfig extends RedisAutoConfiguration{
 
 	@Autowired
 	private JedisConnectionFactory factory;
+//	@Autowired
+//	private RedisClusterConfiguration clusterConfig;
+//	@Autowired
+//	private JedisPoolConfig poolConfig;
 	
 	
    private JedisConnectionFactory getJedisConnectionFactory() {
 	   JedisConnectionFactory jedisConnectionFactory =  new JedisConnectionFactory();
 	    try {
 			BeanUtils.copyProperties(jedisConnectionFactory, factory);
-		} catch (IllegalAccessException | InvocationTargetException e) {
+			setPrivateValue(jedisConnectionFactory
+					,factory,"cluster","sentinelConfig","clusterConfig","clusterCommandExecutor"
+					,"useSsl");
+
+		} catch (Exception e) {
 			LogsUtil.getStackTrace(e);
 		}
 	    return jedisConnectionFactory;
 	   
+   }
+   
+   private void setPrivateValue(
+		   JedisConnectionFactory jedisConnectionFactory,
+		   JedisConnectionFactory factory,
+		   String...fields
+		   ) throws Exception{
+	   Class<?> classType = factory.getClass();
+	   for(String fieldstr:fields) {
+		   Field field = classType.getDeclaredField(fieldstr);
+	       field.setAccessible(true); // 抑制Java对修饰符的检查
+	       field.set(jedisConnectionFactory, field.get(factory));
+	   }
+       
    }
 	
  
