@@ -66,32 +66,16 @@ public class MongoDbBaseFinder {
 	}
 	
 
-	/**
-	 * 分页查询
-	 * @param query
-	 * @param collectionName
-	 * @param sort
-	 * @param pageNumber
-	 * @param pageSize
-	 * @return
-	 */
-	public Page<Map<String,Object>> findPage(Query query, String collectionName,Sort sort,int pageNumber, int pageSize) {
-		Pageable pageable = new PageRequest(pageNumber, pageSize, sort);
-		query.with(pageable);
-		List<Map<String,Object>> result = findAll(query,collectionName);
-		long total = template.count(query, collectionName);
-		Page<Map<String,Object>> page = new PageImpl<>(result,pageable,total);
-		return page;
-	}
-	/**
-	 * 获取查询总数
-	 * @param query
-	 * @param collectionName
-	 * @return
-	 */
-	public long getTotalNum(Query query,String collectionName) {
-		return template.count(query, collectionName);
-	}
+	
+//	/**
+//	 * 获取查询总数
+//	 * @param query
+//	 * @param collectionName
+//	 * @return
+//	 */
+//	public long getTotalNum(Query query,String collectionName) {
+//		return template.count(query, collectionName);
+//	}
 	
 	/**
 	 * 查询一条记录
@@ -107,25 +91,25 @@ public class MongoDbBaseFinder {
 		return null;
 	}
 	
-	/**
-	 * 判断当前页是否是最后一页
-	 * @param query
-	 * @param collectionName
-	 * @param pageNumber 页号 从0开始
-	 * @param pageSize
-	 * @return
-	 */
-	public boolean isLastPage(Query query,String collectionName,int pageNumber,int pageSize) {
-		long total =  getTotalNum(query,collectionName);
-		if(pageSize==0) {
-			return false;
-		}
-		if(total/pageSize<pageNumber+1) {
-			return true;
-		}else {
-			return false;
-		}
-	}
+//	/**
+//	 * 判断当前页是否是最后一页
+//	 * @param query
+//	 * @param collectionName
+//	 * @param pageNumber 页号 从0开始
+//	 * @param pageSize
+//	 * @return
+//	 */
+//	public boolean isLastPage(Query query,String collectionName,int pageNumber,int pageSize) {
+//		long total =  getTotalNum(query,collectionName);
+//		if(pageSize==0) {
+//			return false;
+//		}
+//		if(total/pageSize<pageNumber+1) {
+//			return true;
+//		}else {
+//			return false;
+//		}
+//	}
 	
 	/**
 	 * 查询指定collection的所有数据
@@ -183,8 +167,8 @@ public class MongoDbBaseFinder {
 	/**
 	 * 分页查询
 	 * @param criterias
-	 * @param collectionName
-	 * @param skip
+	 * @param collectionName 
+	 * @param skip 额外跳过条数
 	 * @param pageNumber
 	 * @param pageSize
 	 * @param aggregations

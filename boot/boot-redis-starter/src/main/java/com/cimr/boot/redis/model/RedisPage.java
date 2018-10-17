@@ -8,6 +8,8 @@ public class RedisPage {
 	private Set<String> keys;
 	
 	private Integer count;
+	
+	private Object obj;
 
 	public Set<String> getKeys() {
 		return keys;
@@ -24,6 +26,15 @@ public class RedisPage {
 	public void setCount(Integer count) {
 		this.count = count;
 	}
+
+	public Object getObj() {
+		return obj;
+	}
+
+	public void setObj(Object obj) {
+		this.obj = obj;
+	}
+	
 	
 	
 }
