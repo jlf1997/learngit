@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>500</title>
+    <link href="#url('/static/comm/layui/css/layui.css')" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="#url('/static/comm/js/html5shiv.min.js')"></script>
+    <script src="#url('/static/comm/js/respond.min.js')"></script>
+    <![endif]-->
+</head>
+<body>
+<style>
+    #wrap{
+        position:fixed;
+        top:50%;
+        left:0;
+        width:100%;
+    }
+    #cen{
+        position:relative;
+        height:384px;
+        top:-200px;
+        width:616px;
+        margin:0px auto;
+    }
+</style>
+<div id="wrap">
+    <div id="cen">
+        <p><img src="#url('/static/comm/img/500.png')"></p>
+        <br>
+        <p align="center">
+            <button class="layui-btn layui-btn-primary layui-btn-radius" onclick="history.go(-1)">返回上一页</button>
+            <button class="layui-btn layui-btn-primary layui-btn-radius" onclick="window.location='/finance/nav/refundPage'">&nbsp;&nbsp;&nbsp;首页&nbsp;&nbsp;&nbsp;</button>
+        </p>
+    </div>
+</div>
+</body>
+</html>

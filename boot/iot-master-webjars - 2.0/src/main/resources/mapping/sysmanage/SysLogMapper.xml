@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cimr.sysmanage.dao.SysLogDao">
+    <!-- SysLog的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_SysLog_Map" type="com.cimr.comm.aop.model.AccessLogEntity">
+        <id column="id" property="id" />
+        <result column="path" property="path" />
+        <result column="respon_time" property="responTime" />
+        <result column="method" property="method" />
+        <result column="user_id" property="userId" />
+        <result column="ip" property="ip" />
+        <result column="module" property="module" />
+        <result column="commit" property="commit" />
+        <result column="access_time" property="accessTime" />
+    </resultMap>
+
+    <!-- Assist用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null"> #{req.value}</if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="val" separator=",">
+                        #{val}
+                    </foreach>
+                </if>
+                <if test="req.suffix != null"> ${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- updateAssist用于更新数据的使用它拓展自Assist,用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require}
+                <if test="req.value != null"> #{req.value}</if>
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="val" separator=",">
+                        #{val}
+                    </foreach>
+                </if>
+                <if test="req.suffix != null"> ${req.suffix}</if>
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- 数据库中表名为:sys_log的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="sys_log_Column">
+        sys_log.id as id
+        ,sys_log.path as path
+        ,sys_log.respon_time as respon_time
+        ,sys_log.method as method
+        ,sys_log.user_id as user_id
+        ,sys_log.ip as ip
+        ,sys_log.module as module
+        ,sys_log.commit as commit
+        ,sys_log.access_time as access_time
+    </sql>
+
+    <!--获得类名为:SysLog对应的数据库表的数据总行数 -->
+    <select id="getObjRowCountCommon" parameterType="com.cimr.util.Assist" resultType="java.lang.Long">
+        select count(id) from sys_log
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+
+    <!-- 获得类名为:SysLog对应数据库中表的数据集合 -->
+    <select id="selectList" parameterType="com.cimr.util.Assist"  resultMap="result_SysLog_Map">
+        SELECT * FROM sys_log
+        <if test="require!=null"><include refid="Assist" /></if>
+        <choose>
+            <when test="order !=null">
+                ${order}
+            </when>
+            <otherwise>
+                order by access_time DESC
+            </otherwise>
+        </choose>
+        <if test="startRow !=null and rowSize !=null">
+            LIMIT #{startRow},#{rowSize}
+        </if>
+    </select> 
+
+
+    <!-- 将SysLog中属性值不为null的数据,插入到对应数据库的表中-->
+    <insert id="saveLog" parameterType="com.cimr.comm.aop.model.AccessLogEntity">
+        insert into sys_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="path != null">path,</if>
+            <if test="responTime != null">respon_time,</if>
+            <if test="method != null">method,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="ip != null">ip,</if>
+            <if test="module != null">module,</if>
+            <if test="commit != null">commit,</if>
+            <if test="accessTime != null">access_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="path != null"> #{path},</if>
+            <if test="responTime != null"> #{responTime},</if>
+            <if test="method != null"> #{method},</if>
+            <if test="userId != null"> #{userId},</if>
+            <if test="ip != null"> #{ip},</if>
+            <if test="module != null"> #{module},</if>
+            <if test="commit != null"> #{commit},</if>
+            <if test="accessTime != null"> #{accessTime},</if>
+        </trim>
+    </insert>
+
+</mapper>

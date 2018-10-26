@@ -33,7 +33,11 @@
       <scope>test</scope>
     </dependency>
     
-   
+   	 	<dependency>
+			<groupId>com.cimr</groupId>
+		  	<artifactId>baseutil</artifactId>
+		  	<version>0.0.1-SNAPSHOT</version>
+		 </dependency>
 		
 
 		<dependency>

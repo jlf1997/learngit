@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--引入JS-->
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<script src="#url('/static/js/common/commonImageUpload.js')"></script>
+<script type="text/javascript">
+    AppCommon.include.load("#url('/static/js/example/imageUpload.js')", "js");
+</script>
+</head>
+<body  style="padding: 10px">
+<!--页面静态部分-->
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>测试多图片上传</legend>
+</fieldset>
+<div class="layui-upload">
+    <button type="button" class="layui-btn" id="test_imgUpload">选择图片</button>
+    <button type="button" class="layui-btn" id="test_imgUploadBindAction">上传图片</button>
+    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+        预览图：
+        <ul id="test_imgUploadPreview" class="imglist">
+
+        </ul>
+    </blockquote>
+</div>
+
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>测试单图片上传</legend>
+</fieldset>
+<div class="layui-upload">
+    <button type="button" class="layui-btn" id="test_imgUpload2">选择图片</button>
+    <button type="button" class="layui-btn" id="test_imgUpload2BindAction">上传到文件服务器测试</button>
+    <div  class="layui-upload-list">
+        <img style="width: 160px;height: 160px" id="test_imgUpload2Preview">
+        <p id="test_imgUpload2FileName" style="width:160px;overflow : hidden;white-space : nowrap;text-overflow: ellipsis;"></p>
+    </div>
+</div>
+
+<!-- 图片上传的样式，演示用-->
+<style>
+    ul.imglist{ margin:0 auto; width:830px; overflow:hidden}
+    ul.imglist li{ float:left; padding:4px 8px; width:150px}
+    ul.imglist li img{ display:block; width:150px; height:110px}
+    ul.imglist li span{ display:block; width:100%; height:30px; line-height:30px; background:#F6F6F6}
+</style>
+</body>
+

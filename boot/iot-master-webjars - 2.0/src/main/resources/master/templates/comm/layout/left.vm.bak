@@ -1,0 +1,26 @@
+<!--左侧导航-->
+    <div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side">
+        <ul class="layui-nav layui-nav-tree beg-navbar">
+            <li class="layui-nav-item"><a href="javascript:;"><i class="fa fa-cubes" aria-hidden="true" data-icon="fa-cubes"></i><cite>基本元素</cite><span class="layui-nav-more"></span></a>
+                <dl class="layui-nav-child">
+                    <dd><a href="#url('/static/comm/demo/按钮.html')"><i class="layui-icon" data-icon=""></i><cite>按钮</cite></a></dd>
+                    <dd><a href="#url('/static/comm/demo/表单.html')"><i class="layui-icon" data-icon=""></i><cite>表单</cite></a></dd>
+                    <dd><a href="#url('/static/comm/demo/导航／面包屑.html')"><i class="layui-icon" data-icon=""></i><cite>导航／面包屑</cite></a></dd>
+                    <dd><a href="#url('/static/comm/demo/分页.html')"><i class="layui-icon" data-icon=""></i><cite>分页</cite></a></dd>
+                    <dd><a href="#url('/static/comm/demo/辅助元素.html')"><i class="layui-icon" data-icon=""></i><cite>辅助元素</cite></a></dd>
+                    <dd><a href="#url('/static/comm/demo/选项卡.html')"><i class="layui-icon" data-icon=""></i><cite>选项卡</cite></a></dd>
+                    <dd><a href="#url('/static/comm/demo/静态表格.html')"><i class="layui-icon" data-icon=""></i><cite>静态表格</cite></a></dd>
+                    <dd><a href="#url('/static/comm/demo/面板.html')"><i class="layui-icon" data-icon=""></i><cite>面板</cite></a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="javascript:;"><i class="fa fa-cogs" aria-hidden="true" data-icon="fa-cogs"></i><cite>系统管理</cite><span class="layui-nav-more"></span></a>
+                <dl class="layui-nav-child">
+                    <dd id="manager_userManager" menu="manager/nav/userManager"><a href="javascript:;" onclick="navMenu(this);"><i class="layui-icon" data-icon=""></i><cite>1用户管理</cite></a></dd>
+                    <dd id="manager_roleManager" menu="manager/nav/roleManager"><a href="javascript:;" onclick="navMenu(this);"><cite>角色管理</cite></a></dd>
+                    <dd id="permissionManager" menu="manager/nav/permissionManager"><a href="javascript:;" onclick="navMenu(this);"><cite>权限管理</cite></a></dd>
+                </dl>
+            </li>
+            <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span>
+        </ul>
+    </div>
+<!--左侧导航END-->

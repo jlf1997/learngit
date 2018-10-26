@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<script src="#url('/static/comm/ueditor/third-party/mathquill/mathquill.min.js')"></script>
+<script src="#url('/static/comm/ueditor/umeditor.config.js')"></script>
+<script src="#url('/static/comm/ueditor/umeditor.min.js')"></script>
+<script src="#url('/static/comm/ueditor/lang/zh-cn/zh-cn.js')"></script>
+<script>
+    AppCommon.include.load("#url('/static/comm/ueditor/themes/default/css/umeditor.css')", "css");
+    /*AppCommon.include.load("#url('/static/comm/ueditor/third-party/mathquill/mathquill.min.js')", "js");
+    AppCommon.include.load("#url('/static/comm/ueditor/umeditor.config.js')", "js");
+    AppCommon.include.load("#url('/static/comm/ueditor/umeditor.min.js')", "js");
+    AppCommon.include.load("#url('/static/comm/ueditor/lang/zh-cn/zh-cn.js')", "js");*/
+
+    AppCommon.include.load("#url('/static/js/common/commonUeditor.js')", "js");
+    AppCommon.include.load("#url('/static/js/example/ueditor.js')", "js");
+</script>
+</head>
+<body  style="padding: 10px">
+<div class="animated fadeIn">
+    <!-- 加载编辑器的容器 -->
+    <script id="container" name="content" type="text/plain">
+
+    </script>
+    <div style="margin-top: 20px">
+    <button class="layui-btn" id="getHtml">获取html</button>
+    <button class="layui-btn" id="getText">获取纯文本内容</button>
+    </div>
+</div>
+</body>

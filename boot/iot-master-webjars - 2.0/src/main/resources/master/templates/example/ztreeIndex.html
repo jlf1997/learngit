@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<script type="text/javascript">
+    AppCommon.include.load("#url('/static/comm/ztree/css/zTreeStyle/zTreeStyle.css')", "css");
+    AppCommon.include.load("#url('/static/comm/ztree/js/jquery.ztree.all.js')", "js");
+    AppCommon.include.load("#url('/static/js/common/commonZtree.js')", "js");
+    AppCommon.include.load("#url('/static/js/example/ztree.js')", "js");
+</script>
+</head>
+<body  style="padding: 10px">
+<!--页面静态部分-->
+<div class="layui-tab-item layui-show">
+    <div id="ztree">
+        <ul class="ztree" id="ztreeChecked"></ul>
+        <ul class="ztree" id="ztreeNoChecked"></ul>
+    </div>
+
+    <button class="layui-btn" id="checkNodes">获取选中的节点数据</button>
+    <button class="layui-btn" id="checkedAll">选中所有节点</button>
+    <button class="layui-btn" id="cancelCheckedAll">取消所有选中节点</button>
+</div>
+</body>

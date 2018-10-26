@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse('comm/common.htm')
+    <script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig"></script>
+    <style>.layui-input1{ width: 90%}</style>
+</head>
+<script type="text/javascript">
+    AppCommon.include.load("#url('/static/js/common/commonSelectSearch.js')", "js");
+    AppCommon.include.load("#url('/static/js/example/selectSearch.js')", "js");
+    AppCommon.include.load("#url('/static/js/util/util.js')", "js");
+    AppCommon.include.load("#url('/static/js/sysmanage/dict.js')", "js");
+</script>
+<body style="padding: 20px">
+<div class="layui-tab-item layui-show">
+    <div class="dictManager_box"></div>
+</div>
+<script id="dictManagerList_template" type="text/html">
+    <div style="text-align: left;">
+        <form class="layui-form" lay-filter="searchForm" action="">
+            <div class="layui-inline">
+                <div id="allTypeDiv" class="layui-input-inline" lay-filter="demoDivFilter" style="width:200px;">
+                    <select lay-search id="allType" name="allType" lay-filter="allType">
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input id="descriptions" name="descriptions" placeholder="描述" type="text" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button class="layui-btn" lay-submit lay-filter="searchBtn">查询</button>
+                <button class="layui-btn" id="addBtn">添加</button>
+            </div>
+        </form>
+    </div>
+
+    <div style="width:100%">
+        <table id="tb_list" lay-filter="tb_list" style="width:100%"></table>
+    </div>
+</script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="editBtn">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteBtn">删除</a>
+</script>
+
+<script id="dictManagerForm_template" type="text/html">
+    <div class="layui-show manager-box-style">
+        <form class="layui-form">
+            <input type="hidden" id="id" name="id" value="{{id}}">
+            <div class="layui-form-item">
+                <label class="layui-form-label">键值</label>
+                <div class="layui-input-block">
+                    <input type="text" id="value" name="value" lay-verify="required" placeholder="请输入键值"
+                           autocomplete="off" class="layui-input layui-input1" value="{{value}}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">标签</label>
+                <div class="layui-input-block">
+                    <input type="text" id="label" name="label" lay-verify="required" placeholder="请输入标签"
+                           autocomplete="off" class="layui-input layui-input1" value="{{label}}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <input type="text" id="type" name="type" placeholder="请输入字典类型" autocomplete="off"
+                           class="layui-input layui-input1" value="{{type}}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <input type="text" id="description" name="description" placeholder="请输入描述" autocomplete="off"
+                           class="layui-input layui-input1" value="{{description}}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="text" id="orderId" name="orderId" lay-verify="number" placeholder="请输入排序数字"
+                           autocomplete="off" class="layui-input layui-input1" value="{{orderId}}">
+                </div>
+            </div>
+            <!-- <div class="layui-form-item">
+                 <label class="layui-form-label">父级</label>
+                 <div class="layui-input-block">
+                     <div id="parentIdDiv" lay-filter="demoDivFilter" class="layui-form">
+                         <select lay-search id="parentId" name="parentId" lay-filter="parentId">
+                         </select>
+                     </div>
+                 </div>
+             </div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea  placeholder="请输入备注" id="remarks" name="remarks" class="layui-textarea">{{remarks}}</textarea>
+                </div>
+            </div>
+
+            <br>
+            <div class="button-align">
+                <button class="layui-btn" id="saveBtn" lay-submit="" lay-filter="saveBtn1">提交</button>
+                <button class="layui-btn" id="cancelBtn">取消</button>
+            </div>
+        </form>
+    </div>
+</script>
+</body>

@@ -1,0 +1,107 @@
+mybatis:
+  mapper-locations: classpath:mapping/*/*.xml,classpath:/META-INF/resources/webjars/mapping/*/*.xml
+  type-aliases-package: com.cimr.*.dao  
+iot:
+  auth:
+    callback-url: http://localhost:8071
+    prefix-url: http://iot.auth.com:8088/cas
+    salt: cas
+    cas-login-url: http://iot.auth.com:8088/cas/login
+  shiro:
+    login-url: /login/blank
+    filter-chain-definition-map:
+      {/error/** : anon,
+      /login : anon,
+      /index/** : login,
+      /manager/**: login,
+      /permission/**: permission,
+      /role/**: login,
+      /area/**: login,
+      /dict/**: login,
+      /group/**: login,
+      /operationManager/**: login,
+      /roleManager/**: login,
+      /sysLog/**: login,
+      /unitFile/**: login,
+      /userInfo/**: login,
+      /userManager/**: login,
+      /**: anon}
+#自定义配置
+#自定义配置
+app:
+  name: iot-master-test
+  config:
+    platform-name: 基础开发平台模板
+    title: 基础开发平台模板
+    apiIp: 175.6.77.235
+    apiPort: 8887
+    js-version: 20180921
+    main-index-page: comm/index/indexPage
+    domain-name: tinycg.com
+    default-head: defaultHead.jpg
+    home-page: comm/index/home
+    default-page: comm/login/login
+  
+#pagehelper分页插件
+pagehelper: 
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: false
+    offsetAsPageNum: false
+    rowBoundsWithCount: false
+    pageSizeZero: true
+    
+#数据库相关配置
+spring:
+  profiles: 
+    active: ${profiles.active}
+  datasource:
+    druid: 
+      # 初始化大小 最小 最大
+      initialSize: 1
+      minIdle: 3
+      maxActive: 20
+      maxWait: 60000 # 配置获取连接等待超时的时间
+      minEvictableIdleTimeMillis: 30000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+  http:
+    multipart:
+      maxFileSize: 100MB
+      maxRequestSize: 100MB
+  velocity: 
+    charset: UTF-8
+    properties:
+      input:
+        encoding: UTF-8
+      output:
+        encoding: UTF-8
+      userdirective: com.cimr.comm.velocity.UrlDirective, com.cimr.comm.velocity.HasPermissionDirective
+      velocimacro:
+        library:
+          autoreload: true
+      directive:
+        foreach:
+          count:
+            name: loopCounter
+            initial:
+              value: 1
+    resourceLoaderPath: classpath:/templates/,classpath:META-INF/resources/webjars/master/templates/
+    suffix: .html
+    toolbox-config-location: /META-INF/resources/webjars/master/toolbox.xml
+   
+      
+    
+    

@@ -4,7 +4,7 @@
 
   <groupId>com.cimr</groupId>
   <artifactId>boot-redis-starter</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>boot-redis-starter</name>
@@ -46,8 +46,7 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-		
-		
+	
 		
   </dependencies>
   

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<!--引入JS-->
+<script type="text/javascript">
+    AppCommon.include.load("#url('/static/js/common/commonUpload.js')", "js");
+    AppCommon.include.load("#url('/static/js/example/multiFileupload.js')", "js");
+</script>
+</head>
+<body  style="padding: 10px">
+<!--页面静态部分-->
+<div class="animated fadeIn">
+    <div class="fileContent">
+        <div class="layui-upload">
+            <button type="button" class="layui-btn" id="multiFileUpload">选择多文件</button>
+            <button type="button" class="layui-btn" id="multiFileUploadBindAction">开始上传</button>
+            <div class="layui-upload-list">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="multiFileUploadList">
+                    <!--<tr fileInfo="111">
+                        <td>1</td>
+                        <td></td>
+                        <td>已上传</td>
+                        <td>
+                            <button class="layui-btn layui-btn-mini layui-btn-danger multiFileUploadDeleteFile">删除</button>
+                        </td>
+                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

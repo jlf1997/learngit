@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>${projectName}</title>
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    #parse('comm/common.htm')
+    <link rel="stylesheet" type="text/css" href="#url('/static/comm/css/tipso.css')">
+    <script src="#url('/static/comm/js/index/index.js')"></script>
+    <script src="#url('/static/comm/js/index/tipso.js')"></script>
+    <script src="#url('/static/comm/js/index/theme.js')"></script>
+    <script src="#url('/static/comm/js/jquery.bigcolorpicker.min.js')"></script>
+    <script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+    <link rel="stylesheet" type="text/css" href="#url('/static/comm/css/rightMenu.css')">
+</head>
+<script>
+    AppCommon.include.load("#url('/static/comm/js/menu/menu.js')","js");
+</script>
+<div clas="layui-layout layui-layout-admin">
+    <div class="layui-header header header-demo">
+        <div class="layui-main" style="width:auto; margin:0 15px">
+            <div class="admin-login-box">
+                <a class="logo" style="left: 0;" href="#"><img src="#url('/static/image/indexLogo.png')">${projectName}</a>
+            </div>
+            <ul class="layui-nav admin-header-item">
+            	<!--
+                <li class="layui-nav-item"> <a href="javascript:;">单独菜单1</a> </li>
+                <li class="layui-nav-item"> <a href="javascript:;">单独菜单2</a> </li>
+                <li class="layui-nav-item"> <a href="javascript:;">单独菜单3</a> </li>
+                 -->
+                <li class="layui-nav-item"> <a href="javascript:;" class="admin-header-user"> <img src="${filepath}/${userHeader.sourceUrl}" /> <span class="usermwidth">${userName}</span> </a>
+                    <dl class="layui-nav-child">
+                        <!--<dd> <a id="userInfo" class="top-menu-a" href="javascript:;"><i class="fa fa-user-circle" aria-hidden="true"></i> 个人信息</a> </dd>-->
+                        <input type="hidden" id="userName" value="${userName}">
+                        <dd> <a id="password" class="top-menu-a" href="javascript:;"><i class="fa fa-user-circle" aria-hidden="true"></i> 修改密码</a> </dd>
+                        <dd> <a class="top-menu-a changeSkin" href="javascript:;"><i class="fa fa-refresh"></i><cite>更换皮肤</cite></a></dd>
+                        <dd> <a id="logoutBtn" class="logoutBtn top-menu-a" href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a> </dd>
+                    </dl>
+                </li>
+            </ul>
+            <!-- <ul class="layui-nav admin-header-item-mobile">
+                <li class="layui-nav-item"> <a class="logoutBtn" href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a> </li>
+            </ul> -->
+        </div>
+    </div>
+
+    <div class="layui-side layui-bg-black" id="admin-side">
+        <div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side">
+            <div id="admin-side-toggle" class="admin-side-toggle"> <i class="fa fa-bars" aria-hidden="true"></i> </div>
+            <ul class="layui-nav layui-nav-tree beg-navbar" lay-filter="navTreeFilter">
+                <div class="menuTree_box"></div>
+                <input id="layoutMenu" type="hidden" value="">
+                <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body" style="top: 65px;" id="admin-body">
+        <div class="layui-tab admin-nav-card" lay-filter="demo">
+            <ul class="layui-tab-title">
+                <li class="layui-this"><i class="fa fa-dashboard"></i> <cite>首页</cite> </li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <iframe src="#url('/index/nav/home')" class="iframeH iframeHeight"></iframe>
+                </div>
+            </div>
+        </div>
+        <ul class="rightMenu" id="rightMenu">
+            <li data-type="fresh">刷新</li>
+            <li data-type="current">关闭当前</li>
+            <li data-type="other">关闭其他</li>
+            <li data-type="all">关闭全部</li>
+        </ul>
+    </div>
+    <div class="site-tree-mobile layui-hide"> <i class="layui-icon">&#xe602;</i> </div>
+    <div class="site-mobile-shade"></div>
+</div>
+
+<!--修改密码窗口-->
+<script id="pwdEdit_template" type="text/html">
+    <form class="layui-form">
+        <span style="padding:20px"></span>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">旧密码：</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="pastPwd" class="layui-input">
+                </div>
+            </div>
+            </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">新密码：</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="pwd1" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">确认密码：</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="pwd2" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script id="menuTree_template" type="text/html">
+    {{each data menuLevel1 i}}
+    <li class="layui-nav-item"><a href="javascript:;" class="tooltips" data-tipso="{{menuLevel1.menuName}}"><i class="{{menuLevel1.menuIcon}}" aria-hidden="true" data-icon="fa-cogs"></i><cite>{{data[i].menuName}}</cite><span class="layui-nav-more"></span></a>
+        <dl class="layui-nav-child">
+
+            {{each menuLevel1.children menuLevel2 j}}
+            <dd id="{{menuLevel2.menuKey}}" menu="{{menuLevel2.href}}" target="{{menuLevel2.target}}">
+                <a data-id="{{menuLevel2.menuKey}}" class="tooltips" data-tipso="{{menuLevel2.menuName}}" data-url="{{menuLevel2.href}}"><i class="{{menuLevel2.menuIcon}}" aria-hidden="true" data-icon="fa-cogs"></i><cite>{{menuLevel2.menuName}}</cite>
+                </a>
+            </dd>
+            {{/each}}
+        </dl>
+    </li>
+    {{/each}}
+</script>
+
+
+<!--</script>-->
+<!--左侧导航END-->
+<script>
+    $(document).ready(function(){
+        var iframeHeight = $('.iframeHeight');
+        iframeHeight.height($(window).height() - 111);
+    });
+
+    //左侧栏收缩
+    $('.admin-side-toggle').on('click', function() {
+        var sideWidth = $('#admin-side').width();
+        if(sideWidth === 200) {
+            $('.tooltips').tipso({
+                useTitle: false,
+            });
+            $('.admin-side-toggle').addClass('minitoggle');
+            $('.layui-side-scroll .layui-nav-tree').addClass('minibar');
+            $('#admin-body').animate({
+                left: '60px'
+            }); //admin-footer
+            $('#admin-footer').animate({
+                left: '60px'
+            });
+            $('#admin-side').animate({
+                width: '60px'
+            });
+            $('.layui-nav-tree').animate({
+                width: '60px'
+            });
+        } else {
+            $('.tooltips').tipso('destroy');
+            $('.admin-side-toggle').removeClass('minitoggle');
+            $('.layui-side-scroll .layui-nav-tree').removeClass('minibar');
+            $('#admin-body').animate({
+                left: '200px'
+            });
+            $('#admin-footer').animate({
+                left: '200px'
+            });
+            $('#admin-side').animate({
+                width: '200px'
+            });
+            $('.layui-nav-tree').animate({
+                width: '200px'
+            },0);
+        }
+    });
+    var projectUtl = AppCommon.url.getBaseURL()+"/";
+    layui.use('element',function(){
+        var element = layui.element;
+        element.on('nav(navTreeFilter)', function (elem) {
+            var id = $(elem).find('a').attr('data-id');
+            var title = $(elem).find("a").html();
+            var h = $(window).height();
+            var content = "<iframe id='"+id+"' src='" + projectUtl+$(elem).find('a').attr('data-url') + "' style='height:calc("+h+"px - 109px);height:-webkit-calc("+h+"px - 109px);width:100%;overflow:hidden;'>";
+            var flag = false;
+            var navNumber = 0;
+            $('.layui-tab-title>li').each(function (index,item) {
+                navNumber++;
+                var $li = item;
+                var layId=$($li).attr('lay-id');
+                if(layId == id){
+                    flag = true;
+                    return true;
+                }
+            });
+            if( !flag&&navNumber<=20 ){
+                element.tabAdd('demo', {
+                    title: title+"<i class='layui-icon layui-unselect layui-tab-close' data-id='" + id + "'data-url='"+$(elem).find('a').attr('data-url')+"'>ဆ</i>"
+                    ,content: content
+                    ,id: id,
+                });
+
+            };
+            if( !flag&&navNumber>20){
+                layer.msg('页面已经达到数量上限,无法再继续打开新页面,请先关闭无用的页面。');
+            };
+            element.tabChange('demo', id);
+            $(".layui-tab-close").click(function () {
+                element.tabDelete('demo', $(this).attr("data-id"));
+            });
+            //取消右键
+            $('.layui-tab-title li').on('contextmenu', function() {
+                return false;
+            })
+            $('.layui-tab-title,.layui-tab-title li').on('click', function() {
+                $('.rightMenu').hide();
+            });
+            //桌面点击右击
+            $('.layui-tab-title li').on('contextmenu', function(e) {
+                var aid = $(this).attr("lay-id"); //获取右键时li的lay-id属性
+                var aUrl = $(this).children("i.layui-icon").attr("data-url");
+                var popupmenu = $(".rightMenu");
+                popupmenu.find("li").attr("data-id", aid);
+                popupmenu.find("li").attr("data-url", aUrl);
+                //console.log("popopmenuId:" + popupmenu.find("li").attr("data-id"));
+//                l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+//                console.log("l"+l);
+//                t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+//                console.log("t"+t);
+                popupmenu.css({
+                    left: e.clientX-200,
+                    top:e.clientY-70
+                }).show();
+                return false;
+            });
+            $(".rightMenu li[data-type='fresh']").on('click', function() {
+                var freshId = $(this).attr("data-id");
+                var freshUrl = $(this).attr("data-url");
+                element.tabChange('demo', freshId); //切换到：用户管理
+                $("iframe"+"#"+freshId).attr("src", projectUtl+freshUrl);
+                $(".rightMenu").hide();
+            });
+            $(".rightMenu li[data-type='current']").on('click', function() {
+                element.tabDelete('demo', $(this).attr("data-id"));
+                $(".rightMenu").hide();
+            });
+            $(".rightMenu li[data-type='other']").on('click', function() {
+                var dataId = $(this).attr("data-id");
+                $('.layui-tab-title>li').each(function (index,item) {
+                    var $li = item;
+                    var layId=$($li).attr('lay-id');
+                    if(dataId!=layId) {
+                        element.tabDelete('demo', layId);
+                    }
+                });
+                $(".rightMenu").hide();
+            });
+            $(".rightMenu li[data-type='all']").on('click', function() {
+                $('.layui-tab-title>li').each(function (index,item) {
+                    var $li = item;
+                    var layId=$($li).attr('lay-id');
+                    element.tabDelete('demo', layId);
+                });
+                $(".rightMenu").hide();
+            });
+        });
+    });
+    //手机设备的简单适配
+    var treeMobile = $('.site-tree-mobile'),
+        shadeMobile = $('.site-mobile-shade');
+    treeMobile.on('click', function() {
+        $('body').addClass('site-mobile');
+    });
+    shadeMobile.on('click', function() {
+        $('body').removeClass('site-mobile');
+    });
+
+    //注销登录
+	$('#logoutBtn').on('click', function() {
+	    layer.load();
+	    var postData = {
+	    };
+	    var onSuccess = function (data) {
+	        layer.closeAll('loading');
+	        if (!data.success) {
+	            layer.msg(data.error);
+	        } else {
+	            layer.msg("退出成功！",function () {
+	                window.location.reload();
+	            });
+	        }
+	    };
+	    AppCommon.ajax.execute({
+	        'url':AppCommon.url.getBaseURL()+"/ajax/logout",
+	        'data':postData,
+	        'success':onSuccess
+	    });
+	});
+
+    $("#userInfo").click(function () {
+        layer.msg("aaa");
+    });
+    //修改密码
+    $("#password").click(function () {
+        var userName= $("#userName").val();
+        var roleAuthLayer = layer.open({
+            type: 1,
+            area: ['400px', '300px'], //宽高
+            btn: ['提交', '取消'], //可以无限个按钮
+            yes: function(index, layero){
+                var pastPwd = $("#pastPwd").val();
+                if(pastPwd==""||pastPwd==null){
+                    alert("请输入密码!");
+                    return;
+                }
+                var data = {
+                    username: userName,
+                    pswd:pastPwd
+                };
+                var onSuccess=function (resultData){
+                   if(resultData.data=="1"){
+                       alert("密码错误");
+                       return;
+                   }else{
+                       var pwd1=$("#pwd1").val();
+                       var pwd2=$("#pwd2").val();
+                       if(pwd1==null || pwd1==""){
+                           alert("请输入新密码");
+                           return;
+                       }
+                       if(pwd1.length<4){
+                           alert("密码不能低于4位，请重新输入");
+                           return;
+                       }
+
+                       if(pwd1==pastPwd){
+                           alert("新密码不能与旧密码相同，请重新输入");
+                           return;
+                       }
+
+                       if(pwd2==null || pwd2==""){
+                           alert("请输入确认密码");
+                           return;
+                       }
+
+                       if(pwd1!=pwd2){
+                           alert("新密码和确认密码不同，请重新输入");
+                           return;
+                       }
+                       var parm = {
+                           username :userName,
+                           pswd:pwd1
+                       }
+                       var onSuccess1=function (resultData) {
+                           if(resultData.success){
+                               var onSuccess2 = function (data) {
+                                   layer.closeAll('loading');
+                                   if (!data.success) {
+                                       layer.msg(data.error);
+                                   } else {
+                                       layer.close(roleAuthLayer);
+                                       layer.msg("修改成功，请重新登录！",function () {
+                                           window.location.reload();
+                                       });
+                                   }
+                               };
+                               AppCommon.ajax.execute({
+                                   'url':AppCommon.url.getBaseURL()+"/ajax/logout",
+                                   'data':"",
+                                   'success':onSuccess2
+                               });
+                           }
+                       }
+                       AppCommon.ajax.execute({
+                           'url': AppCommon.url.getBaseURL() + '/userManager/ajax/pwdEdit',
+                           'data':parm,
+                           'success': onSuccess1
+                       });
+                   }
+                }
+                AppCommon.ajax.execute({
+                    'url': AppCommon.url.getBaseURL() + '/ajax/pwdEdit',
+                    'data':data,
+                    'success': onSuccess
+                });
+/*
+                roleManagement_page.action.saveMenuForm();
+*/
+            },
+            btnAlign: 'c',
+            content:$("#pwdEdit_template").html()
+        });
+    });
+</script>
+</body>
+</html>

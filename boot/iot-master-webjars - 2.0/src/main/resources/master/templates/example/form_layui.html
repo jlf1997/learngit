@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<script type="text/javascript">
+    AppCommon.include.load("#url('/static/js/example/form_layui.js')", "js");
+</script>
+</head>
+<body  style="padding: 10px">
+<div class="layui-form-item">
+    <label class="layui-form-label">标题</label>
+    <div class="layui-input-block">
+        <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+    </div>
+</div>
+</body>

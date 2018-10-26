@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cimr.sysmanage.dao.UnitFileDao">
+    <!-- UnitFile的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_UnitFile_Map" type="com.cimr.sysmanage.model.UnitFile">
+        <id column="id" property="id" />
+        <result column="ext" property="ext" />
+        <result column="del_flag" property="delFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="max_logo_url" property="maxLogoUrl" />
+        <result column="min_logo_url" property="minLogoUrl" />
+        <result column="title" property="title" />
+        <result column="type" property="type" />
+        <result column="source_url" property="sourceUrl" />
+        <result column="res_type" property="resType" />
+        <result column="create_by" property="createBy" />
+        <result column="ope_type" property="opeType" />
+        <result column="update_time" property="updateTime" />
+        <result column="user_type" property="userType" />
+        <result column="middle_logo_url" property="middleLogoUrl" />
+        <result column="user_id" property="userId" />
+        <result column="res_id" property="resId" />
+        <result column="width" property="width" />
+        <result column="descript" property="descript" />
+        <result column="update_by" property="updateBy" />
+        <result column="order_id" property="orderId" />
+        <result column="height" property="height" />
+    </resultMap>
+
+	   <!-- Assist用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} 
+                <if test="req.value != null"> #{req.value}</if> 
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="val" separator=","> 
+                        #{val} 
+                    </foreach> 
+                </if> 
+                <if test="req.suffix != null"> ${req.suffix}</if> 
+            </foreach>
+        </where>
+    </sql>
+
+	   <!-- updateAssist用于更新数据的使用它拓展自Assist,用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} 
+                <if test="req.value != null"> #{req.value}</if> 
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="val" separator=","> 
+                        #{val} 
+                    </foreach> 
+                </if> 
+                <if test="req.suffix != null"> ${req.suffix}</if> 
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- 数据库中表名为:unit_file的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="unit_file_Column">
+        unit_file.id as id
+        ,unit_file.ext as ext
+        ,unit_file.del_flag as del_flag
+        ,unit_file.create_time as create_time
+        ,unit_file.max_logo_url as max_logo_url
+        ,unit_file.min_logo_url as min_logo_url
+        ,unit_file.title as title
+        ,unit_file.type as type
+        ,unit_file.source_url as source_url
+        ,unit_file.res_type as res_type
+        ,unit_file.create_by as create_by
+        ,unit_file.ope_type as ope_type
+        ,unit_file.update_time as update_time
+        ,unit_file.user_type as user_type
+        ,unit_file.middle_logo_url as middle_logo_url
+        ,unit_file.user_id as user_id
+        ,unit_file.res_id as res_id
+        ,unit_file.width as width
+        ,unit_file.descript as descript
+        ,unit_file.update_by as update_by
+        ,unit_file.order_id as order_id
+        ,unit_file.height as height
+    </sql>
+
+    <!--获得类名为:UnitFile对应的数据库表的数据总行数 -->
+    <select id="getObjRowCount_common" parameterType="com.cimr.util.Assist" resultType="java.lang.Long">
+        select count(id) from unit_file
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <!-- 获得类名为:UnitFile对应数据库中表的数据集合 -->
+    <select id="selectObj_common" parameterType="com.cimr.util.Assist"  resultMap="result_UnitFile_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="unit_file_Column" /> 
+            </otherwise>
+        </choose>
+        from unit_file
+        <choose>
+            <when test="rowSize ==null">
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+            </when>
+            <otherwise>
+                inner join
+                (
+                SELECT id as primary_key FROM unit_file
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+                <choose>
+                    <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize} </when>
+                    <when test="rowSize !=null">LIMIT #{rowSize}</when>
+                 </choose>
+                 ) as tmp
+                 on tmp.primary_key=unit_file.id
+            </otherwise>
+        </choose>
+    </select> 
+
+    <!-- 获得一个UnitFile对象,以参数UnitFile对象中不为空的属性作为条件进行查询-->
+    <select id="selectObjByObj_common" parameterType="com.cimr.sysmanage.model.UnitFile" resultMap="result_UnitFile_Map">
+        select 
+            <include refid="unit_file_Column" /> 
+        from unit_file
+        <where>
+            <if test="height != null "> and unit_file.height = #{height}</if>
+            <if test="orderId != null "> and unit_file.order_id = #{orderId}</if>
+            <if test="updateBy != null "> and unit_file.update_by = #{updateBy}</if>
+            <if test="descript != null "> and unit_file.descript = #{descript}</if>
+            <if test="width != null "> and unit_file.width = #{width}</if>
+            <if test="resId != null "> and unit_file.res_id = #{resId}</if>
+            <if test="userId != null "> and unit_file.user_id = #{userId}</if>
+            <if test="middleLogoUrl != null "> and unit_file.middle_logo_url = #{middleLogoUrl}</if>
+            <if test="userType != null "> and unit_file.user_type = #{userType}</if>
+            <if test="updateTime != null "> and unit_file.update_time = #{updateTime}</if>
+            <if test="opeType != null "> and unit_file.ope_type = #{opeType}</if>
+            <if test="createBy != null "> and unit_file.create_by = #{createBy}</if>
+            <if test="resType != null "> and unit_file.res_type = #{resType}</if>
+            <if test="sourceUrl != null "> and unit_file.source_url = #{sourceUrl}</if>
+            <if test="type != null "> and unit_file.type = #{type}</if>
+            <if test="title != null "> and unit_file.title = #{title}</if>
+            <if test="minLogoUrl != null "> and unit_file.min_logo_url = #{minLogoUrl}</if>
+            <if test="maxLogoUrl != null "> and unit_file.max_logo_url = #{maxLogoUrl}</if>
+            <if test="createTime != null "> and unit_file.create_time = #{createTime}</if>
+            <if test="delFlag != null "> and unit_file.del_flag = #{delFlag}</if>
+            <if test="ext != null "> and unit_file.ext = #{ext}</if>
+            <if test="id != null "> and unit_file.id = #{id}</if>
+        </where>
+    </select> 
+
+    <!-- 通过UnitFile的id获得对应数据库中表的数据对象-->
+    <select id="selectObjById_common" parameterType="java.lang.String" resultMap="result_UnitFile_Map">
+        select 
+            <include refid="unit_file_Column" /> 
+        from unit_file
+        where unit_file.id = #{id}
+    </select> 
+
+    <!-- 将UnitFile插入到对应数据库的表中,包括属性值为null的数据-->
+
+    <insert id="insertObj_common" parameterType="com.cimr.sysmanage.model.UnitFile">
+        insert into unit_file(id,ext,del_flag,create_time,max_logo_url,min_logo_url,title,type,source_url,res_type,create_by,ope_type,update_time,user_type,middle_logo_url,user_id,res_id,width,descript,update_by,order_id,height) 
+        values(#{id},#{ext},#{delFlag},#{createTime},#{maxLogoUrl},#{minLogoUrl},#{title},#{type},#{sourceUrl},#{resType},#{createBy},#{opeType},#{updateTime},#{userType},#{middleLogoUrl},#{userId},#{resId},#{width},#{descript},#{updateBy},#{orderId},#{height})
+    </insert>
+
+    <!-- 将UnitFile中属性值不为null的数据,插入到对应数据库的表中-->
+    <insert id="insertNonEmptyObj_common" parameterType="com.cimr.sysmanage.model.UnitFile">
+        insert into unit_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="ext != null">ext,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="maxLogoUrl != null">max_logo_url,</if>
+            <if test="minLogoUrl != null">min_logo_url,</if>
+            <if test="title != null">title,</if>
+            <if test="type != null">type,</if>
+            <if test="sourceUrl != null">source_url,</if>
+            <if test="resType != null">res_type,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="opeType != null">ope_type,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="userType != null">user_type,</if>
+            <if test="middleLogoUrl != null">middle_logo_url,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="resId != null">res_id,</if>
+            <if test="width != null">width,</if>
+            <if test="descript != null">descript,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="height != null">height,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="ext != null"> #{ext},</if>
+            <if test="delFlag != null"> #{delFlag},</if>
+            <if test="createTime != null"> #{createTime},</if>
+            <if test="maxLogoUrl != null"> #{maxLogoUrl},</if>
+            <if test="minLogoUrl != null"> #{minLogoUrl},</if>
+            <if test="title != null"> #{title},</if>
+            <if test="type != null"> #{type},</if>
+            <if test="sourceUrl != null"> #{sourceUrl},</if>
+            <if test="resType != null"> #{resType},</if>
+            <if test="createBy != null"> #{createBy},</if>
+            <if test="opeType != null"> #{opeType},</if>
+            <if test="updateTime != null"> #{updateTime},</if>
+            <if test="userType != null"> #{userType},</if>
+            <if test="middleLogoUrl != null"> #{middleLogoUrl},</if>
+            <if test="userId != null"> #{userId},</if>
+            <if test="resId != null"> #{resId},</if>
+            <if test="width != null"> #{width},</if>
+            <if test="descript != null"> #{descript},</if>
+            <if test="updateBy != null"> #{updateBy},</if>
+            <if test="orderId != null"> #{orderId},</if>
+            <if test="height != null"> #{height},</if>
+        </trim>
+    </insert>
+
+    <!-- 将UnitFile批量插入到对应数据库的表中-->
+    <insert id="insertObjByBatch_common" parameterType="ArrayList">
+        insert into unit_file(id,ext,del_flag,create_time,max_logo_url,min_logo_url,title,type,source_url,res_type,create_by,ope_type,update_time,user_type,middle_logo_url,user_id,res_id,width,descript,update_by,order_id,height) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id},#{item.ext},#{item.delFlag},#{item.createTime},#{item.maxLogoUrl},#{item.minLogoUrl},#{item.title},#{item.type},#{item.sourceUrl},#{item.resType},#{item.createBy},#{item.opeType},#{item.updateTime},#{item.userType},#{item.middleLogoUrl},#{item.userId},#{item.resId},#{item.width},#{item.descript},#{item.updateBy},#{item.orderId},#{item.height})
+        </foreach>
+    </insert>
+
+    <!-- 通过UnitFile的id将数据库表中对应的数据删除-->
+    <delete id="deleteObjById_common" parameterType="java.lang.String">
+        delete from unit_file
+        where id = #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将UnitFile对应的数据库表的数据删除-->
+    <delete id="deleteObj_common" parameterType="com.cimr.util.Assist">
+        delete from unit_file
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <!-- 通过UnitFile的id将UnitFile的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateObjById_common" parameterType="com.cimr.sysmanage.model.UnitFile">
+        update unit_file set
+            ext=#{ext}
+            ,del_flag=#{delFlag}
+            ,create_time=#{createTime}
+            ,max_logo_url=#{maxLogoUrl}
+            ,min_logo_url=#{minLogoUrl}
+            ,title=#{title}
+            ,type=#{type}
+            ,source_url=#{sourceUrl}
+            ,res_type=#{resType}
+            ,create_by=#{createBy}
+            ,ope_type=#{opeType}
+            ,update_time=#{updateTime}
+            ,user_type=#{userType}
+            ,middle_logo_url=#{middleLogoUrl}
+            ,user_id=#{userId}
+            ,res_id=#{resId}
+            ,width=#{width}
+            ,descript=#{descript}
+            ,update_by=#{updateBy}
+            ,order_id=#{orderId}
+            ,height=#{height}
+        where id=#{id}
+    </update>
+
+    <!-- 通过UnitFile的id将UnitFile中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyObjById_common" parameterType="com.cimr.sysmanage.model.UnitFile">
+        update unit_file
+        <set>
+            <if test="ext != null">
+                ext=#{ext},
+            </if>
+            <if test="delFlag != null">
+                del_flag=#{delFlag},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="maxLogoUrl != null">
+                max_logo_url=#{maxLogoUrl},
+            </if>
+            <if test="minLogoUrl != null">
+                min_logo_url=#{minLogoUrl},
+            </if>
+            <if test="title != null">
+                title=#{title},
+            </if>
+            <if test="type != null">
+                type=#{type},
+            </if>
+            <if test="sourceUrl != null">
+                source_url=#{sourceUrl},
+            </if>
+            <if test="resType != null">
+                res_type=#{resType},
+            </if>
+            <if test="createBy != null">
+                create_by=#{createBy},
+            </if>
+            <if test="opeType != null">
+                ope_type=#{opeType},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+            <if test="userType != null">
+                user_type=#{userType},
+            </if>
+            <if test="middleLogoUrl != null">
+                middle_logo_url=#{middleLogoUrl},
+            </if>
+            <if test="userId != null">
+                user_id=#{userId},
+            </if>
+            <if test="resId != null">
+                res_id=#{resId},
+            </if>
+            <if test="width != null">
+                width=#{width},
+            </if>
+            <if test="descript != null">
+                descript=#{descript},
+            </if>
+            <if test="updateBy != null">
+                update_by=#{updateBy},
+            </if>
+            <if test="orderId != null">
+                order_id=#{orderId},
+            </if>
+            <if test="height != null">
+                height=#{height},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将UnitFile中的数据更新到数据库对应的表中,包括值为null的数据-->
+    <update id="updateObj_common" parameterType="map">
+        update unit_file
+        <set>
+                id=#{enti.id},
+                ext=#{enti.ext},
+                del_flag=#{enti.delFlag},
+                create_time=#{enti.createTime},
+                max_logo_url=#{enti.maxLogoUrl},
+                min_logo_url=#{enti.minLogoUrl},
+                title=#{enti.title},
+                type=#{enti.type},
+                source_url=#{enti.sourceUrl},
+                res_type=#{enti.resType},
+                create_by=#{enti.createBy},
+                ope_type=#{enti.opeType},
+                update_time=#{enti.updateTime},
+                user_type=#{enti.userType},
+                middle_logo_url=#{enti.middleLogoUrl},
+                user_id=#{enti.userId},
+                res_id=#{enti.resId},
+                width=#{enti.width},
+                descript=#{enti.descript},
+                update_by=#{enti.updateBy},
+                order_id=#{enti.orderId},
+                height=#{enti.height},
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将UnitFile中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyObj_common" parameterType="map">
+        update unit_file
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.ext != null">
+                ext=#{enti.ext},
+            </if>
+            <if test="enti.delFlag != null">
+                del_flag=#{enti.delFlag},
+            </if>
+            <if test="enti.createTime != null">
+                create_time=#{enti.createTime},
+            </if>
+            <if test="enti.maxLogoUrl != null">
+                max_logo_url=#{enti.maxLogoUrl},
+            </if>
+            <if test="enti.minLogoUrl != null">
+                min_logo_url=#{enti.minLogoUrl},
+            </if>
+            <if test="enti.title != null">
+                title=#{enti.title},
+            </if>
+            <if test="enti.type != null">
+                type=#{enti.type},
+            </if>
+            <if test="enti.sourceUrl != null">
+                source_url=#{enti.sourceUrl},
+            </if>
+            <if test="enti.resType != null">
+                res_type=#{enti.resType},
+            </if>
+            <if test="enti.createBy != null">
+                create_by=#{enti.createBy},
+            </if>
+            <if test="enti.opeType != null">
+                ope_type=#{enti.opeType},
+            </if>
+            <if test="enti.updateTime != null">
+                update_time=#{enti.updateTime},
+            </if>
+            <if test="enti.userType != null">
+                user_type=#{enti.userType},
+            </if>
+            <if test="enti.middleLogoUrl != null">
+                middle_logo_url=#{enti.middleLogoUrl},
+            </if>
+            <if test="enti.userId != null">
+                user_id=#{enti.userId},
+            </if>
+            <if test="enti.resId != null">
+                res_id=#{enti.resId},
+            </if>
+            <if test="enti.width != null">
+                width=#{enti.width},
+            </if>
+            <if test="enti.descript != null">
+                descript=#{enti.descript},
+            </if>
+            <if test="enti.updateBy != null">
+                update_by=#{enti.updateBy},
+            </if>
+            <if test="enti.orderId != null">
+                order_id=#{enti.orderId},
+            </if>
+            <if test="enti.height != null">
+                height=#{enti.height},
+            </if>
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+</mapper>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>首页</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="#url('/static/js/html5shiv.min.js')"></script>
+    <script src="#url('/static/js/respond.min.js')"></script>
+    <![endif]-->
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script type="text/javascript">
+
+        function navMenu(btn){
+            var thisBtn=$(btn);
+            var targetUrl=thisBtn.attr("_url");
+            if(!targetUrl){
+                var  thisMenu=thisBtn.parents("li[menu]");
+                var menuCode=thisMenu.attr("menu");
+                if(!!menuCode){
+                    targetUrl= "#url('/')"+ menuCode+"/nav/index";
+                    window.location.href=targetUrl;
+                }
+            }
+            return false;
+
+        }
+        function navSubMenu(btn){
+            var thisBtn=$(btn);
+            var targetUrl=thisBtn.attr("_url");
+            if(!targetUrl){
+                var  thisSubMenu=thisBtn.parents("li[menu]");
+                var menuCode=thisSubMenu.attr("menu");
+                if(!!menuCode){
+                    var thisMainMenu=thisSubMenu.parents("ul[submenu]")
+                    var mainMenuCode=thisMainMenu.attr("submenu");
+                    if(!!mainMenuCode){
+
+                        crmSubMenu.updateMenu(menuCode);
+                        targetUrl= "#url('/')"+mainMenuCode+"/" +menuCode;
+                        var head=$("head");
+                        $("link[ctx]",head).remove();
+                        $("script[ctx]",head).remove();
+                        //异步获取 页面资源，填充在 指定容器中
+                        $("body>.m-content").load(targetUrl, function(){
+
+                        });
+                    }else{
+
+                    }
+                }
+            }
+            return false;
+
+        }
+
+        function CrmSubMenu(){
+            this.container="";
+            this.subMenuPoint="";
+            this.menuPoint="";
+        }
+        CrmSubMenu.prototype={
+            init:function (container,menuPoint,subMenuPoint) {
+                this.container=container;
+                this.menuPoint=menuPoint;
+                this.subMenuPoint=subMenuPoint;
+                this.updateMenu(subMenuPoint);
+            },
+            updateMenu:function(newSubMenuPoint){
+                var menuThis=this;
+                if(!!newSubMenuPoint){
+                    menuThis.subMenuPoint=newSubMenuPoint;
+                }
+
+                $(".nav",this.container).each(function(i,dom){
+                    var thisSubMenu=$(dom);
+                    if(thisSubMenu.attr("submenu") ==menuThis.menuPoint ){
+                        thisSubMenu.show();
+                        var testMenu=$("[menu='"+menuThis.subMenuPoint+"']",thisSubMenu );
+                        if(testMenu.length>0){
+                            $("[menu]",thisSubMenu ).each( function(i,dom){
+                                var thisMenu=$(dom);
+                                if(thisMenu.attr("menu") == menuThis.subMenuPoint){
+                                    thisMenu.addClass("active");
+                                }else{
+                                    thisMenu.removeClass("active");
+                                }
+                            } );
+                        }else{
+                            $("[menu]",thisSubMenu ).removeClass("active").eq(0).addClass("active");
+                        }
+                    }else{
+                        thisSubMenu.hide();
+                    }
+                });
+
+            }
+        }
+        $(document).ready(function(){
+            // 推荐开启切换
+            var Li = $(".sms-index .recommend .column li");
+            Li.hover(function(){
+                $(this).addClass("active").siblings("li").removeClass("active");
+            });
+            //消息栏绑定事件，点击X关掉
+            $(".m-broadcast .broadcast i").on("click", function() {
+                $(this).parents(".m-broadcast").remove();
+            });
+
+            var menuPoint="${layoutMenu}";
+            var subMenuPoint="${layoutSubMenu}";
+            var headDiv =$(".m-header .header");
+            // 处理主菜单
+            $(".menu .extend ul",headDiv).each(function(i,dom){
+                var thisMainMenu=$(dom);
+                var testMenu=$("[menu='"+menuPoint+"']",thisMainMenu );
+                if(testMenu.length>0){
+                    $("[menu]",thisMainMenu ).each( function(i,dom){
+                        var thisMenu=$(dom);
+                        if(thisMenu.attr("menu") == menuPoint){
+                            thisMenu.addClass("active");
+                            var showPickedMenu=$(".showPicked",thisMenu.parents(".menu")).attr("class",function(){return "showPicked"});
+                            var newMenuHref=$("a[class]", thisMenu);
+                            showPickedMenu.addClass(newMenuHref.attr("class"));
+                            $("span",showPickedMenu).text(newMenuHref.text())
+                        }else{
+                            thisMenu.removeClass("active");
+                        }
+
+                    } );
+                }else{
+                    $("[menu]",thisMainMenu ).removeClass("active").eq(0).addClass("active");
+                }
+            });
+            var crmSubMenu=new CrmSubMenu();
+            crmSubMenu.init(headDiv,menuPoint,subMenuPoint);
+            window['crmSubMenu']=crmSubMenu;
+
+            header=header||{};
+            header.urls={
+                "shopProfile": "#url('/headData/shopProfile')",
+            }
+            header.event.onReady();
+
+        });
+    </script>
+</head>
+<body>
+
+<!-- 头部 -->
+<div class="m-header">
+    <div class="header">
+        <div class="logo">人人拓客</div>
+        <div class="menu">
+            <h1 class="showPicked sms"><span>短信营销</span></h1>
+            <div class="extend">
+                <i class="arrow"></i>
+                <ul>
+                    <li menu="dxyx"><a class="sms" href="javaScript:void(0);" onclick="navMenu(this);">短信营销</a></li>
+                    <li menu="wxhy"><a class="member" href="javaScript:void(0);" onclick="navMenu(this);">无线会员</a></li>
+                    <!--<li menu="wxyx"><a class="wireless" href="javaScript:void(0);" onclick="navMenu(this);">无线营销</a></li>-->
+                    <li menu="sjfx"><a class="analysis" href="javaScript:void(0);" onclick="navMenu(this);">数据分析</a></li>
+                    <li menu="shezhi"><a class="site" href="javaScript:void(0);" onclick="navMenu(this);">设置</a></li>
+                    <li menu="yhzx" title="用户中心" style="display: none;"><a class="back" href="javaScript:void(0);" onclick="navMenu(this);">首页</a></li>
+                </ul>
+                <p>常用功能：<span>会员营销</span><span>红包营销</span><span>会员关怀</span><span>RFM标准分析</span></p>
+            </div>
+        </div>
+        <ul class="nav" submenu="dxyx">
+            <li menu="yxsy"><a href="javaScript:void(0);" onclick="navSubMenu(this);">营销首页</a></li>
+            <li menu="dxqf"><a href="javaScript:void(0);" onclick="navSubMenu(this);">短信群发</a></li>
+            <li menu="hygh"><a href="javaScript:void(0);" onclick="navSubMenu(this);">会员关怀</a></li>
+            <li menu="fsjl"><a href="javaScript:void(0);" onclick="navSubMenu(this);">发送记录</a></li>
+        </ul>
+        <ul class="nav" submenu="wxhy">
+            <li menu="mlist"><a href="javaScript:void(0);" onclick="navSubMenu(this);">会员列表</a></li>
+            <li menu="mlevel"><a href="javaScript:void(0);" onclick="navSubMenu(this);">会员等级</a></li>
+            <li menu="mgroup"><a href="javaScript:void(0);" onclick="navSubMenu(this);">条件分组</a></li>
+            <li menu="mblack"><a href="javaScript:void(0);" onclick="navSubMenu(this);">黑名单管理</a></li>
+        </ul>
+        <ul class="nav" submenu="sjfx">
+            <li menu="rptorder"><a href="javaScript:void(0);" onclick="navSubMenu(this);">订单分析</a></li>
+            <li menu="rptdsr"><a href="javaScript:void(0);" onclick="navSubMenu(this);">DSR评分分析</a></li>
+            <li menu="rptrfm"><a href="javaScript:void(0);" onclick="navSubMenu(this);">RFM标准分析</a></li>
+            <!--<li menu="rpturfm"><a href="javaScript:void(0);" onclick="navSubMenu(this);">RFM自定义分析</a></li>-->
+        </ul>
+        <ul class="nav" submenu="yhzx">
+            <li menu="ucenter"><a href="javaScript:void(0);" onclick="navSubMenu(this);">用户中心</a></li>
+            <li menu="ulist"><a href="javaScript:void(0);" onclick="navSubMenu(this);">子账号</a></li>
+            <li menu="umsg"><a href="javaScript:void(0);" onclick="navSubMenu(this);">消息</a></li>
+        </ul>
+        <div class="user">
+        </div>
+    </div>
+</div>
+<div class="m-content">
+$screen_content
+</div>
+<div class="m-footer">
+    <div class="footer">
+        <div class="contact">
+            <ul class="service">
+                <li><span class="ico-service">客服</span>：<span class="ico-custom">小拓</span>投诉：<span class="ico-complaint">客服主管</span></li>
+                <li><span class="ico-tel">客服电话：400-888-8888</span></li>
+            </ul>
+            <ul class="time">
+                <li><span class="ico-time">工作时间：09:00-22:00</span>7*12小时为您提供服务</li>
+                <li><span class="ico-urgent">紧急处理：137-0101-8888</span></li>
+            </ul>
+            <a class="help" href="#">帮助中心</a>
+        </div>
+        <p class="copy">Copyright©2008-2016 人人拓客 All Rights Reserved 京ICP备09083305号</p>
+    </div>
+</div>
+
+<!-- 边栏 -->
+<div class="m-aside">
+    <ul>
+        <li class="service">
+            <i></i>
+            <div class="info-box">
+                <div class="info">
+                    <p><span>小拓</span><span>投诉</span></p>
+                    <p>客服电话：400-888-8888</p>
+                    <p>紧急处理：137-0101-8888</p>
+                </div>
+            </div>
+        </li>
+        <li class="help">
+            <i></i>
+            <span>帮助中心</span>
+        </li>
+        <li class="msg">
+            <i></i>
+            <span>意见反馈</span>
+        </li>
+    </ul>
+</div>
+<script id="tpl_head_user_info" type="text/html">
+    <div class="info">
+        <div class="type"><span>{{crmVerTitle | header_value:''}}</span></div>
+        <div class="title">
+            <span class="name">{{title}}</span>
+            <div class="extend">
+                <i class="arrow"></i>
+                <div class="content">
+                    <div class="exit">
+                        <img width="40" height="40" src="{{pic_path}}" title="" />
+                        <span>{{title}}</span>
+                        <button>退出</button>
+                    </div>
+                    <ul class="data">
+                        <li>
+                            <span>短信余额：{{smsLeftNum | header_value:'[-]'}}条</span>
+                            <button>充值</button>
+                        </li>
+                        <li>
+                            <span>软件使用天数还有：{{limitDays | header_value:'[-]'}}天</span>
+                        </li>
+                        <li>
+                            <span>到期时间:{{expireTime | header_timeToDayStr:'[-]'}}</span>
+                            <button>续费</button>
+                        </li>
+                    </ul>
+                    <ul class="link">
+                        <li class="home"><a href="#url('/yhzx/nav/ucenter')">用户中心</a></li>
+                        <li class="child"><a href="#url('/yhzx/nav/ulist')">子账号</a></li>
+                        <li class="notice"><a href="#url('/yhzx/nav/umsg')">消息</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="avatar"><img width="40" height="40" src="{{pic_path}}" title="" /></div>
+    </div>
+</script>
+<script src="#url('/static/js/artTemplate.js')"></script>
+</body>
+</html>

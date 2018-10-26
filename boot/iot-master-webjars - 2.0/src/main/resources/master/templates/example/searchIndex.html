@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<script>
+    AppCommon.include.load("#url('/static/js/common/commonSelectSearch.js')", "js");
+    AppCommon.include.load("#url('/static/js/example/selectSearch.js')", "js");
+</script>
+</head>
+<body  style="padding: 10px">
+<!--页面静态部分-->
+<div class="animated fadeIn">
+    <div id="selectSearch" class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">异步加载</label>
+                        <div class="layui-input-block">
+                            <div id="demoDiv" lay-filter="demoDivFilter" class="layui-form">
+                                <select lay-search id="demoSelect"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">一次性加载</label>
+                        <div class="layui-input-block">
+                            <div id="allInDiv" lay-filter="" class="layui-form">
+                                <select lay-search id="allInSelect"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>

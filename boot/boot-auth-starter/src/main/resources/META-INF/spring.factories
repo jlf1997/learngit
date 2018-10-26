@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.cimr.boot.auth.BootAuthConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.cimr.boot.auth.shiro.BootShiroConfiguration

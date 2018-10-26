@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cimr.sysmanage.dao.UserDao">
+    <!-- User的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_User_Map" type="com.cimr.sysmanage.model.User">
+        <id column="id" property="id" />
+        <result column="del_flag" property="delFlag" />
+        <result column="pswd" property="pswd" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="create_time" property="createTime" />
+        <result column="avatar" property="avatar" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="phone" property="phone" />
+        <result column="group_id" property="groupId" />
+        <result column="comment" property="comment" />
+        <result column="theme" property="theme" />
+        <result column="fullname" property="fullname" />
+        <result column="update_by" property="updateBy" />
+        <result column="order_id" property="orderId" />
+        <result column="email" property="email" />
+        <result column="username" property="username" />
+        <result column="status" property="status" />
+        <result column="user_type" property="userType" />
+    </resultMap>
+
+	   <!-- Assist用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="Assist">
+        <where>
+            <foreach collection="require" item="req" separator=" ">
+                ${req.require} 
+                <if test="req.value != null"> #{req.value}</if> 
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="val" separator=","> 
+                        #{val} 
+                    </foreach> 
+                </if> 
+                <if test="req.suffix != null"> ${req.suffix}</if> 
+            </foreach>
+        </where>
+    </sql>
+
+	   <!-- updateAssist用于更新数据的使用它拓展自Assist,用于辅助工具类setRequires设置的条件,${req.require}表示列名,#{req.value}表示值它是防SQL注入的 -->
+    <sql id="updateAssist">
+        <where>
+            <foreach collection="assist.require" item="req" separator=" ">
+                ${req.require} 
+                <if test="req.value != null"> #{req.value}</if> 
+                <if test="req.values != null">
+                    <foreach collection="req.values" item="val" separator=","> 
+                        #{val} 
+                    </foreach> 
+                </if> 
+                <if test="req.suffix != null"> ${req.suffix}</if> 
+            </foreach>
+        </where>
+    </sql>
+
+    <!-- 数据库中表名为:sys_user的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="sys_user_Column">
+        sys_user.id as id
+        ,sys_user.del_flag as del_flag
+        ,sys_user.pswd as pswd
+        ,sys_user.last_login_time as last_login_time
+        ,sys_user.create_time as create_time
+        ,sys_user.avatar as avatar
+        ,sys_user.create_by as create_by
+        ,sys_user.update_time as update_time
+        ,sys_user.phone as phone
+        ,sys_user.group_id as group_id
+        ,sys_user.comment as comment
+        ,sys_user.theme as theme
+        ,sys_user.fullname as fullname
+        ,sys_user.update_by as update_by
+        ,sys_user.order_id as order_id
+        ,sys_user.email as email
+        ,sys_user.username as username
+        ,sys_user.status as status
+        ,sys_user.user_type as user_type
+    </sql>
+
+    <!--获得类名为:User对应的数据库表的数据总行数 -->
+    <select id="getObjRowCount_common" parameterType="com.cimr.util.Assist" resultType="java.lang.Long">
+        select count(id) from sys_user
+        <if test="require!=null"><include refid="Assist" /></if>
+    </select>
+    <!-- 获得类名为:User对应数据库中表的数据集合 -->
+    <select id="selectObj_common" parameterType="com.cimr.util.Assist"  resultMap="result_User_Map">
+        select  <if test="distinct !=null">${distinct}</if>
+        <choose>
+            <when test="resultColumn!=null">${resultColumn}</when>
+            <otherwise>
+        <include refid="sys_user_Column" /> 
+            </otherwise>
+        </choose>
+        from sys_user
+        <choose>
+            <when test="rowSize ==null">
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+            </when>
+            <otherwise>
+                inner join
+                (
+                SELECT id as primary_key FROM sys_user
+                <if test="require!=null">
+                    <include refid="Assist" />
+                </if>
+                <if test="order !=null">${order}</if>
+                <choose>
+                    <when test="startRow !=null and rowSize !=null">LIMIT #{startRow},#{rowSize} </when>
+                    <when test="rowSize !=null">LIMIT #{rowSize}</when>
+                 </choose>
+                 ) as tmp
+                 on tmp.primary_key=sys_user.id
+            </otherwise>
+        </choose>
+    </select> 
+
+    <!-- 获得一个User对象,以参数User对象中不为空的属性作为条件进行查询-->
+    <select id="selectObjByObj_common" parameterType="com.cimr.sysmanage.model.User" resultMap="result_User_Map">
+        select 
+            <include refid="sys_user_Column" /> 
+        from sys_user
+        <where>
+            <if test="status != null "> and sys_user.status = #{status}</if>
+            <if test="username != null "> and sys_user.username = #{username}</if>
+            <if test="email != null "> and sys_user.email = #{email}</if>
+            <if test="orderId != null "> and sys_user.order_id = #{orderId}</if>
+            <if test="updateBy != null "> and sys_user.update_by = #{updateBy}</if>
+            <if test="fullname != null "> and sys_user.fullname = #{fullname}</if>
+            <if test="theme != null "> and sys_user.theme = #{theme}</if>
+            <if test="comment != null "> and sys_user.comment = #{comment}</if>
+            <if test="groupId != null "> and sys_user.group_id = #{groupId}</if>
+            <if test="phone != null "> and sys_user.phone = #{phone}</if>
+            <if test="updateTime != null "> and sys_user.update_time = #{updateTime}</if>
+            <if test="createBy != null "> and sys_user.create_by = #{createBy}</if>
+            <if test="avatar != null "> and sys_user.avatar = #{avatar}</if>
+            <if test="createTime != null "> and sys_user.create_time = #{createTime}</if>
+            <if test="lastLoginTime != null "> and sys_user.last_login_time = #{lastLoginTime}</if>
+            <if test="pswd != null "> and sys_user.pswd = #{pswd}</if>
+            <if test="delFlag != null "> and sys_user.del_flag = #{delFlag}</if>
+            <if test="id != null "> and sys_user.id = #{id}</if>
+            <if test="userType != null "> and sys_user.user_type = #{userType}</if>
+        </where>
+    </select> 
+
+    <!-- 通过User的id获得对应数据库中表的数据对象-->
+    <select id="selectObjById_common" parameterType="java.lang.String" resultMap="result_User_Map">
+        select 
+            <include refid="sys_user_Column" /> 
+        from sys_user
+        where sys_user.id = #{id}
+    </select> 
+
+    <!-- 将User插入到对应数据库的表中,包括属性值为null的数据-->
+    <insert id="insertObj_common" parameterType="com.cimr.sysmanage.model.User">
+        insert into sys_user(id,del_flag,pswd,last_login_time,create_time,avatar,create_by,update_time,phone,group_id,comment,theme,fullname,update_by,order_id,email,username,status,user_type)
+        values(#{id},#{delFlag},#{pswd},#{lastLoginTime},#{createTime},#{avatar},#{createBy},#{updateTime},#{phone},#{groupId},#{comment},#{theme},#{fullname},#{updateBy},#{orderId},#{email},#{username},#{status},#{userType})
+    </insert>
+
+    <!-- 将User中属性值不为null的数据,插入到对应数据库的表中-->
+    <insert id="insertNonEmptyObj_common" parameterType="com.cimr.sysmanage.model.User">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="pswd != null">pswd,</if>
+            <if test="lastLoginTime != null">last_login_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="phone != null">phone,</if>
+            <if test="groupId != null">group_id,</if>
+            <if test="comment != null">comment,</if>
+            <if test="theme != null">theme,</if>
+            <if test="fullname != null">fullname,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="email != null">email,</if>
+            <if test="username != null">username,</if>
+            <if test="status != null">status,</if>
+            <if test="status != null">user_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null"> #{id},</if>
+            <if test="delFlag != null"> #{delFlag},</if>
+            <if test="pswd != null"> #{pswd},</if>
+            <if test="lastLoginTime != null"> #{lastLoginTime},</if>
+            <if test="createTime != null"> #{createTime},</if>
+            <if test="avatar != null"> #{avatar},</if>
+            <if test="createBy != null"> #{createBy},</if>
+            <if test="updateTime != null"> #{updateTime},</if>
+            <if test="phone != null"> #{phone},</if>
+            <if test="groupId != null"> #{groupId},</if>
+            <if test="comment != null"> #{comment},</if>
+            <if test="theme != null"> #{theme},</if>
+            <if test="fullname != null"> #{fullname},</if>
+            <if test="updateBy != null"> #{updateBy},</if>
+            <if test="orderId != null"> #{orderId},</if>
+            <if test="email != null"> #{email},</if>
+            <if test="username != null"> #{username},</if>
+            <if test="status != null"> #{status},</if>
+            <if test="status != null"> #{userType},</if>
+        </trim>
+    </insert>
+
+    <!-- 将User批量插入到对应数据库的表中-->
+    <insert id="insertObjByBatch_common" parameterType="ArrayList">
+        insert into sys_user(id,del_flag,pswd,last_login_time,create_time,avatar,create_by,update_time,phone,group_id,comment,theme,fullname,update_by,order_id,email,username,status,user_type) values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id},#{item.delFlag},#{item.pswd},#{item.lastLoginTime},#{item.createTime},#{item.avatar},#{item.createBy},#{item.updateTime},#{item.phone},#{item.groupId},#{item.comment},#{item.theme},#{item.fullname},#{item.updateBy},#{item.orderId},#{item.email},#{item.username},#{item.status},#{item.userType})
+        </foreach>
+    </insert>
+
+    <!-- 通过User的id将数据库表中对应的数据删除-->
+    <delete id="deleteObjById_common" parameterType="java.lang.String">
+        delete from sys_user
+        where id = #{id}
+    </delete>
+
+    <!-- 通过辅助工具Assist中的条件将User对应的数据库表的数据删除-->
+    <delete id="deleteObj_common" parameterType="com.cimr.util.Assist">
+        delete from sys_user
+        <if test="require!=null"><include refid="Assist" /></if>
+    </delete>
+
+    <!-- 通过User的id将User的数据更新到数据库中对应的表,包括值null的数据-->
+    <update id="updateObjById_common" parameterType="com.cimr.sysmanage.model.User">
+        update sys_user set
+            del_flag=#{delFlag}
+            ,pswd=#{pswd}
+            ,last_login_time=#{lastLoginTime}
+            ,create_time=#{createTime}
+            ,avatar=#{avatar}
+            ,create_by=#{createBy}
+            ,update_time=#{updateTime}
+            ,phone=#{phone}
+            ,group_id=#{groupId}
+            ,comment=#{comment}
+            ,theme=#{theme}
+            ,fullname=#{fullname}
+            ,update_by=#{updateBy}
+            ,order_id=#{orderId}
+            ,email=#{email}
+            ,username=#{username}
+            ,status=#{status}
+            ,user_type=${userType}
+        where id=#{id}
+    </update>
+
+    <!-- 通过User的id将User中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyObjById_common" parameterType="com.cimr.sysmanage.model.User">
+        update sys_user
+        <set>
+            <if test="delFlag != null">
+                del_flag=#{delFlag},
+            </if>
+            <if test="pswd != null">
+                pswd=#{pswd},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time=#{lastLoginTime},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="avatar != null">
+                avatar=#{avatar},
+            </if>
+            <if test="createBy != null">
+                create_by=#{createBy},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime},
+            </if>
+            <if test="phone != null">
+                phone=#{phone},
+            </if>
+            <if test="groupId != null">
+                group_id=#{groupId},
+            </if>
+            <if test="comment != null">
+                comment=#{comment},
+            </if>
+            <if test="theme != null">
+                theme=#{theme},
+            </if>
+            <if test="fullname != null">
+                fullname=#{fullname},
+            </if>
+            <if test="updateBy != null">
+                update_by=#{updateBy},
+            </if>
+            <if test="orderId != null">
+                order_id=#{orderId},
+            </if>
+            <if test="email != null">
+                email=#{email},
+            </if>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="userType != null">
+                user_type=#{userType},
+            </if>
+
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将User中的数据更新到数据库对应的表中,包括值为null的数据-->
+    <update id="updateObj_common" parameterType="map">
+        update sys_user
+        <set>
+                id=#{enti.id},
+                del_flag=#{enti.delFlag},
+                pswd=#{enti.pswd},
+                last_login_time=#{enti.lastLoginTime},
+                create_time=#{enti.createTime},
+                avatar=#{enti.avatar},
+                create_by=#{enti.createBy},
+                update_time=#{enti.updateTime},
+                phone=#{enti.phone},
+                group_id=#{enti.groupId},
+                comment=#{enti.comment},
+                theme=#{enti.theme},
+                fullname=#{enti.fullname},
+                update_by=#{enti.updateBy},
+                order_id=#{enti.orderId},
+                email=#{enti.email},
+                username=#{enti.username},
+                status=#{enti.status},
+                user_type=#{enti.userType}
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <!-- 通过辅助工具Assist中的条件将User中属性值不为null的数据更新到数据库对应的表中-->
+    <update id="updateNonEmptyObj_common" parameterType="map">
+        update sys_user
+        <set>
+            <if test="enti.id != null">
+                id=#{enti.id},
+            </if>
+            <if test="enti.delFlag != null">
+                del_flag=#{enti.delFlag},
+            </if>
+            <if test="enti.pswd != null">
+                pswd=#{enti.pswd},
+            </if>
+            <if test="enti.lastLoginTime != null">
+                last_login_time=#{enti.lastLoginTime},
+            </if>
+            <if test="enti.createTime != null">
+                create_time=#{enti.createTime},
+            </if>
+            <if test="enti.avatar != null">
+                avatar=#{enti.avatar},
+            </if>
+            <if test="enti.createBy != null">
+                create_by=#{enti.createBy},
+            </if>
+            <if test="enti.updateTime != null">
+                update_time=#{enti.updateTime},
+            </if>
+            <if test="enti.phone != null">
+                phone=#{enti.phone},
+            </if>
+            <if test="enti.groupId != null">
+                group_id=#{enti.groupId},
+            </if>
+            <if test="enti.comment != null">
+                comment=#{enti.comment},
+            </if>
+            <if test="enti.theme != null">
+                theme=#{enti.theme},
+            </if>
+            <if test="enti.fullname != null">
+                fullname=#{enti.fullname},
+            </if>
+            <if test="enti.updateBy != null">
+                update_by=#{enti.updateBy},
+            </if>
+            <if test="enti.orderId != null">
+                order_id=#{enti.orderId},
+            </if>
+            <if test="enti.email != null">
+                email=#{enti.email},
+            </if>
+            <if test="enti.username != null">
+                username=#{enti.username},
+            </if>
+            <if test="enti.status != null">
+                status=#{enti.status},
+            </if>
+            <if test="enti.user_type != null">
+                user_type=#{enti.userType},
+            </if>
+
+        </set>
+        <if test="assist.require!=null"><include refid="updateAssist" /></if>
+    </update>
+
+    <select id="selectUserListByChildGroups" parameterType="com.cimr.sysmanage.dto.UserDto" resultMap="result_User_Map">
+        SELECT U.* FROM sys_user U
+        WHERE
+        U.group_id IN(
+          select G.id from sys_group G inner join (select getChildLst(#{currentUserGroupId}) as idArr) TEMP where FIND_IN_SET(G.id, TEMP.idArr)
+        )
+        <include refid="selectUserListConditionSql"/>
+    </select>
+
+    <select id="selectUserListByParentGroups" parameterType="com.cimr.sysmanage.dto.UserDto" resultMap="result_User_Map">
+        SELECT U.* FROM sys_user U
+        WHERE
+        U.group_id IN(
+          select G.id from sys_group G inner join (select getFatherLst(#{currentUserGroupId}) as idArr) TEMP where FIND_IN_SET(G.id, TEMP.idArr)
+        )
+        <include refid="selectUserListConditionSql"/>
+    </select>
+
+    <sql id="selectUserListConditionSql">
+        AND U.del_flag = 0
+        <if test="username != null and username !=''">
+            and U.username like concat('%',#{username},'%')
+        </if>
+        <if test="fullname != null and fullname !=''">
+            and U.fullname like concat('%',#{fullname},'%')
+        </if>
+        <if test="phone != null and phone !=''">
+            and U.phone = #{phone}
+        </if>
+        <if test="groupId != null and groupId !=''">
+            and U.group_id = #{groupId}
+        </if>
+        <if test="status != null and status !=''">
+            and U.status = #{status}
+        </if>
+        <if test="userType != null and userType !=''">
+            and U.user_type = #{userType}
+        </if>
+    </sql>
+</mapper>

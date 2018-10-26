@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<!--引入JS-->
+<script type="text/javascript" >
+    AppCommon.include.load("#url('/static/js/example/list_layui.js')","js");
+</script>
+</head>
+<!--页面静态部分-->
+<body  style="padding: 10px">
+
+<!--页面动态部分-列表-->
+<script id="list_layui-template" type="text/html">
+
+    <div style="text-align: left;">
+        <form class="layui-form" lay-filter="searchForm" action="">
+            <div class="layui-inline">
+                <!--<label class="layui-form-label">标题</label>-->
+                <div class="layui-input-inline">
+                    <input name="titleInput" type="text" placeholder="标题" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button class="layui-btn" lay-submit lay-filter="searchBtn">查询</button>
+                <button class="layui-btn" id="addBtn">添加</button>
+            </div>
+        </form>
+    </div>
+
+    <div style="margin-right: 10px;">
+        <table id="tb_list" lay-filter="tb_list"></table>
+    </div>
+</script>
+
+<!--页面动态部分-表单-->
+<script id="form_layui-template" type="text/html">
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-form-pane">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="layui-inline">
+        <button class="layui-btn" id="submitBtn">提交</button>
+        <button class="layui-btn" id="cancelBtn">取消</button>
+    </div>
+</script>
+</body>
+
+

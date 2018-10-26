@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<!--页面静态部分-->
+</head>
+<body  style="padding: 10px">
+<div class="animated fadeIn">
+
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">验证手机</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="sendSms">发送</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+        //监听提交
+        form.on('submit(sendSms)', function (data) {
+            var formData = data.field;
+            AppCommon.ajax.execute({
+                'url': AppCommon.url.getBaseURL() + "/sms/sendSms",
+                'data': formData,
+                'success': function (data) {
+                    if (data.success) {
+                        layer.alert('短信发送成功');
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>

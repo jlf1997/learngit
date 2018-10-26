@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<!--页面静态部分-->
+</head>
+<body  style="padding: 10px">
+<div class="layui-tab-item layui-show">
+    <a type="button" class="layui-btn layui-btn-normal" id="excelOut" download= "daochu" href="${request.contextPath}/excel/ajax/execlExport"><i class="layui-icon"></i>导出表格</a>
+</div>
+</body>

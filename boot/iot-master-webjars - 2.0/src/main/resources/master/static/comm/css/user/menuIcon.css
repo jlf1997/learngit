@@ -1,0 +1,44 @@
+@charset "utf-8";
+.bigicon .fa-hover{
+    text-align: center;
+}
+.bigicon .fa-hover.on{
+    background: #e2e2e2;
+}
+.bigicon .fa-hover a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    color: #222222;
+    line-height: 60px;
+    height: 60px;
+    padding: 0;
+    border-radius: 4px;
+}
+.bigicon .fa-hover a:hover{
+    background:none;
+    color:#1d9d74;
+    text-decoration:none;
+}
+.bigicon .fa-hover a.on{
+    color:#1d9d74;
+}
+.col-md-1 {
+    width: 4.33333333%;
+    float: left;
+}
+
+.bigicon .fa-hover a .fa {
+    width: 32px;
+    font-size: 28px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 0px;
+}
+section {
+    height: auto;
+    overflow: hidden;
+    float: none;
+    margin:20px;
+}

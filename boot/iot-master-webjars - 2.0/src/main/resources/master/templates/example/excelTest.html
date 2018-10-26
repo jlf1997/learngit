@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+#parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+<script type="text/javascript" >
+    AppCommon.include.load("#url('/static/js/common/excelIn.js')","js");
+    AppCommon.include.load("#url('/static/js/example/excelTest.js')","js");
+</script>
+</head>
+<!--页面静态部分-->
+<body  style="padding: 10px">
+<div class="animated fadeIn">
+    <a class="layui-btn layui-btn-normal" href="#url('static\excelTemplate\tableT.xlsx')">下载表格模板</a>
+    <button type="button" class="layui-btn layui-btn-normal" id="test3"><i class="layui-icon"></i>导入表格</button>
+    <button id="showdata" class="layui-btn layui-btn-normal" type="button">显示</button>
+    <div id="div_data">
+    </div>
+</div>
+</body>

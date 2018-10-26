@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    #parse('comm/common.htm')
+<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig" data-version="20180831"></script>
+
+</head>
+<script type="text/javascript" >
+    AppCommon.include.load("#url('/static/js/util/verify.js')","js");
+    AppCommon.include.load("#url('/static/js/common/commonSelectSearch.js')", "js");
+    AppCommon.include.load("#url('/static/comm/ztree/css/zTreeStyle/zTreeStyle.css')", "css");
+    AppCommon.include.load("#url('/static/comm/ztree/js/jquery.ztree.all.js')", "js");
+    AppCommon.include.load("#url('/static/comm/js/manager/roleManagement.js')","js");
+    AppCommon.include.load("#url('/static/js/common/commonZtree.js')","js");
+    
+    
+</script>
+<body style="padding: 20px">
+<div class="animated fadeIn">
+    <div class="roleManager_box"></div>
+</div>
+<script id="roleManagerList_template" type="text/html">
+    <div style="text-align: left;">
+        <form class="layui-form" lay-filter="searchForm" action="">
+            <div class="layui-inline">
+                <!--<label class="layui-form-label">关键字</label>-->
+                <div class="layui-input-inline">
+                    <input name="nameInput" type="text" placeholder="角色名称" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button resourceId="1" class="layui-btn layui-btn-normal iotPermission" lay-submit lay-filter="searchBtn">查询</button>
+                <button resourceId="2" class="layui-btn layui-btn-normal iotPermission" id="addBtn">添加</button>
+            </div>
+        </form>
+    </div>
+
+    <div style="margin-right: 10px;">
+        <table id="tb_list" lay-filter="tb_list"></table>
+    </div>
+</script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="editBtn">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="menuBtn">菜单授权</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="operateBtn">操作授权</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteBtn">删除</a>
+</script>
+
+<script id="roleManagerForm_template" type="text/html">
+    <form class="layui-form" action="">
+    <div class="layui-show manager-box-style">
+    <input type="hidden" id="id" name="id" value="{{id}}" lay-verify="id">
+        <div class="layui-form-item">
+            <div class="layui-inline" id="roleKey_div">
+                <label class="layui-form-label">角色关键字<span style="color:red">*</span></label>
+                <div class="layui-input-inline">
+                    <input type="text" id="roleKey" name="roleKey" required  lay-verify="required|roleKey" placeholder="请输入角色关键字" autocomplete="off" class="layui-input" value="{{roleKey}}">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">角色名称<span style="color:red">*</span></label>
+                <div class="layui-input-inline">
+                    <input type="text" id="roleName" name="roleName" required  lay-verify="required" placeholder="请输入角色名称" autocomplete="off" class="layui-input" value="{{roleName}}">
+                </div>
+            </div>
+        </div>
+        <!--<div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">组织</label>
+                <div class="layui-input-inline">
+                    <div id="groupIdDiv" lay-filter="" class="layui-form">
+                        <select id="groupId" name="groupId" lay-filter="groupId"></select>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">组织<span style="color:red">*</span></label>
+            <div class="layui-input-inline" id="parentId_div" lay-filter="parentId" style="width:450px;">
+                <input disabled class="layui-input" id="parentId_add" name="parentId_add" lay-verify="required" lay-search="" lay-filter="parentId" data-id="{{groupId}}" value="{{groupName}}"/>
+                <ul id="menuTree_add" style="position:fixed;z-index:999;background-color: #e2e2e2;width:450px;display: none;"></ul>
+            </div>
+            <div class="layui-input-inline" style="width:40px;">
+                <button class="layui-btn layui-btn-sm selectIcon_add" id="selectMenu_add"><i class="layui-icon">&#xe615;</i></button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">序号<span style="color:red">*</span></label>
+                <div class="layui-input-inline">
+                    <input style="width:512px;" type="text" id="orderId" name="orderId" lay-verify="orderId" placeholder="请输入序号" autocomplete="off" class="layui-input" value="{{orderId}}" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">说明</label>
+                <div class="layui-input-inline">
+                    <textarea style="width: 512px;" placeholder="请输入内容" id="comment" name="comment" lay-verify="comment" class="layui-textarea">{{comment}}</textarea>
+                </div>
+            </div>
+        </div>
+    <br>
+     <div class="button-align">
+         <button class="layui-btn layui-btn-normal" lay-submit="" id="saveBtn" lay-filter="saveBtn">提交</button>
+         <button class="layui-btn layui-btn-normal" id="cancelBtn">取消</button>
+    </div>
+    </div>
+    </form>
+</script>
+
+<!--菜单授权页-->
+<script id="roleManagerForm_ztree" type="text/html">
+    <div style="margin-left: 24px;">
+        <input type="hidden" id="dataId" value="{{dataId}}" >
+        <ul id="treeDemo" class="ztree"></ul>
+    </div>
+</script>
+<!--操作授权页-->
+<script id="roleManagerList_operation" type="text/html">
+    <div id="opLog" style="margin: 10px;">
+    </div>
+    <div style="text-align: left;margin: 10px;">
+        <form class="layui-form" lay-filter="searchOpForm" action="">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input name="operationName" type="text" placeholder="操作名称" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-inline">
+                &nbsp;&nbsp;
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="searchOp">查询</button>
+                <button class="layui-btn layui-btn-normal" id="getCheckData" data-type="getCheckData">提交</button>
+            </div>
+        </form>
+    </div>
+
+    <div style="margin: 10px;">
+        <table id="op_list" lay-filter="op_list" ></table>
+    </div>
+</script>
+</body>
+</html>

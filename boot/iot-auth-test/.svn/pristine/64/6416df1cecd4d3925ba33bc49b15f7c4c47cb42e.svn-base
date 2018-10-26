@@ -1,0 +1,21 @@
+server:
+  port: 8080   
+#数据库相关配置
+spring:
+  datasource: 
+      url: jdbc:mysql://175.6.73.138:3406/iot_master_test?characterEncoding=utf8&useSSL=false
+      username: root
+      password: root   
+    
+#自定义配置
+app:
+  config:
+    file: 
+      basePath: F:\resource\operation\
+      root-path: /tinycgFile
+      temp-path: /fileTemp/
+      server-path: resource
+    apiIp: 175.6.77.235
+    apiPort: 8887
+
+
