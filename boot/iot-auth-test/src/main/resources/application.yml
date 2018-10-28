@@ -1,31 +1,37 @@
+boot:
+  auth:
+    shiro:
+      enable: true
+      type: cas
 mybatis:
   mapper-locations: classpath:mapping/*/*.xml,classpath:/META-INF/resources/webjars/mapping/*/*.xml
   type-aliases-package: com.cimr.*.dao  
 iot:
   auth:
-    callback-url: http://localhost:8071
-    prefix-url: http://iot.auth.com:8088/cas
-    salt: cas
-    cas-login-url: http://iot.auth.com:8088/cas/login
-  shiro:
-    login-url: /login/blank
-    filter-chain-definition-map:
-      {/error/** : anon,
-      /login : anon,
-      /index/** : login,
-      /manager/**: login,
-      /permission/**: permission,
-      /role/**: login,
-      /area/**: login,
-      /dict/**: login,
-      /group/**: login,
-      /operationManager/**: login,
-      /roleManager/**: login,
-      /sysLog/**: login,
-      /unitFile/**: login,
-      /userInfo/**: login,
-      /userManager/**: login,
-      /**: anon}
+    cas: 
+      callback-url: http://localhost:8071
+      prefix-url: http://iot.auth.com:8088/cas
+      salt: cas
+      cas-login-url: http://iot.auth.com:8088/cas/login
+    shiro:
+      login-url: /login/blank
+      filter-chain-definition-map: 
+        {/error/** : anon,
+        /login : anon,
+        /index/** : cas,
+        /manager/**: cas,
+        /permission/**: cas,
+        /role/**: cas,
+        /area/**: cas,
+        /dict/**: cas,
+        /group/**: cas,
+        /operationManager/**: cas,
+        /roleManager/**: cas,
+        /sysLog/**: cas,
+        /unitFile/**: cas,
+        /userInfo/**: cas,
+        /userManager/**: cas,
+        /**: anon}
 #自定义配置
 #自定义配置
 app:

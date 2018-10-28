@@ -50,3 +50,14 @@ boot/iot-master/
 api/microservice-client-messagesystem/
 api/cimrjobclient/target/
 boot/iot-master -yx/target/
+boot/boot-auth-starter/target/
+boot/iot-auth-test/target/
+boot/iot-master-webjars - 2.0/target/
+yx-video-manger/target/
+iot-arithmetic-sv/target/
+*.factorypath
+boot/iot-auth-test/.settings/org.eclipse.wst.common.project.facet.core.xml
+boot/iot-master-webjars - 2.0/.settings/
+iot-arithmetic-sv/.settings/
+boot/boot-auth-starter/.settings/
+yx-video-manger/

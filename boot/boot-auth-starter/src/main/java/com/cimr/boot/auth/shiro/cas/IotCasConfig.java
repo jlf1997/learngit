@@ -7,13 +7,14 @@ import org.pac4j.cas.client.rest.CasRestFormClient;
 import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.config.CasProtocol;
 import org.pac4j.core.client.Clients;
-import org.pac4j.core.config.Config;
 import org.pac4j.core.matching.PathMatcher;
 import org.pac4j.http.client.direct.ParameterClient;
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator;
 import org.pac4j.jwt.profile.JwtGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -22,12 +23,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
-import com.cimr.boot.auth.shiro.properties.AuthProperties;
+import com.cimr.boot.auth.properties.BootCasProperties;
 @Configuration
 public class IotCasConfig {
 	
+	
+	
+	private static final Logger log = LoggerFactory.getLogger(IotCasConfig.class);
+
+	
 	@Autowired
-	private AuthProperties authProperties;
+	private BootCasProperties bootCasProperties;
 
 	
     /**
@@ -66,8 +72,9 @@ public class IotCasConfig {
     public CasClient casClient(CasConfiguration casConfiguration) {
         CasClient casClient = new CasClient();
         casClient.setConfiguration(casConfiguration);
-        casClient.setCallbackUrl(authProperties.getCallbackUrl());
+        casClient.setCallbackUrl(bootCasProperties.getCallbackUrl());
         casClient.setName("cas");
+        log.info("============cas===============");
         return casClient;
     }
  
@@ -104,15 +111,15 @@ public class IotCasConfig {
     @SuppressWarnings("rawtypes")
     @Bean
     protected JwtGenerator jwtGenerator() {
-        return new JwtGenerator(new SecretSignatureConfiguration(authProperties.getSalt())
-        		, new SecretEncryptionConfiguration(authProperties.getSalt()));
+        return new JwtGenerator(new SecretSignatureConfiguration(bootCasProperties.getSalt())
+        		, new SecretEncryptionConfiguration(bootCasProperties.getSalt()));
     }
  
     @Bean
     protected JwtAuthenticator jwtAuthenticator() {
         JwtAuthenticator jwtAuthenticator = new JwtAuthenticator();
-        jwtAuthenticator.addSignatureConfiguration(new SecretSignatureConfiguration(authProperties.getSalt()));
-        jwtAuthenticator.addEncryptionConfiguration(new SecretEncryptionConfiguration(authProperties.getSalt()));
+        jwtAuthenticator.addSignatureConfiguration(new SecretSignatureConfiguration(bootCasProperties.getSalt()));
+        jwtAuthenticator.addEncryptionConfiguration(new SecretEncryptionConfiguration(bootCasProperties.getSalt()));
         return jwtAuthenticator;
     }
  
@@ -123,9 +130,9 @@ public class IotCasConfig {
      */
     @Bean
     public CasConfiguration casConfiguration() {
-        CasConfiguration casConfiguration = new CasConfiguration(authProperties.getCasLoginUrl());
+        CasConfiguration casConfiguration = new CasConfiguration(bootCasProperties.getCasLoginUrl());
         casConfiguration.setProtocol(CasProtocol.CAS20);
-        casConfiguration.setPrefixUrl(authProperties.getPrefixUrl());
+        casConfiguration.setPrefixUrl(bootCasProperties.getPrefixUrl());
         return casConfiguration;
     }
  
@@ -152,7 +159,7 @@ public class IotCasConfig {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setName("singleSignOutFilter");
         SingleSignOutFilter singleSignOutFilter = new SingleSignOutFilter();
-        singleSignOutFilter.setCasServerUrlPrefix(authProperties.getPrefixUrl());
+        singleSignOutFilter.setCasServerUrlPrefix(bootCasProperties.getPrefixUrl());
         singleSignOutFilter.setIgnoreInitConfiguration(true);
         bean.setFilter(singleSignOutFilter);
         bean.addUrlPatterns("/*");

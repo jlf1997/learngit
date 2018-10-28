@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.cimr.demo.service.SmsCodeService;
 import com.cimr.util.SmsUtil;
-import com.xlybase.file.fastdfs.common.ConfigUtil;
 
 /**
  * @author wyq

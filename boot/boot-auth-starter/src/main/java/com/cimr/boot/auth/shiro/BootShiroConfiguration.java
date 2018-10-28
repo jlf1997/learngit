@@ -10,8 +10,8 @@ import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.jasig.cas.client.session.SingleSignOutFilter;
-import org.pac4j.core.config.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,15 +20,13 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
-import com.cimr.boot.auth.shiro.cas.Pac4JShiroFactory;
-import com.cimr.boot.auth.shiro.properties.AuthProperties;
-
-import io.buji.pac4j.filter.CallbackFilter;
-import io.buji.pac4j.filter.SecurityFilter;
+import com.cimr.boot.auth.properties.AuthProperties;
+import com.cimr.boot.auth.properties.BootShiroProperties;
+import com.cimr.boot.auth.shiro.cas.CasShiroFactory;
+import com.cimr.boot.auth.shiro.normal.NormalShiroFactory;
 
 @Configuration
 //@EnableConfigurationProperties(value = MongoOptionProperties.class)                                                                        
@@ -37,15 +35,38 @@ import io.buji.pac4j.filter.SecurityFilter;
 public class BootShiroConfiguration {
 
 	
+	private static final Logger log = LoggerFactory.getLogger(BootShiroConfiguration.class);
+
+	
 	
 	@Autowired
-	private AuthProperties authProperties;
+	private BootShiroProperties bootShiroProperties;
+	
 	
  
-	@Bean
+	/**
+	 * 创建cas shiro
+	 * @return
+	 */
+	@Bean(name="casShiroFactory")
 	@ConditionalOnMissingBean
-	public IotShiroFactory getIotFilters() {
-		return new Pac4JShiroFactory();
+	@ConditionalOnProperty(prefix = "boot.auth.shiro", name = "type",havingValue  = "cas", matchIfMissing = false)
+	public IotShiroFactory getCasShiroFactory() {
+		log.info("cas shiroFactory init");
+		return new CasShiroFactory();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@Bean(name="normalShiroFactory")
+	@Primary
+	@ConditionalOnMissingBean
+	@ConditionalOnProperty(prefix = "boot.auth.shiro",name = "type", havingValue  = "normal", matchIfMissing = true)
+	public IotShiroFactory getShiroFactory() {
+		log.info("normal shiroFactory init");
+		return new NormalShiroFactory();
 	}
     
 	@Bean
@@ -106,7 +127,8 @@ public class BootShiroConfiguration {
         //默认配置
         filterChainDefinitionMap.put("/**", "anon");
         //自定义配置
-        filterChainDefinitionMap.putAll(authProperties.getFilterChainDefinitionMap());
+        log.info("======base=====");
+        filterChainDefinitionMap.putAll(bootShiroProperties.getFilterChainDefinitionMap());
         filterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return filterFactoryBean;
         

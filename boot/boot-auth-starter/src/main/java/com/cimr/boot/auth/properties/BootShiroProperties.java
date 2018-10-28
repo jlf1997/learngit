@@ -1,36 +1,28 @@
-package com.cimr.boot.auth.shiro.properties;
+package com.cimr.boot.auth.properties;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
 @Component
-@ConfigurationProperties(prefix = "iot.auth")
-public class AuthProperties {
+@ConfigurationProperties(prefix = "iot.auth.shiro")
+public class BootShiroProperties {
 
 	
 	/**
 	 * 未登录跳转地址
 	 */
-	private String loginUrl = "/login/blank";
+	private String loginUrl = "/login/blank1";
 	
 	
 	/**
 	 * 无权限跳转地址
 	 */
-	private String unauthorizedUrl = "/login/blank";
+	private String unauthorizedUrl = "/login/blank1";
 	
 	
-	private String prefixUrl;
-	 
-	private String casLoginUrl;
-	 
-	private String callbackUrl;
-	 
-	//jwt秘钥
-	private String salt;
+	
 	    
 	    
 	    
@@ -70,47 +62,4 @@ public class AuthProperties {
 		this.filterChainDefinitionMap = filterChainDefinitionMap;
 	}
 
-
-	public String getPrefixUrl() {
-		return prefixUrl;
-	}
-
-
-	public void setPrefixUrl(String prefixUrl) {
-		this.prefixUrl = prefixUrl;
-	}
-
-
-	public String getCasLoginUrl() {
-		return casLoginUrl;
-	}
-
-
-	public void setCasLoginUrl(String casLoginUrl) {
-		this.casLoginUrl = casLoginUrl;
-	}
-
-
-	public String getCallbackUrl() {
-		return callbackUrl;
-	}
-
-
-	public void setCallbackUrl(String callbackUrl) {
-		this.callbackUrl = callbackUrl;
-	}
-
-
-	public String getSalt() {
-		return salt;
-	}
-
-
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-	
-	
-	
-	
 }
