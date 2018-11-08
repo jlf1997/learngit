@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	#parse('comm/common.htm')
+	<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig"></script>
+</head>
+<script type="text/javascript">
+    //js文件需要带版本号
+    AppCommon.include.loadJs("#url('/static/js/${templateInfo.projectName}/${tableModel.domainName}Form.js')", "v1.0");
+</script>
+<script>
+    //${tableModel.domainName}ID
+    var ${templateInfo.model}Form_id = '${r'${id}'}';
+</script>
+<body  style="padding: 20px">
+<div class="layui-tab-item layui-show">
+	<div class="${templateInfo.model}Form_box"></div>
+</div>
+<!-- 表单页面模版 -->
+<script id="${templateInfo.model}Form_template" type="text/html">
+	<div class="layui-show manager-box-style">
+		<form class="layui-form">
+			<#list tableModel.columnList as columnModel>
+			<#if columnModel.columnName == "id">
+			<input type="hidden" id="${columnModel.columnName}" name="${columnModel.columnName}" value="{{${columnModel.columnName}}}">
+			</#if>
+			<#if columnModel.columnName != "id"
+						&& columnModel.columnName != "createBy"
+						&& columnModel.columnName != "createTime"
+						&& columnModel.columnName != "updateBy"
+						&& columnModel.columnName != "updateTime"
+						&& columnModel.columnName != "delFlag">
+			<div class="layui-form-item">
+				<label class="layui-form-label">${columnModel.columnChineseName}<span style="color:red">*</span></label>
+				<div class="layui-input-block">
+					<input type="text" id="${columnModel.columnName}" name="${columnModel.columnName}" placeholder="请输入${columnModel.columnChineseName}"
+						autocomplete="off" class="layui-input" lay-verify="required" value="{{${columnModel.columnName}}}">
+				</div>
+			</div>
+			</#if>
+			</#list>
+			<div class="button-align">
+				<div class="layui-btn" id="saveBtn" lay-submit="" lay-filter="saveBtn1">提交</div>
+				<div class="layui-btn" id="cancelBtn">取消</div>
+			</div>
+		</form>
+	</div>
+</script>
+<!-- js文件引入 -->
+</body>
+

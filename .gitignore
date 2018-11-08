@@ -61,3 +61,5 @@ boot/iot-master-webjars - 2.0/.settings/
 iot-arithmetic-sv/.settings/
 boot/boot-auth-starter/.settings/
 yx-video-manger/
+tools/output/
+tools/target/

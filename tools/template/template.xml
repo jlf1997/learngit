@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" standalone = "yes"?>
+<!--  template的模版定义DTD -->
+<!DOCTYPE list[
+        <!ELEMENT list (templateInfo*)>
+        <!ELEMENT templateInfo (companyName,projectName,templateName,templateType,outputSubDir,isNeedDirPerFile,dirNameTypePerFile,outputFileExt,outputFilePrefix,outputFileSuffix,outputFileNameType,encoding)>
+        <!ELEMENT companyName (#PCDATA)>
+        <!ELEMENT projectName (#PCDATA)>
+        <!ELEMENT templateName (#PCDATA)>
+        <!ELEMENT templateType (#PCDATA)>
+        <!ELEMENT outputSubDir (#PCDATA)>
+        <!ELEMENT isNeedDirPerFile (#PCDATA)>
+        <!ELEMENT dirNameTypePerFile (#PCDATA)>
+        <!ELEMENT outputFileExt (#PCDATA)>
+        <!ELEMENT outputFilePrefix (#PCDATA)>
+        <!ELEMENT outputFileSuffix (#PCDATA)>
+        <!ELEMENT outputFileNameType (#PCDATA)>
+        <!ELEMENT encoding (#PCDATA)>
+   ]>
+<list>
+	<!-- Domain类模版 -->
+	<templateInfo>
+		<packageName>com.cimr.operations.model</packageName>
+		<model>customer</model>
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<templateName>IotMgrDomainTemplate.java</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>model</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>java</outputFileExt>
+		<modulePrefix>true</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix></outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+	
+	<!-- DomainDto类模版 -->
+	<templateInfo>
+		<packageName>com.cimr.operations.dto</packageName>
+		<model>customer</model>
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<templateName>DomainDtoTemplate.java</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>dto</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>java</outputFileExt>
+		<modulePrefix>true</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>Dto</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+	
+	<!-- Dao类模版-->
+	<templateInfo>
+		<packageName>com.cimr.operations.dao</packageName>
+		<model>customer</model>
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<templateName>DaoTemplate.java</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>dao</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>java</outputFileExt>
+		<modulePrefix>false</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>Dao</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- ibatis的sql语句模版 -->
+	<templateInfo>
+		<model>customer</model>
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<templateName>SqlMapTemplate.xml</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>mapper</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>xml</outputFileExt>
+		<outputFilePrefix></outputFilePrefix>
+		<modulePrefix>true</modulePrefix>
+		<!--管控平台后缀用Dao,其他的是用Mapper-->
+		<outputFileSuffix>Mapper</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- 管控平台专用ibatis的sql语句模版 -->
+	<templateInfo>
+		<model>customer</model>
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<templateName>SqlMapTemplate.xml</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>mapper</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>xml</outputFileExt>
+		<outputFilePrefix></outputFilePrefix>
+		<modulePrefix>true</modulePrefix>
+		<!--管控平台后缀用Dao,其他的是用Mapper-->
+		<outputFileSuffix>Dao</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- Service类模版 -->
+	<templateInfo>
+		<packageName>com.cimr.operations.service</packageName>
+		<model>customer</model>
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<templateName>ServiceTemplate.java</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>service</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>java</outputFileExt>
+		<modulePrefix>false</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>Service</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+	
+	<!-- ServiceImpl类模版-->
+	<templateInfo>
+		<packageName>com.cimr.operations.service.impl</packageName>
+		<model>customer</model>
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<templateName>ServiceImplTemplate.java</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>service/impl</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>java</outputFileExt>
+		<modulePrefix>false</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>ServiceImpl</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+	
+	<!-- jpa类模版-->
+	<templateInfo>
+		<packageName>com.readboy.ssm.appjx.jpa</packageName>
+		<model>customer</model>
+		<companyName>readboy</companyName>
+		<projectName>appjx</projectName>
+		<templateName>JpaTemplate.java</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>jpa</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>java</outputFileExt>
+		<modulePrefix>false</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>Jpa</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+	
+	<!-- jpaService类模版-->
+	<templateInfo>
+		<packageName>com.readboy.ssm.appjx.service</packageName>
+		<model>customer</model>
+		<companyName>readboy</companyName>
+		<projectName>appjx</projectName>
+		<templateName>JpaServiceTemplate.java</templateName>
+		<templateType>table</templateType>
+		<outputSubDir>service</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>java</outputFileExt>
+		<modulePrefix>false</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>Jpa</outputFileSuffix>
+		<outputFileNameType>none</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- html列表模版 -->
+	<templateInfo>
+		<!-- 实体 -->
+		<model>customer</model>
+		<!-- 企业名称 -->
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<!-- 对应的模版 -->
+		<templateName>ListTemplate.html</templateName>
+		<templateType>table</templateType>
+		<!-- 输出的上一级文件夹名称 -->
+		<outputSubDir>html</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>html</outputFileExt>
+		<modulePrefix>true</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>List</outputFileSuffix>
+		<outputFileNameType>pascal</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- html表单模版 -->
+	<templateInfo>
+		<!-- 实体 -->
+		<model>customer</model>
+		<!-- 企业名称 -->
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<!-- 对应的模版 -->
+		<templateName>FormTemplate.html</templateName>
+		<templateType>table</templateType>
+		<!-- 输出的上一级文件夹名称 -->
+		<outputSubDir>html</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>html</outputFileExt>
+		<modulePrefix>true</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>Form</outputFileSuffix>
+		<outputFileNameType>pascal</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- js列表模版 -->
+	<templateInfo>
+		<!-- 实体 -->
+		<model>customer</model>
+		<!-- 企业名称 -->
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<!-- 对应的模版 -->
+		<templateName>ListTemplate.js</templateName>
+		<templateType>table</templateType>
+		<!-- 输出的上一级文件夹名称 -->
+		<outputSubDir>js</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>js</outputFileExt>
+		<modulePrefix>true</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>List</outputFileSuffix>
+		<outputFileNameType>pascal</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- js表单模版 -->
+	<templateInfo>
+		<!-- 实体 -->
+		<model>customer</model>
+		<!-- 企业名称 -->
+		<companyName>cimr</companyName>
+		<projectName>operations</projectName>
+		<!-- 对应的模版 -->
+		<templateName>FormTemplate.js</templateName>
+		<templateType>table</templateType>
+		<!-- 输出的上一级文件夹名称 -->
+		<outputSubDir>js</outputSubDir>
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<outputFileExt>js</outputFileExt>
+		<modulePrefix>true</modulePrefix>
+		<outputFilePrefix></outputFilePrefix>
+		<outputFileSuffix>Form</outputFileSuffix>
+		<outputFileNameType>pascal</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+	<!-- controller模版 -->
+	<templateInfo>
+		<packageName>com.cimr.operations.controller</packageName>
+		<!-- 实体 -->
+		<model>customer</model>
+		<!-- 企业名称 -->
+		<companyName>cimr</companyName>
+		<!-- 项目名称 -->
+		<projectName>operations</projectName>
+		<!-- 对应的模版 -->
+		<templateName>IotMgrControllerTemplate.java</templateName>
+		<!-- 模版类型 -->
+		<templateType>table</templateType>
+		<!-- 输出文件的子目录 -->
+		<outputSubDir>controller</outputSubDir>
+		<!-- 是否需要每个文件一个目录 -->
+		<isNeedDirPerFile>false</isNeedDirPerFile>
+		<!-- 是否驼峰命名 -->
+		<dirNameTypePerFile>camel</dirNameTypePerFile>
+		<!-- 输出文件格式-->
+		<outputFileExt>java</outputFileExt>
+		<!-- 是否需要模块前缀 -->
+		<modulePrefix>true</modulePrefix>
+		<!-- 输出文件前缀 -->
+		<outputFilePrefix></outputFilePrefix>
+		<!-- 输出文件后缀 -->
+		<outputFileSuffix>Controller</outputFileSuffix>
+		<!-- 输出文件名称类型 -->
+		<outputFileNameType>pascal</outputFileNameType>
+		<encoding>UTF-8</encoding>
+	</templateInfo>
+
+</list>

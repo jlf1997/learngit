@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	#parse('comm/common.htm')
+	<script src="#url('/static/comm/js/appCommon.js')" data-toggle="jsConfig"></script>
+</head>
+<script type="text/javascript">
+    //js文件需要带版本号
+    AppCommon.include.loadJs("#url('/static/js/${templateInfo.projectName}/${tableModel.domainName}List.js')", "v1.0");
+</script>
+<body  style="padding: 20px">
+<div class="layui-tab-item layui-show">
+	<div class="${templateInfo.model}List_box"></div>
+</div>
+<!-- 列表页面模版-->
+<script id="${templateInfo.model}List_template" type="text/html">
+	<div style="text-align: left;">
+		<form class="layui-form" lay-filter="searchForm" action="">
+		<#list tableModel.columnList as columnModel>
+				<#if columnModel.columnName != "id"
+								&& columnModel.columnName != "createBy"
+								&& columnModel.columnName != "createTime"
+								&& columnModel.columnName != "updateBy"
+								&& columnModel.columnName != "updateTime"
+								&& columnModel.columnName != "delFlag"
+								&& columnModel.columnName?index_of("Id")==-1
+								&& columnModel_index <= 10 >
+			<div class="layui-inline">
+				<div class="layui-input-inline">
+					<input name="search${columnModel.columnNameFirstUpper}" id="search${columnModel.columnNameFirstUpper}" type="text" placeholder="${columnModel.columnChineseName}" class="layui-input" style="width:200px;">
+				</div>
+			</div>
+				</#if>
+		</#list>
+			<div class="layui-inline">
+				&nbsp;&nbsp;
+				<div class="layui-btn layui-btn-normal" lay-submit lay-filter="searchBtn" id="searchBtn">查询</div>
+				<div class="layui-btn layui-btn-normal" id="addBtn">添加</div>
+			</div>
+		</form>
+	</div>
+
+	<div style="width:100%">
+		<table id="tb_list" lay-filter="tb_list" style="width:100%"></table>
+	</div>
+</script>
+<!-- 工具条模版-->
+<script type="text/html" id="toolbar">
+	<a class="layui-btn layui-btn-xs" lay-event="editBtn">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteBtn">删除</a>
+</script>
+</body>
